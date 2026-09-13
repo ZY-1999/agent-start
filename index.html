@@ -64,6 +64,50 @@
   nav.toc a.lvl1 { font-weight: 600; color: var(--ink); margin-top: 10px; }
   nav.toc a.lvl3 { padding-left: 26px; color: var(--ink-mute); }
 
+  /* ============ 目录折叠 ============ */
+  nav.toc .toc-head { display: flex; align-items: center; justify-content: space-between; margin: 0 12px 10px; }
+  nav.toc .toc-head .toc-title { margin: 0; }
+  nav.toc .toc-all {
+    background: transparent; border: none; cursor: pointer; font-family: inherit;
+    color: var(--ink-mute); font-size: 12px; padding: 2px 8px; border-radius: 6px;
+  }
+  nav.toc .toc-all:hover { background: #f2f3f7; color: var(--ink); }
+  nav.toc li.toc-group { margin-top: 9px; }
+  nav.toc li.toc-group > .toc-row { display: flex; align-items: center; }
+  nav.toc li.toc-group > .toc-row > a.lvl1 { margin-top: 0; flex: 1; min-width: 0; }
+  nav.toc button.toc-caret {
+    flex: 0 0 auto; background: transparent; border: none; cursor: pointer;
+    color: var(--ink-mute); font-size: 11px; line-height: 1;
+    padding: 7px 8px; border-radius: 6px; font-family: inherit;
+    transition: transform .15s ease;
+  }
+  nav.toc button.toc-caret:hover { background: #f2f3f7; color: var(--ink); }
+  nav.toc li.toc-group.collapsed > .toc-row button.toc-caret { transform: rotate(-90deg); }
+  nav.toc li.toc-group.collapsed > ul.toc-sub { display: none; }
+
+  /* ============ 侧栏收起 ============ */
+  nav.toc .toc-side-toggle {
+    position: absolute; top: 0; right: -17px;
+    width: 26px; height: 26px; border-radius: 50%;
+    border: 1px solid var(--line); background: var(--paper);
+    color: var(--ink-mute); cursor: pointer; font-size: 12px; line-height: 1;
+    display: flex; align-items: center; justify-content: center; padding: 0;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  nav.toc .toc-side-toggle:hover { color: var(--ink); border-color: #c9cedb; }
+  .toc-restore {
+    display: none; position: sticky; top: 24px; align-self: flex-start;
+    flex: 0 0 auto; width: 30px; height: 64px; margin-right: 26px;
+    border: 1px solid var(--line); border-radius: 8px; background: var(--paper);
+    cursor: pointer; color: var(--ink-mute); font-size: 14px; padding: 0;
+    align-items: center; justify-content: center;
+  }
+  .toc-restore:hover { color: var(--ink); border-color: #c9cedb; background: #f7f8fc; }
+  .layout.toc-hidden { gap: 0; }
+  .layout.toc-hidden nav.toc { display: none; }
+  .layout.toc-hidden .toc-restore { display: flex; }
+  .layout.toc-hidden main { max-width: 1016px; }
+
   main { flex: 1; min-width: 0; max-width: 800px; }
 
   /* ============ 章节 ============ */
@@ -133,12 +177,12 @@
   footer.site { border-top: 1px solid var(--line); text-align: center; color: var(--ink-mute); font-size: 13px; padding: 26px 0 44px; }
 
   @media (max-width: 960px) {
-    nav.toc { display: none; }
+    nav.toc, .toc-restore { display: none !important; }
     .layout { padding: 8px 16px 60px; }
     .site-head h1 { font-size: 25px; }
   }
   @media print {
-    nav.toc, .site-head { display: none; }
+    nav.toc, .toc-restore, .site-head { display: none; }
     .layout { display: block; padding: 0; }
     section.chap { break-inside: avoid-page; }
     figure.code .bar button { display: none; }
@@ -158,37 +202,71 @@
 
 <div class="layout">
 <nav class="toc" id="toc">
-  <p class="toc-title">目录</p>
+  <button class="toc-side-toggle" type="button" title="收起目录" aria-label="收起目录">❮</button>
+  <div class="toc-head">
+    <p class="toc-title">目录</p>
+    <button class="toc-all" id="toc-all" type="button">收起全部</button>
+  </div>
   <ul>
-    <li><a class="lvl1" href="#ch1">一、是什么：定义、演进与定位</a></li>
-    <li><a class="lvl3" href="#s1-1">1.1 定义与能力范围</a></li>
-    <li><a class="lvl3" href="#s1-2">1.2 三个技术阶段</a></li>
-    <li><a class="lvl3" href="#s1-3">1.3 对工程师意味着什么</a></li>
-    <li><a class="lvl1" href="#ch2">二、能干什么：七个典型场景</a></li>
-    <li><a class="lvl3" href="#s2-0">2.0 场景总览</a></li>
-    <li><a class="lvl3" href="#s2-1">2.1 脚手架代码</a></li>
-    <li><a class="lvl3" href="#s2-2">2.2 遗留代码理解</a></li>
-    <li><a class="lvl3" href="#s2-3">2.3 重构与迁移</a></li>
-    <li><a class="lvl3" href="#s2-4">2.4 排障</a></li>
-    <li><a class="lvl3" href="#s2-5">2.5 写测试</a></li>
-    <li><a class="lvl3" href="#s2-6">2.6 文档</a></li>
-    <li><a class="lvl3" href="#s2-7">2.7 正则 / Shell / Sed</a></li>
-    <li><a class="lvl1" href="#ch3">三、不能干什么：能力边界</a></li>
-    <li><a class="lvl3" href="#s3-1">边界一：幻觉</a></li>
-    <li><a class="lvl3" href="#s3-2">边界二：上下文限制</a></li>
-    <li><a class="lvl3" href="#s3-3">边界三：安全合规</a></li>
-    <li><a class="lvl3" href="#s3-4">边界四：责任归属</a></li>
-    <li><a class="lvl3" href="#s3-5">边界五：何时效率更低</a></li>
-    <li><a class="lvl1" href="#ch4">四、怎么用好：六项实践</a></li>
-    <li><a class="lvl3" href="#s4-1">实践一：给足上下文（Prompt 与项目规则）</a></li>
-    <li><a class="lvl3" href="#s4-2">实践二：任务分解</a></li>
-    <li><a class="lvl3" href="#s4-3">实践三：代码审查</a></li>
-    <li><a class="lvl3" href="#s4-4">实践四：迭代修正</a></li>
-    <li><a class="lvl3" href="#s4-5">实践五：CodeMap 指路</a></li>
-    <li><a class="lvl3" href="#s4-6">实践六：拷问式开局</a></li>
+    <li class="toc-group">
+      <div class="toc-row">
+        <a class="lvl1" href="#ch1">一、是什么：定义、演进与定位</a>
+        <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
+      </div>
+      <ul class="toc-sub">
+        <li><a class="lvl3" href="#s1-1">1.1 定义与能力范围</a></li>
+        <li><a class="lvl3" href="#s1-2">1.2 三个技术阶段</a></li>
+        <li><a class="lvl3" href="#s1-3">1.3 对工程师意味着什么</a></li>
+      </ul>
+    </li>
+    <li class="toc-group">
+      <div class="toc-row">
+        <a class="lvl1" href="#ch2">二、能干什么：七个典型场景</a>
+        <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
+      </div>
+      <ul class="toc-sub">
+        <li><a class="lvl3" href="#s2-0">2.0 场景总览</a></li>
+        <li><a class="lvl3" href="#s2-1">2.1 脚手架代码</a></li>
+        <li><a class="lvl3" href="#s2-2">2.2 遗留代码理解</a></li>
+        <li><a class="lvl3" href="#s2-3">2.3 重构与迁移</a></li>
+        <li><a class="lvl3" href="#s2-4">2.4 排障</a></li>
+        <li><a class="lvl3" href="#s2-5">2.5 写测试</a></li>
+        <li><a class="lvl3" href="#s2-6">2.6 文档</a></li>
+        <li><a class="lvl3" href="#s2-7">2.7 正则 / Shell / Sed</a></li>
+      </ul>
+    </li>
+    <li class="toc-group">
+      <div class="toc-row">
+        <a class="lvl1" href="#ch3">三、不能干什么：能力边界</a>
+        <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
+      </div>
+      <ul class="toc-sub">
+        <li><a class="lvl3" href="#s3-1">边界一：幻觉</a></li>
+        <li><a class="lvl3" href="#s3-2">边界二：上下文限制</a></li>
+        <li><a class="lvl3" href="#s3-3">边界三：安全合规</a></li>
+        <li><a class="lvl3" href="#s3-4">边界四：责任归属</a></li>
+        <li><a class="lvl3" href="#s3-5">边界五：何时效率更低</a></li>
+      </ul>
+    </li>
+    <li class="toc-group">
+      <div class="toc-row">
+        <a class="lvl1" href="#ch4">四、怎么用好：七项实践</a>
+        <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
+      </div>
+      <ul class="toc-sub">
+        <li><a class="lvl3" href="#s4-1">实践一：给足上下文（Prompt 与项目规则）</a></li>
+        <li><a class="lvl3" href="#s4-2">实践二：任务分解</a></li>
+        <li><a class="lvl3" href="#s4-3">实践三：代码审查</a></li>
+        <li><a class="lvl3" href="#s4-4">实践四：迭代修正</a></li>
+        <li><a class="lvl3" href="#s4-5">实践五：CodeMap 指路</a></li>
+        <li><a class="lvl3" href="#s4-6">实践六：拷问式开局</a></li>
+        <li><a class="lvl3" href="#s4-7">实践七：AI 自我验证</a></li>
+      </ul>
+    </li>
     <li><a class="lvl1" href="#appendix">附录：配套演示</a></li>
   </ul>
 </nav>
+<button class="toc-restore" type="button" title="展开目录" aria-label="展开目录">❯</button>
 
 <main>
 
@@ -457,8 +535,8 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
 
 <!-- ==================== 第四章 ==================== -->
 <section class="chap" id="ch4">
-  <h2 class="chap-title">四、怎么用好：六项实践</h2>
-  <p>前两章回答"它能做什么、不能做什么"，本章回答"你该怎么做"。第一项是根基——<b>给足上下文</b>：对话级的 Prompt 写作与项目级的规则文件是一件事的两面，前者每次委托时交代，后者一次写好、长期生效；随后三项是<b>对话级习惯</b>，每个对应一个可以立即开始练习的动作；最后两项是<b>项目级基础设施</b>——维护地图、拷问需求——让团队与 Agent 的协作收敛而不是发散。</p>
+  <h2 class="chap-title">四、怎么用好：七项实践</h2>
+  <p>前两章回答"它能做什么、不能做什么"，本章回答"你该怎么做"。第一项是根基——<b>给足上下文</b>：对话级的 Prompt 写作与项目级的规则文件是一件事的两面，前者每次委托时交代，后者一次写好、长期生效；随后三项是<b>对话级习惯</b>，每个对应一个可以立即开始练习的动作；最后三项是<b>项目级基础设施</b>——维护地图、拷问需求、验收闭环——让团队与 Agent 的协作收敛而不是发散。</p>
 
   <h3 id="s4-1">实践一：给足上下文——Prompt 写作与项目规则</h3>
   <p>Prompt 的本质是需求文档：你写给外包团队的需求文档怎么写，Prompt 就怎么写。同一个"实现分页"的需求，两种写法的产出质量差距巨大。反例：</p>
@@ -511,7 +589,7 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
 第 4 轮  「金额为什么用 double？改 BigDecimal」        → 纠偏细节
 第 5 轮  「给这个类补充注释和单测」                    → 补全配套</code></pre></figure>
   <p>两个立即可用的技巧：<b>提供参照物</b>——项目里一个现成的类，胜过十句描述；<b>要求自我检查</b>——"检查上面代码的边界情况并逐条列出"，AI 经常能挑出自己的毛病。</p>
-  <p>以上对话级实践对应的能力——写需求文档、拆任务、审代码、迭代地带人——都是工程师已经掌握的，需要的只是习惯的迁移。接下来两项则要在项目层面一次性建设。</p>
+  <p>以上对话级实践对应的能力——写需求文档、拆任务、审代码、迭代地带人——都是工程师已经掌握的，需要的只是习惯的迁移。接下来三项则要在项目层面一次性建设。</p>
 
   <h3 id="s4-5">实践五：用 CodeMap 给 Agent 指路</h3>
   <p>真实仓库动辄上千个文件，让 Agent 自己全仓搜索，既慢又容易断错调用链。给高频功能维护<b>面向 Agent 的代码地图（CodeMap）</b>——注意，不是给人看的架构百科。四条要领：</p>
@@ -545,7 +623,23 @@ Node: 退款入口        [confirmed] OrderController :: refund
   <p>拷问结束后，你得到的是一份被压测过的需求说明、更新过的术语与决策，再交给 Agent 执行——此时 Prompt 里的每句话都有出处。</p>
   <p>两类资产<b>按需惰性创建</b>：仓库里还没有它们时，Agent 静默继续，等术语或决策真正落定才落盘——预先铺满的文档没人维护，很快变成新的遗留代码。配套的纪律是冲突显式化：Agent 的输出与术语表或既有 ADR 矛盾时，必须显式指出（"与 ADR-0007 矛盾——但值得重开，因为……"），而不是静默覆盖。Demo 08 把这套约定写在 <code class="inline">docs/agents/domain.md</code>。</p>
 
-  <p>把实践一沉淀的规则文件、实践五的代码地图、实践六的拷问访谈连起来，就是 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a> 配置下一次任务的完整生命周期。注意两个人机交接点（Gate）——需求与规格的批准都由人拍板，Agent 只在批准后动手：</p>
+  <h3 id="s4-7">实践七：AI 自我验证——把验收标准交给机器执行</h3>
+  <p>实践四说"不指望一次生成完美"，但多数人的迭代方式是：AI 写完，人来运行、人来发现 bug、人再反馈回去修。这恰恰把方向用反了——编程 Agent 的天性是<b>工具调用循环</b>：写代码、观察反馈、修改、再观察，一轮轮迭代直到任务完成。当验证环节由人承担时，人就成了这个循环里的"工具人"，永远在机械地替 AI 做测试。解法是反转角色：<b>人制定验收标准，AI 按标准自我验证</b>，让"写代码 → 查问题 → 改代码"的闭环完全由 Agent 自己走完。</p>
+  <p>另一条常见的弯路是把可靠性寄托在"更细致的 Prompt"上——规范越写越长、流程越铺越重。这条路有两个上限：一是对使用者能力要求很高，面对不熟悉的技术栈根本无从把关；二是长 Prompt 本身是对原始需求的"展开"，微小的偏差会沿流程逐级放大，指令越长 AI 越难完全遵循。细致的上下文（实践一、实践六）解决"方向对"，自我验证解决"结果对"，两者不能互相替代。</p>
+  <p>从简单到复杂，三种给 Agent 配备的自我验证能力：</p>
+  <ul>
+    <li><b>lint 检查</b>——最低成本的守门员，专治幻觉类低级错误：括号没对齐、删了代码却留下引用、变量未定义。在 AGENTS.md 里写一条硬规则：每次修改代码后<b>必须</b>运行 lint，并保证完全通过。</li>
+    <li><b>集成测试</b>——只关心"给定输入是否产出预期输出"，不关心实现细节，天然适合作验收标准。先让 AI 写好端到端用例并自己跑通，改代码时"修改前后各跑一遍，必须全绿"；配套一条铁律：<b>严禁 Agent 修改测试用例</b>——认为用例不合理可以提出，但改不改由人拍板，否则等于让考生自己改考卷。</li>
+    <li><b>浏览器自动化（Playwright）</b>——Web 场景的大杀器：让 Agent 自己启动项目、打开页面、模拟用户操作、核对结果，替代人工点检。代价是 token 消耗显著上升，适合收尾验收而非每轮迭代。</li>
+  </ul>
+  <figure class="code" data-lang="prompt"><pre><code>把以下自我验证规则补充到 AGENTS.md：
+- 每次修改代码后必须运行编译 + lint，保证完全通过
+- 修改业务代码前后各运行一遍集成测试，必须全部通过
+- 严禁修改集成测试用例；认为用例不合理时，先说明理由等我确认
+功能实现完成后，本地启动项目并用 Playwright 走一遍核心路径</code></pre></figure>
+  <p>这套实践与实践一规则文件里的"怎么构建与验证"直接呼应：那条构建与测试命令本该是 Agent 自查的依据，而不是摆设。配上验收闭环之后，工程体验会发生质变——你不再盯着进度逐条指 bug，而是给出需求和验收标准，然后等待一个自证通过的结论；实践三的代码审查依然不可省，但它从"每轮纠错"退到"最终把关"。</p>
+
+  <p>把实践一沉淀的规则文件、实践五的代码地图、实践六的拷问访谈、实践七的验收闭环连起来，就是 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a> 配置下一次任务的完整生命周期。注意两个人机交接点（Gate）——需求与规格的批准都由人拍板，Agent 只在批准后动手：</p>
   <figure class="code" data-lang="text"><pre><code>口头需求 / 工单
   │  /grill-with-docs 拷问式访谈（先读 AGENTS.md · CodeMap · CONTEXT.md）
   ▼
@@ -658,6 +752,62 @@ document.querySelectorAll('figure.code').forEach(function (fig) {
   });
 })();
 
+/* ---------- 目录折叠 ---------- */
+var tocCollapse = (function () {
+  var nav = document.querySelector('nav.toc');
+  if (!nav) return { reveal: function () {} };
+  var groups = Array.prototype.slice.call(nav.querySelectorAll('li.toc-group'));
+  var allBtn = document.getElementById('toc-all');
+
+  function setGroup(g, collapsed) {
+    g.classList.toggle('collapsed', collapsed);
+    var btn = g.querySelector('.toc-caret');
+    if (btn) btn.setAttribute('aria-expanded', collapsed ? 'false' : 'true');
+  }
+  function syncAll() {
+    if (!allBtn) return;
+    var open = groups.filter(function (g) { return !g.classList.contains('collapsed'); }).length;
+    allBtn.textContent = open === groups.length ? '收起全部' : '展开全部';
+  }
+  groups.forEach(function (g) {
+    var btn = g.querySelector('.toc-caret');
+    if (btn) btn.addEventListener('click', function () {
+      setGroup(g, !g.classList.contains('collapsed'));
+      syncAll();
+    });
+  });
+  if (allBtn) allBtn.addEventListener('click', function () {
+    var collapse = groups.every(function (g) { return !g.classList.contains('collapsed'); });
+    groups.forEach(function (g) { setGroup(g, collapse); });
+    syncAll();
+  });
+  return {
+    reveal: function (a) {
+      var g = a.closest('li.toc-group');
+      if (g && g.classList.contains('collapsed')) { setGroup(g, false); syncAll(); }
+    }
+  };
+})();
+
+/* ---------- 侧栏收起 ---------- */
+(function () {
+  var layout = document.querySelector('.layout');
+  var toggle = document.querySelector('nav.toc .toc-side-toggle');
+  var restore = document.querySelector('.toc-restore');
+  if (!layout || !toggle || !restore) return;
+  function setHidden(hidden) {
+    layout.classList.toggle('toc-hidden', hidden);
+    try {
+      if (hidden) localStorage.setItem('toc-hidden', '1');
+      else localStorage.removeItem('toc-hidden');
+    } catch (e) {}
+  }
+  toggle.addEventListener('click', function () { setHidden(true); });
+  restore.addEventListener('click', function () { setHidden(false); });
+  try { if (localStorage.getItem('toc-hidden') === '1') layout.classList.add('toc-hidden'); }
+  catch (e) {}
+})();
+
 /* ---------- 目录滚动高亮 ---------- */
 (function () {
   var links = Array.prototype.slice.call(document.querySelectorAll('nav.toc a'));
@@ -668,11 +818,14 @@ document.querySelectorAll('figure.code').forEach(function (fig) {
       if (e.isIntersecting) {
         links.forEach(function (a) { a.classList.remove('active'); });
         var a = map[e.target.id];
-        if (a) a.classList.add('active');
+        if (a) {
+          a.classList.add('active');
+          tocCollapse.reveal(a);
+        }
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
-  ['ch1','s1-1','s1-2','s1-3','ch2','s2-0','s2-1','s2-2','s2-3','s2-4','s2-5','s2-6','s2-7','s2-8','ch3','s3-1','s3-2','s3-3','s3-4','s3-5','ch4','s4-1','s4-2','s4-3','s4-4','s4-5','s4-6','route','appendix'].forEach(function (id) {
+  ['ch1','s1-1','s1-2','s1-3','ch2','s2-0','s2-1','s2-2','s2-3','s2-4','s2-5','s2-6','s2-7','s2-8','ch3','s3-1','s3-2','s3-3','s3-4','s3-5','ch4','s4-1','s4-2','s4-3','s4-4','s4-5','s4-6','s4-7','route','appendix'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) obs.observe(el);
   });
