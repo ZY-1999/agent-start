@@ -1,0 +1,35 @@
+2026-09-12 14:23:51 INFO  [order-svc] 10.20.133.45 POST /api/orders status=200 cost=35ms
+2026-09-12 14:23:52 WARN  [order-svc] 10.20.133.45 GET /api/orders/881 status=200 cost=121ms
+2026-09-12 14:23:53 ERROR [order-svc] 10.20.133.45 POST /api/orders status=500 cost=3021ms orderId=A20260912001
+2026-09-12 14:23:54 INFO  [auth-svc]  172.16.8.10 POST /api/auth/login status=200 cost=88ms
+2026-09-12 14:23:55 INFO  [auth-svc]  172.16.8.10 POST /api/auth/login status=200 cost=79ms
+2026-09-12 14:23:56 ERROR [auth-svc]  203.0.113.7 POST /api/auth/login status=401 cost=12ms
+2026-09-12 14:23:57 INFO  [order-svc] 10.20.133.46 GET /api/orders/882 status=200 cost=45ms
+2026-09-12 14:23:58 INFO  [order-svc] 10.20.133.46 PUT /api/orders/882 status=200 cost=67ms
+2026-09-12 14:23:59 ERROR [pay-svc]   10.20.133.46 POST /api/payments status=500 cost=5430ms orderId=A20260912002
+2026-09-12 14:24:00 INFO  [pay-svc]   10.20.133.47 GET /api/payments/5501 status=200 cost=33ms
+2026-09-12 14:24:01 WARN  [order-svc] 10.20.133.47 GET /api/orders/883 status=404 cost=8ms
+2026-09-12 14:24:02 INFO  [auth-svc]  198.51.100.23 POST /api/auth/login status=200 cost=95ms
+2026-09-12 14:24:03 INFO  [auth-svc]  198.51.100.23 POST /api/auth/refresh status=200 cost=41ms
+2026-09-12 14:24:04 ERROR [order-svc] 198.51.100.23 POST /api/orders status=500 cost=2877ms orderId=A20260912003
+2026-09-12 14:24:05 INFO  [order-svc] 10.20.133.45 GET /api/orders/884 status=200 cost=52ms
+2026-09-12 14:24:06 INFO  [order-svc] 10.20.133.45 GET /api/orders/885 status=200 cost=49ms
+2026-09-12 14:24:07 INFO  [order-svc] 10.20.133.45 POST /api/orders status=201 cost=210ms orderId=A20260912004
+2026-09-12 14:24:08 WARN  [pay-svc]   172.16.8.10 POST /api/payments status=409 cost=15ms
+2026-09-12 14:24:09 ERROR [auth-svc]  203.0.113.7 POST /api/auth/login status=401 cost=11ms
+2026-09-12 14:24:10 ERROR [auth-svc]  203.0.113.7 POST /api/auth/login status=401 cost=9ms
+2026-09-12 14:24:11 ERROR [auth-svc]  203.0.113.7 POST /api/auth/login status=401 cost=10ms
+2026-09-12 14:24:12 INFO  [order-svc] 10.20.133.46 DELETE /api/orders/886 status=204 cost=63ms
+2026-09-12 14:24:13 INFO  [order-svc] 10.20.133.46 GET /api/orders/887 status=200 cost=44ms
+2026-09-12 14:24:14 INFO  [order-svc] 10.20.133.46 GET /api/orders/888 status=200 cost=47ms
+2026-09-12 14:24:15 ERROR [pay-svc]   10.20.133.47 POST /api/payments status=500 cost=6110ms orderId=A20260912005
+2026-09-12 14:24:16 INFO  [pay-svc]   10.20.133.47 GET /api/payments/5502 status=200 cost=38ms
+2026-09-12 14:24:17 INFO  [pay-svc]   10.20.133.47 GET /api/payments/5503 status=200 cost=29ms
+2026-09-12 14:24:18 INFO  [gateway]   172.16.8.10 GET /actuator/health status=200 cost=3ms
+2026-09-12 14:24:19 INFO  [gateway]   172.16.8.10 GET /actuator/health status=200 cost=2ms
+2026-09-12 14:24:20 ERROR [order-svc] 10.20.133.45 POST /api/orders status=500 cost=4102ms orderId=A20260912006
+2026-09-12 14:24:21 INFO  [order-svc] 10.20.133.46 GET /api/orders/889 status=200 cost=50ms
+2026-09-12 14:24:22 WARN  [order-svc] 198.51.100.23 GET /api/orders/890 status=404 cost=7ms
+2026-09-12 14:24:23 INFO  [auth-svc]  198.51.100.23 POST /api/auth/refresh status=200 cost=36ms
+2026-09-12 14:24:24 INFO  [order-svc] 10.20.133.45 PUT /api/orders/891 status=200 cost=72ms
+2026-09-12 14:24:25 ERROR [pay-svc]   203.0.113.7 POST /api/payments status=500 cost=3890ms orderId=A20260912007
