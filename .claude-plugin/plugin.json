@@ -1,0 +1,26 @@
+{
+  "version": "1.0.1",
+  "name": "zy-skills",
+  "skills": [
+    "./skills/dev/grill-with-docs",
+    "./skills/dev/prototype",
+    "./skills/dev/domain-modeling",
+    "./skills/dev/codebase-design",
+    "./skills/dev/codemap",
+    "./skills/dev/setup-skills",
+    "./skills/dev/review",
+    "./skills/dev/idea-to-prd",
+    "./skills/dev/improve-architecture",
+    "./skills/dev/diagnose-bug",
+    "./skills/dev/to-prd",
+    "./skills/general/route",
+    "./skills/general/handoff",
+    "./skills/general/grill-me",
+    "./skills/general/grilling",
+    "./skills/general/teach",
+    "./skills/general/writing-great-skills",
+    "./skills/sdd/to-spec",
+    "./skills/sdd/tdd",
+    "./skills/sdd/sdd-flow"
+  ]
+}

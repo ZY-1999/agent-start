@@ -1,6 +1,6 @@
 # 08-project-demo — Agent 说明
 
-## Agent skills
+## Agent Notice
 
 ### Issue tracker
 

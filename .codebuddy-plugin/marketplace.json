@@ -1,0 +1,18 @@
+{
+  "name": "zy-skills-local",
+  "description": "本地 zy-skills 插件市场（fork of mattpocock/skills，base/ 通用 + sdd/ SDD 两个技能桶）。",
+  "owner": {
+    "name": "ZY-1999",
+    "url": "https://github.com/ZY-1999/agent-start"
+  },
+  "plugins": [
+    {
+      "name": "zy-skills",
+      "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills. Fork of mattpocock/skills in base/ + sdd/ buckets.",
+      "version": "1.0.1",
+      "source": "./",
+      "homepage": "https://github.com/ZY-1999/agent-start",
+      "license": "MIT"
+    }
+  ]
+}
