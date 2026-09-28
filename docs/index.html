@@ -11,7 +11,7 @@
     --ink-soft: #4a5264;
     --ink-mute: #7b8394;
     --line: #e3e6ec;
-    --accent: #4338ca;
+    --accent: #8ab4f8;
     --warn: #b45309;
     --code-bg: #1b2030;
     --code-ink: #d7dce8;
@@ -138,6 +138,15 @@
     color: var(--ink-soft); font-size: 15.5px;
   }
 
+  /* ============ 核心观点 ============ */
+  .takeaway {
+    border: 1px solid #d5d9f2; border-left: 4px solid var(--accent); border-radius: 10px;
+    background: #f7f8fd; padding: 16px 20px; margin: 26px 0 8px;
+  }
+  .takeaway .t { font-size: 12px; font-weight: 700; letter-spacing: .14em; color: var(--accent); margin: 0 0 8px; }
+  .takeaway p.key { font-size: 17.5px; line-height: 1.9; color: var(--ink); font-weight: 500; margin: 0; }
+  .takeaway p.key b { color: var(--accent); }
+
   /* ============ 代码块 ============ */
   figure.code { margin: 16px 0; border-radius: 8px; overflow: hidden; border: 1px solid #141826; }
   figure.code .bar {
@@ -170,6 +179,16 @@
     padding: 1px 6px; font-size: 13px; font-family: ui-monospace, Consolas, monospace; color: #374151;
   }
 
+  /* ============ 解决 skills 引用 ============ */
+  .skill-refs { margin: -4px 0 14px; font-size: 13px; color: var(--ink-mute); line-height: 2; }
+  .skill-refs .lbl { font-weight: 600; }
+  .skill-refs .item { white-space: nowrap; margin-right: 12px; }
+  code.skill {
+    background: #eef3fe; color: #3b6fd4; border: 1px solid #d3e0fa; border-radius: 999px;
+    padding: 1px 9px; margin-right: 5px; font-size: 12.5px;
+    font-family: ui-monospace, Consolas, monospace;
+  }
+
   a { color: var(--accent); }
   .demo-link { font-weight: 600; text-decoration: none; font-size: 14px; white-space: nowrap; }
   .demo-link:hover { text-decoration: underline; }
@@ -193,7 +212,7 @@
 
 <header class="site-head">
   <div class="inner">
-    <p class="kicker">技术分享 · 面向传统程序员 · 2026-09</p>
+    <p class="kicker">技术分享 ·2026-09</p>
     <h1>什么是 AI Coding？<br>从代码补全到 Agent 开发：能力边界、典型场景与工程实践</h1>
     <p class="sub">AI Coding 正在从个人开发者的效率工具演变为软件工程的基础设施。但"AI 能写代码"本身并不构成一个完整的技术判断——关键在于生成的代码能否通过审查、进入生产环境，并持续维护。本文沿"是什么、能干什么、不能干什么、怎么用好"四个问题展开。</p>
     <p class="meta">内部技术分享 · 配套 8 个演示（7 个现场运行 + 1 个 SDD 仓库模板，见 <code class="inline">demos/</code> 目录） · 全文阅读约 20 分钟</p>
@@ -210,18 +229,17 @@
   <ul>
     <li class="toc-group">
       <div class="toc-row">
-        <a class="lvl1" href="#ch1">一、是什么：定义、演进与定位</a>
+        <a class="lvl1" href="#ch1">一、是什么：定义与演进</a>
         <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
       </div>
       <ul class="toc-sub">
         <li><a class="lvl3" href="#s1-1">1.1 定义与能力范围</a></li>
         <li><a class="lvl3" href="#s1-2">1.2 三个技术阶段</a></li>
-        <li><a class="lvl3" href="#s1-3">1.3 对工程师意味着什么</a></li>
       </ul>
     </li>
     <li class="toc-group">
       <div class="toc-row">
-        <a class="lvl1" href="#ch2">二、能干什么：七个典型场景</a>
+        <a class="lvl1" href="#ch2">二、能干什么：典型场景</a>
         <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
       </div>
       <ul class="toc-sub">
@@ -250,17 +268,26 @@
     </li>
     <li class="toc-group">
       <div class="toc-row">
-        <a class="lvl1" href="#ch4">四、怎么用好：七项实践</a>
+        <a class="lvl1" href="#ch4">四、怎么用好：五项实践</a>
         <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
       </div>
       <ul class="toc-sub">
-        <li><a class="lvl3" href="#s4-1">实践一：给足上下文（Prompt 与项目规则）</a></li>
+        <li><a class="lvl3" href="#s4-1">实践一：给足上下文（Prompt · 拷问 · 规则与地图）</a></li>
         <li><a class="lvl3" href="#s4-2">实践二：任务分解</a></li>
         <li><a class="lvl3" href="#s4-3">实践三：代码审查</a></li>
         <li><a class="lvl3" href="#s4-4">实践四：迭代修正</a></li>
-        <li><a class="lvl3" href="#s4-5">实践五：CodeMap 指路</a></li>
-        <li><a class="lvl3" href="#s4-6">实践六：拷问式开局</a></li>
-        <li><a class="lvl3" href="#s4-7">实践七：AI 自我验证</a></li>
+        <li><a class="lvl3" href="#s4-5">实践五：AI 自我验证</a></li>
+      </ul>
+    </li>
+    <li class="toc-group">
+      <div class="toc-row">
+        <a class="lvl1" href="#ch5">五、对工程师意味着什么</a>
+        <button class="toc-caret" type="button" aria-expanded="true" aria-label="收起本章小节">▾</button>
+      </div>
+      <ul class="toc-sub">
+        <li><a class="lvl3" href="#s5-1">5.1 焦虑不新鲜：三轮同样的变革</a></li>
+        <li><a class="lvl3" href="#s5-2">5.2 三件 AI 做不了、也不该做的事</a></li>
+        <li><a class="lvl3" href="#s5-3">5.3 统一心智模型与协作方式</a></li>
       </ul>
     </li>
     <li><a class="lvl1" href="#appendix">附录：配套演示</a></li>
@@ -272,11 +299,11 @@
 
 <!-- ==================== 第一章 ==================== -->
 <section class="chap" id="ch1">
-  <h2 class="chap-title">一、是什么：定义、演进与定位</h2>
+  <h2 class="chap-title">一、是什么：定义与演进</h2>
 
   <h3 id="s1-1">1.1 定义与能力范围</h3>
   <p>AI Coding 的工作方式是：模型根据开发者提供的输入约束——上下文代码、自然语言描述或结构化规格——生成代码或辅助完成编码任务。从能力范围看，它覆盖代码补全与续写、函数级代码生成、页面与组件搭建、API 接口实现、测试用例生成，以及架构设计辅助和需求到代码的转化。不同工具在这些能力层级上的覆盖深度差异显著。</p>
-  <p>判断一个 AI Coding 工具是否达到可用标准，核心不是看它能否生成代码，而是看它生成的代码是否具备三个属性：<b>可控性、可审查性、可维护性。</b>可控性指生成结果确定、可复现；可审查性指每段代码能追溯需求来源、能被逐条核对；可维护性指代码进入项目后，后续的同事敢于也便于改动。这三个属性决定了 AI 编码成果能否从实验环境进入生产环境，后文的所有结论都围绕它们展开。</p>
+  <p>判断一个 AI Coding 工具是否达到可用标准，核心不是看它能否生成代码，而是看它生成的代码是否具备三个属性：<b>可控性、可审查性、可维护性。</b>可控性指生成结果确定、可复现；可审查性指每段代码能追溯需求来源、能被逐条核对；可维护性指代码进入项目后，后续的同事敢于也便于改动。</p>
 
   <h3 id="s1-2">1.2 三个技术阶段</h3>
   <p>按 AI 参与的深度划分，AI Coding 经历了三个阶段。每个阶段在输入方式、输出可控性和适用场景上有本质区别：</p>
@@ -306,8 +333,7 @@
   </table>
   <p>三个阶段是叠加关系而非替代关系，就像企业可以按场景混用：个人日常编码用补全，方案与排障用对话式，任务级开发在审查与测试门禁就绪后交给 Agent。行业多项开发者调研显示，仅补全类工具就能将日常编码效率提升 20%–40%；后两个阶段在特定任务上的增益更高，对应的质量把关要求也更高。</p>
 
-  <h4>第一阶段：代码补全</h4>
-  <p>补全工具通过分析编辑器当前上下文，预测开发者接下来要输入的代码，提供行级或函数级建议。它的核心价值是减少重复性编码：样板代码、API 调用模板、正则表达式、测试框架脚手架。局限同样明确：只能处理局部上下文，无法理解整体业务逻辑；产出需要开发者自行审查和整合；不具备需求理解和架构设计能力。它是有效的辅助工具，但不能独立承担开发任务。</p>
+  <h4>第一阶段：代码补全</h4>  <p>补全工具通过分析编辑器当前上下文，预测开发者接下来要输入的代码，提供行级或函数级建议。它的核心价值是减少重复性编码：样板代码、API 调用模板、正则表达式、测试框架脚手架。局限同样明确：只能处理局部上下文，无法理解整体业务逻辑；产出需要开发者自行审查和整合；不具备需求理解和架构设计能力。它是有效的辅助工具，但不能独立承担开发任务。</p>
 
   <h4>第二阶段：对话式生成（Vibe Coding）</h4>
   <p>对话式工具将 AI 的参与范围从"代码片段"扩展到"功能模块"：开发者用自然语言描述意图，AI 生成完整的代码文件或方案。这类模式在排障、学习、方案对比、内部工具原型上表现出色，也是目前多数工程师的日常用法。但把它直接用于生产环境的核心系统，会遇到三个结构性挑战：</p>
@@ -329,39 +355,11 @@
     <tr><td>多人协作</td><td>弱，缺乏统一基准</td><td>强，方案 / 规格作为协作基准</td></tr>
     <tr><td>适用场景</td><td>原型、探索、辅助分析</td><td>任务级开发、批量重构</td></tr>
   </table>
-
-  <h3 id="s1-3">1.3 对工程师意味着什么</h3>
-  <p>技术演进层面之外，工程师更关心的是自己的位置。AI Coding 不是第一次改变"写代码"这个动作的成本结构，每一轮生产力工具变革都伴随过同样的焦虑，而身处其中的工程师每一次都完成了过渡：</p>
-  <table>
-    <tr><th>变革</th><th>当时的主流疑虑</th><th>后来的事实</th></tr>
-    <tr><td>汇编 → 高级语言</td><td>编译器生成的代码性能不可接受</td><td>手写汇编退出日常开发，懂底层的工程师反而更稀缺</td></tr>
-    <tr><td>手写代码 → IDE 补全 / 重构</td><td>自动补全打断思路，重构工具不可信</td><td>离开 IDE 重构工具的现代开发流程已不可想象</td></tr>
-    <tr><td>检索式查资料 → 对话式问答</td><td>复制粘贴已足够好用</td><td>正在发生，本文的主题</td></tr>
-  </table>
-  <p>三轮变革的共同规律是：工具消灭的是重复劳动，不是使用工具的人。真正需要担心的不是被 AI 取代，而是被更早完成过渡的同行拉开效率差距。</p>
-  <p>同时也要明确三件 AI 目前做不了、也不该由它做的事：</p>
-  <ul>
-    <li><b>不承担架构决策。</b>选 MySQL 还是 MongoDB、单体还是微服务——AI 能输出对比分析，但拍板依据是团队、预算与历史包袱，这些信息不在它的上下文里。</li>
-    <li><b>不掌握业务理解。</b>"为什么财务模块每月 15 号必须锁账"这类知识藏在组织流程与人的经验中，不在任何训练语料里，必须由工程师翻译给 AI。</li>
-    <li><b>不承担线上责任。</b>AI 可以给排查建议，但对故障报告负责的是提交代码的工程师，责任无法外包给工具。</li>
-  </ul>
-  <p>对三个阶段的工具，一个统一且足够准确的心智模型是：</p>
-  <blockquote>把 AI 当成"一个反应快、知识面广、但产出需要 Code Review 的初级同事"。</blockquote>
-  <p>这个模型的三个特征，分别对应三条使用纪律：</p>
-  <table>
-    <tr><th>特征</th><th>具体表现</th><th>使用纪律</th></tr>
-    <tr><td>反应快</td><td>秒级产出完整代码，全天候响应</td><td>不用"快"作为采纳依据，产出速度与正确性无关</td></tr>
-    <tr><td>知识面广</td><td>主流语言、框架、运维脚本均有积累</td><td>冷门场景要求它给出处，给不出就要警惕</td></tr>
-    <tr><td>需要 Review</td><td>大方向正确，但会编造 API、遗漏边界、风格漂移</td><td>一切产出过编译、测试、Review 三道关，与人写的代码同一标准</td></tr>
-  </table>
-  <p>与这个"同事"协作的方式，本质上就是工程师做了十几年的事情：给任务、给上下文、验收产出、Review 代码。转移的是习惯，不是能力。</p>
 </section>
 
 <!-- ==================== 第二章 ==================== -->
 <section class="chap" id="ch2">
-  <h2 class="chap-title">二、能干什么：七个典型场景</h2>
-  <p>本章是全文核心。每个场景按"任务定义—演示—边界"展开，示例以 Java、SQL、Python、Shell 为主，全部配有可现场运行的演示。</p>
-
+  <h2 class="chap-title">二、能干什么：典型场景</h2>
   <h3 id="s2-0">2.0 场景总览</h3>
   <table>
     <tr><th>场景</th><th>演示内容</th><th>效率增益来源</th><th>主要风险</th><th>配套演示</th></tr>
@@ -404,7 +402,6 @@ public double calc(double p, int t, boolean f, Date d) {
 }</code></pre></figure>
 
   <p>AI 的产出分两层。<b>业务解释层：</b>推断出这是阶梯折扣 + 会员折扣 + 促销月的定价逻辑。<b>事实判断层：</b>指出 <code class="inline">Date.getMonth()</code> 从 0 开始计数，<code class="inline">== 5</code> 实际是六月——如果业务规则是五月促销，这个 bug 已潜伏多年；同时指出金额使用 <code class="inline">double</code> 的精度风险。</p>
-  <div class="warnbox"><p class="t">边界提示</p><p>业务解释是"最合理的推测"，不是事实；技术判断是语言事实，可以直接对照验证。业务结论必须找业务方确认——AI 是理解遗留代码的助手，不是业务历史的记录者。</p></div>
 
   <h3 id="s2-3">2.3 场景三：重构与迁移 <a class="demo-link" href="demos/03-refactor/DEMO.md">Demo 03</a></h3>
   <p><b>任务定义：</b>JDK 8 升 17、Date 全家桶换新 API、慢 SQL 优化、语言迁移。工作量不小但极其琐碎，属于典型的"模式已知"任务。</p>
@@ -427,7 +424,6 @@ LocalDate deadline = d.plusDays(30);</pre>
   </table>
   <p><b>演示 B：慢 SQL 优化。</b>输入表结构、慢查询与 EXPLAIN 结果，AI 的标准产出包含三部分：性能问题点清单（函数包列导致索引失效、<code class="inline">SELECT *</code> 阻断覆盖索引、子查询执行计划差）、改写后的 SQL 及每处改动原理、建议索引及列顺序依据。</p>
   <p>这类任务 AI 表现稳定的原因具有普遍意义：迁移和优化是模式已知、语料充足的任务——无数工程师做过 JDK 8→11→17，标准解法遍布训练语料。AI 最擅长的正是此类工作。</p>
-  <div class="note"><p class="t">实践建议</p><p>让 AI 在输出中附"变更点清单"（原写法 → 新写法 → 原因），把审查从通读全文变为逐项核对，这是迁移类任务的安全措施。SQL 索引建议必须在生产级数据量上实测验证。</p></div>
 
   <h3 id="s2-4">2.4 场景四：排障 <a class="demo-link" href="demos/04-debug/DEMO.md">Demo 04</a></h3>
   <p><b>任务定义：</b>面对陌生异常栈，传统流程是"搜异常名 → 翻博客 → 筛选过时答案"，冷门异常可能耗掉半天。</p>
@@ -441,7 +437,6 @@ LocalDate deadline = d.plusDays(30);</pre>
 ...</code></pre></figure>
 
   <p>合格的回答包含三层：<b>直接原因</b>——fail-fast 迭代器发现 modCount 与 expectedModCount 不一致；<b>定位</b>——第 42 行的遍历中做了结构性修改；<b>修复选项</b>——<code class="inline">removeIf()</code>、迭代器删除、收集后统一删，各自适用场景与推荐理由。与传统搜索的区别在于：答案针对的是你的堆栈和你的代码，而不是别人的场景。</p>
-  <p>需要注意，排障效果与输入信息质量成正比。AI 只能分析你提供的信息——上下文不全（分布式链路、环境差异、数据问题）时它会"自信地猜"。信息给得越全，它越准，这与带新人排查问题遵循同一条规律。</p>
 
   <h3 id="s2-5">2.5 场景五：写测试 <a class="demo-link" href="demos/05-testing/DEMO.md">Demo 05</a></h3>
   <p><b>任务定义：</b>补测试覆盖率是"正确但无聊"的工作，边界用例的枚举质量取决于当时的耐心。</p>
@@ -451,7 +446,6 @@ LocalDate deadline = d.plusDays(30);</pre>
     <tr><td>确定性覆盖</td><td>正常值（购买 10 件）；折扣临界（99 / 100 / 101 件）；VIP 与数量折扣的叠加顺序</td></tr>
     <tr><td>防御性发现</td><td>数量为 0、为负数时的行为；单价为 null 抛什么异常；BigDecimal 精度与断言方式</td></tr>
   </table>
-  <p>在本 Demo 中，AI 会额外指出被测代码的防御缺失——负数数量当前会返回负数总额，等于"下单越多退钱越多"。测试生成与代码审查一次完成，这是该场景超出预期的部分。人工的职责是核对期望值，防止 AI 为凑绿而写错断言。</p>
 
   <h3 id="s2-6">2.6 场景六：文档 <a class="demo-link" href="demos/06-docs/DEMO.md">Demo 06</a></h3>
   <p><b>任务定义：</b>接口文档、README、Commit Message——所有团队都认同其价值，多数团队因成本而长期欠账。</p>
@@ -480,14 +474,13 @@ LocalDate deadline = d.plusDays(30);</pre>
 grep -oE '[0-9]{1,3}(\.[0-9]{1,3}){3}' access.log | sort | uniq -c | sort -rn | head -5
 
 # 3. 先备份再原地替换（GNU sed 与 BSD sed 的 -i 行为不同，跨平台需注意）
-cp config.properties config.properties.bak
-sed -i 's/env=test/env=prod/g' config.properties</code></pre></figure>
-
+ cp config.properties config.properties.bak
+ sed -i 's/env=test/env=prod/g' config.properties</code></pre></figure>
+</section>
 
 <!-- ==================== 第三章 ==================== -->
 <section class="chap" id="ch3">
   <h2 class="chap-title">三、不能干什么：能力边界</h2>
-  <p>只讲好处的介绍是推销，讲清边界的介绍才是工程。本章五条边界，每条附现象与对策——这一章是建立信任的关键。</p>
 
   <h3 id="s3-1">边界一：幻觉——编造不存在的东西</h3>
   <p><b>现象：</b>AI 会以确定的语气输出不存在的 API、过时的用法、想象中的配置项。这不是故障，是大语言模型工作原理的固有属性——它计算的是"最合理的下一个词"，而不是"真实的下一个词"。这也是五条边界中最高频的一条。</p>
@@ -530,15 +523,17 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
     <tr><td>性能敏感代码</td><td>AI 生成"平均值正确"的代码，不理解你的热点路径</td><td>人写核心路径，AI 做基准测试脚手架</td></tr>
     <tr><td>团队强规范</td><td>生成 → 改风格 → 改命名，来回拉扯</td><td>把规范文件作为上下文提供后再生成</td></tr>
   </table>
-  <p>判断标准与 2.0 节一致："说清需求的成本"对比"动手做的成本"，谁低用谁。承认 AI 有负增益场景，是用好它的前提。</p>
 </section>
 
 <!-- ==================== 第四章 ==================== -->
 <section class="chap" id="ch4">
-  <h2 class="chap-title">四、怎么用好：七项实践</h2>
-  <p>前两章回答"它能做什么、不能做什么"，本章回答"你该怎么做"。第一项是根基——<b>给足上下文</b>：对话级的 Prompt 写作与项目级的规则文件是一件事的两面，前者每次委托时交代，后者一次写好、长期生效；随后三项是<b>对话级习惯</b>，每个对应一个可以立即开始练习的动作；最后三项是<b>项目级基础设施</b>——维护地图、拷问需求、验收闭环——让团队与 Agent 的协作收敛而不是发散。</p>
+  <h2 class="chap-title">四、怎么用好：五项实践</h2>
+  <p>前两章回答"它能做什么、不能做什么"，本章回答"你该怎么做"。第一项是根基——<b>给足上下文</b>：从对话级的 Prompt 写作，到需求级的拷问式开局（grill），再到项目级的规则文件与代码地图（CodeMap），共同回答"Agent 进场前，什么已经准备好了"；中间三项是<b>对话级习惯</b>——任务分解、代码审查、迭代修正——每个对应一个可以立即开始练习的动作；最后一项是<b>项目级基础设施</b>——AI 自我验证的验收闭环——让团队与 Agent 的协作收敛而不是发散。每项实践标题下方标注了对应的<b>解决 skills</b>（opencode / Claude Code 斜杠命令，全量收录在本仓库 <code class="inline">skills/</code> 目录），可直接取用。</p>
 
-  <h3 id="s4-1">实践一：给足上下文——Prompt 写作与项目规则</h3>
+  <h3 id="s4-1">实践一：给足上下文——Prompt、拷问、规则与地图</h3>
+  <p class="skill-refs"><span class="lbl">解决 skills：</span><span class="item"><code class="skill">/grill-with-docs</code>拷问式访谈压实需求</span><span class="item"><code class="skill">/idea-to-prd</code>从想法拷问到 PRD</span><br><span class="item"><code class="skill">/setup-skills</code>初始化规则与文档骨架</span><span class="item"><code class="skill">/codemap</code>生成与维护代码地图</span><span class="item"><code class="skill">/domain-modeling</code>维护术语表与 ADR</span><span class="item"><code class="skill">/improve-architecture</code>扫描架构深化机会</span><span class="item"><code class="skill">/diagnose-bug</code>复现并钉死根因</span></p>
+  <p>"给足上下文"分两层：<b>对话级</b>的 Prompt 每次委托时交代；<b>需求级与项目级</b>的上下文沉淀成仓库资产，一次准备、长期生效——拷问式访谈（grill）在开工前压实需求、沉淀术语表与 ADR，规则文件（AGENTS.md）交代构建验证、编码规范与安全红线，代码地图（CodeMap）给 Agent 标注仓库地形。</p>
+
   <p>Prompt 的本质是需求文档：你写给外包团队的需求文档怎么写，Prompt 就怎么写。同一个"实现分页"的需求，两种写法的产出质量差距巨大。反例：</p>
   <figure class="code" data-lang="prompt"><pre><code>帮我写个分页</code></pre></figure>
   <p>没有技术栈，它猜一个；没有字段定义，它编字段；没有规范约束，风格随缘。结果能用，但要大改。正例：</p>
@@ -550,16 +545,26 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
 - status 为空时不过滤
 风格参照附件里的 UserController。</code></pre></figure>
   <p>技术栈、字段、返回结构、参照物齐备，一次生成的可用率显著提高。归纳成三要素：<b>上下文</b>（什么技术、什么场景）、<b>约束</b>（不能做什么、按什么规范）、<b>示例</b>（照着项目里哪个类写）。三要素齐备，一句"帮我写个 XX"才能变成一次合格的委托。</p>
-  <p>三要素里最花成本的是上下文与示例——每个 Prompt 都重新交代一遍，很快没人坚持。最常见的失误正在这里：Agent 每次进场都从零开始，不知道构建命令、不了解分层约定、不清楚哪些目录碰不得。解法是把可复用的部分沉淀成<b>项目规则文件</b>——在仓库根部放一份规则文件（AGENTS.md、CLAUDE.md、CONTEXT.md，各工具叫法不同，作用一致），把三件事写清楚：</p>
-  <ul>
-    <li><b>怎么构建与验证</b>——构建、测试、lint 命令；这是 Agent 自查的依据，而不是靠它猜</li>
-    <li><b>代码写成什么样</b>——分层与命名约定、错误码风格，各给一个参照类；一个现成的类比十句描述管用</li>
-    <li><b>什么不能碰</b>——安全红线、合规要求、禁改目录、密钥与数据的处理边界</li>
-  </ul>
-  <p>没有这份文件，同一个 Prompt 每次产出的风格都不一样；有了它，三要素中的上下文与约束由项目兜底，产出天然向项目规范收敛，Review 的纠偏成本大幅下降。</p>
-  <p>三件事是最小集，成熟形态会长成 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a> 的样子：规则文件不堆长文，而是索引到 <code class="inline">docs/agents/</code> 下的分文件约定。</p>
+  <p>三要素里最花成本的是上下文与示例——每个 Prompt 都重新交代一遍，很快没人坚持。最常见的失误正在这里：Agent 每次进场都从零开始，不知道构建命令、不了解分层约定、不清楚哪些目录碰不得。解法是把可复用的部分沉淀成仓库资产，落位如下（Demo 08 模板）：</p>
+
+  <figure class="code" data-lang="text"><pre><code>08-project-demo/
+├── AGENTS.md                  # 规则入口：索引下面所有约定，Agent 进场先读
+├── CONTEXT.md                 # 全局上下文 + 术语表（/domain-modeling 按需创建）
+└── docs/
+    ├── adr/                   # 架构决策记录（按需创建，如 ADR-0007.md）
+    ├── codemap/               # Agent 代码地图（首批代码落地后 /codemap 生成）
+    └── agents/
+        ├── domain.md          # 术语表与 ADR 的创建纪律（惰性创建、冲突显式化）
+        ├── issue-tracker.md   # 本地 issue 跟踪（.scratch/&lt;feature&gt;/）
+        ├── triage-labels.md   # needs-info / ready-for-agent 等流转标签
+        ├── git-contract.md    # 分支与提交契约
+        ├── JAVA开发规范.md     # 【强制】/【推荐】/【参考】分级
+        └── 数据库规范.md       # 建表、索引、SQL 规约</code></pre></figure>
+
+  <p>所有资产<b>按需惰性创建</b>：仓库里还没有它们时 Agent 静默继续，等真正落定才落盘——预先铺满的文档没人维护，很快变成新的遗留代码。配套的纪律是<b>冲突显式化</b>：Agent 的输出与术语表或既有 ADR 矛盾时必须显式指出，而不是静默覆盖。完整模板见 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a>。</p>
 
   <h3 id="s4-2">实践二：任务分解——拆到 AI 能处理的小块</h3>
+  <p class="skill-refs"><span class="lbl">解决 skills：</span><span class="item"><code class="skill">/to-prd</code>把讨论收敛为父 issue</span><span class="item"><code class="skill">/to-spec</code>拆解为原子 spec</span></p>
   <p>"把订单模块重构成 DDD 风格"——这个任务 AI 处理不了。"把 OrderService 里的校验逻辑抽到独立的 OrderValidator 类，保持行为不变，先给出类骨架"——这个它一次就能做好。任务粒度的分界线：每一步产出可验证、可回滚。</p>
   <figure class="code" data-lang="text"><pre><code>大需求：订单支持部分退款
   ├─ ① 理解类：「解释 OrderService 里退款的调用链」        ← 先让它读懂现状
@@ -567,9 +572,9 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
   ├─ ③ 实现类：「实现 RefundCalculator.calculate(明细, 比例)」← 小块实现
   ├─ ④ 验证类：「为上面的计算器写参数化测试，覆盖部分/全额」 ← 测试兜底
   └─ ⑤ 每一步人工确认后再进入下一步                          ← 人在回路</code></pre></figure>
-  <p>这套拆法与带新人拆任务的方法论完全一致——你已经会了，需要的只是习惯的迁移。</p>
 
   <h3 id="s4-3">实践三：代码审查——AI 是加速器，人是质量守门员</h3>
+  <p class="skill-refs"><span class="lbl">解决 skills：</span><span class="item"><code class="skill">/review</code>Standards + Spec 双轴审查</span></p>
   <p>效率提升的前提是质量不坍塌。以下检查项建议直接纳入团队规范：</p>
   <ul>
     <li>编译 / 类型检查通过——挡住绝大多数幻觉</li>
@@ -579,9 +584,10 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
     <li>安全——SQL 注入、XSS、敏感信息入日志</li>
     <li>风格与项目一致——命名、分层、错误码</li>
   </ul>
-  <p>一个值得注意的事实：用好 AI 之后，工程师的代码阅读量是上升的，不是下降的——写得更少，读得更多，角色从生产者向审校者偏移。这恰好是资深工程师的优势区。</p>
+  <p>事实上：用好 AI 之后，工程师的代码阅读量是上升的，不是下降的——写得更少，读得更多，角色从生产者向审校者偏移。</p>
 
   <h3 id="s4-4">实践四：迭代修正——不指望一次生成完美代码</h3>
+  <p class="skill-refs"><span class="lbl">解决 skills：</span><span class="item"><code class="skill">/prototype</code>一次性原型对比方案</span></p>
   <p>新手期待一次成活，熟练使用者都是多轮逼近：</p>
   <figure class="code" data-lang="text"><pre><code>第 1 轮  「按上面需求实现」                        → 拿到 80 分的版本
 第 2 轮  「持久层我们用 MyBatis 不是 JPA，改掉」      → 纠偏技术栈
@@ -589,43 +595,11 @@ new ObjectMapper().readValue(json, Order.class, SOME_FEATURE); // 不存在的�
 第 4 轮  「金额为什么用 double？改 BigDecimal」        → 纠偏细节
 第 5 轮  「给这个类补充注释和单测」                    → 补全配套</code></pre></figure>
   <p>两个立即可用的技巧：<b>提供参照物</b>——项目里一个现成的类，胜过十句描述；<b>要求自我检查</b>——"检查上面代码的边界情况并逐条列出"，AI 经常能挑出自己的毛病。</p>
-  <p>以上对话级实践对应的能力——写需求文档、拆任务、审代码、迭代地带人——都是工程师已经掌握的，需要的只是习惯的迁移。接下来三项则要在项目层面一次性建设。</p>
 
-  <h3 id="s4-5">实践五：用 CodeMap 给 Agent 指路</h3>
-  <p>真实仓库动辄上千个文件，让 Agent 自己全仓搜索，既慢又容易断错调用链。给高频功能维护<b>面向 Agent 的代码地图（CodeMap）</b>——注意，不是给人看的架构百科。四条要领：</p>
-  <ul>
-    <li><b>路由，不是复述</b>——地图不复制代码，只标注"去哪看、按什么顺序看、看什么证据"；省的是 Agent 的注意力，不只是 token</li>
-    <li><b>渐进披露</b>——第一屏只有入口与模块索引，细节等任务需要时再展开</li>
-    <li><b>诚实标注不确定性</b>——关键链路标 <code class="inline">confirmed</code>（已验证）/ <code class="inline">inferred</code>（推测）/ <code class="inline">unknown</code>（未确认），让 Agent 明确知道哪些不能信</li>
-    <li><b>自带验证入口</b>——每张图写清"用什么测试、命令、日志证明行为"，地图直接喂验收</li>
-  </ul>
-  <figure class="code" data-lang="text"><pre><code>docs/codemap/refund.md —— 退款功能地图（节选）
-
-Node: 退款入口        [confirmed] OrderController :: refund
-  -&gt; 主流程：创建退款单 -&gt; 风控校验 -&gt; 渠道调用      [confirmed]
-  -&gt; 分支：部分退款目前仅虚拟商品支持                [inferred]  待核对 RefundPolicy
-  -&gt; 依赖：支付渠道网关（超时 3s，已有降级）          [confirmed]
-  -&gt; 验证：RefundFlowTest；部分退款暂无用例          [unknown]
-  -&gt; Next Drill-Down: 渠道回调幂等处理，见 channel-callback.md</code></pre></figure>
-  <p>两头都要用起来：开工先读图——需求、排障、迁移都从地图指路的位置进入，而不是从全局搜索开始；收尾做比对（drift-check）——拿 diff 与地图核对，入口、调用链、依赖等地形若被本次改动波及，<b>以代码为准</b>更新地图，过期的地图比没有地图更危险。地图本身也按需生成——新仓库不必预先铺图，首批代码落地后再生成项目级地图，之后增量维护；Demo 08 把这条约定连同 drift-check 的触发时机写进了 AGENTS.md。</p>
-
-  <h3 id="s4-6">实践六：需求从拷问开始（grill-with-docs）</h3>
-  <p>「帮我做个分页」是最低效的开局——需求里的模糊点会全部变成 Agent 的自由发挥。更有价值的做法是先用<b>拷问式访谈（grill-with-docs）</b>把需求压实在：<b>一次只问一个问题，顺着依赖逐个解决，每个问题给出推荐答案，能靠代码和地图回答的不开会空谈</b>。访谈过程顺手沉淀两类资产：</p>
-  <ul>
-    <li><b>术语表</b>（一页即可）：把"退款""撤销""部分退款"这类易混词的团队定义写下来；用语与术语表冲突时当场指出——多数争论其实是定义之争</li>
-    <li><b>ADR（决策记录）</b>：只给满足三个条件的决策立档——难以逆转、未来读者会困惑"为什么这么做"、是真实权衡的结果</li>
-  </ul>
-  <figure class="code" data-lang="text"><pre><code>ADR-0007：部分退款走异步补偿，而非同步原路退回
-
-背景：渠道同步退款超时率 2%，失败后订单状态不一致
-决策：部分退款改为异步补偿单，T+1 对账兜底
-权衡：同步退回（实现简单，超时即故障，放弃）/ 事务性退款（渠道不支持，放弃）</code></pre></figure>
-  <p>拷问结束后，你得到的是一份被压测过的需求说明、更新过的术语与决策，再交给 Agent 执行——此时 Prompt 里的每句话都有出处。</p>
-  <p>两类资产<b>按需惰性创建</b>：仓库里还没有它们时，Agent 静默继续，等术语或决策真正落定才落盘——预先铺满的文档没人维护，很快变成新的遗留代码。配套的纪律是冲突显式化：Agent 的输出与术语表或既有 ADR 矛盾时，必须显式指出（"与 ADR-0007 矛盾——但值得重开，因为……"），而不是静默覆盖。Demo 08 把这套约定写在 <code class="inline">docs/agents/domain.md</code>。</p>
-
-  <h3 id="s4-7">实践七：AI 自我验证——把验收标准交给机器执行</h3>
+  <h3 id="s4-5">实践五：AI 自我验证——把验收标准交给机器执行</h3>
+  <p class="skill-refs"><span class="lbl">解决 skills：</span><span class="item"><code class="skill">/tdd</code>测试先行，红-绿-重构</span><span class="item"><code class="skill">/sdd-flow</code>spec → build → review 全流程调度</span></p>
   <p>实践四说"不指望一次生成完美"，但多数人的迭代方式是：AI 写完，人来运行、人来发现 bug、人再反馈回去修。这恰恰把方向用反了——编程 Agent 的天性是<b>工具调用循环</b>：写代码、观察反馈、修改、再观察，一轮轮迭代直到任务完成。当验证环节由人承担时，人就成了这个循环里的"工具人"，永远在机械地替 AI 做测试。解法是反转角色：<b>人制定验收标准，AI 按标准自我验证</b>，让"写代码 → 查问题 → 改代码"的闭环完全由 Agent 自己走完。</p>
-  <p>另一条常见的弯路是把可靠性寄托在"更细致的 Prompt"上——规范越写越长、流程越铺越重。这条路有两个上限：一是对使用者能力要求很高，面对不熟悉的技术栈根本无从把关；二是长 Prompt 本身是对原始需求的"展开"，微小的偏差会沿流程逐级放大，指令越长 AI 越难完全遵循。细致的上下文（实践一、实践六）解决"方向对"，自我验证解决"结果对"，两者不能互相替代。</p>
+  <p>另一条常见的弯路是把可靠性寄托在"更细致的 Prompt"上——规范越写越长、流程越铺越重。这条路有两个上限：一是对使用者能力要求很高，面对不熟悉的技术栈根本无从把关；二是长 Prompt 本身是对原始需求的"展开"，微小的偏差会沿流程逐级放大，指令越长 AI 越难完全遵循。细致的上下文（实践一）解决"方向对"，自我验证解决"结果对"，两者不能互相替代。</p>
   <p>从简单到复杂，三种给 Agent 配备的自我验证能力：</p>
   <ul>
     <li><b>lint 检查</b>——最低成本的守门员，专治幻觉类低级错误：括号没对齐、删了代码却留下引用、变量未定义。在 AGENTS.md 里写一条硬规则：每次修改代码后<b>必须</b>运行 lint，并保证完全通过。</li>
@@ -637,9 +611,9 @@ Node: 退款入口        [confirmed] OrderController :: refund
 - 修改业务代码前后各运行一遍集成测试，必须全部通过
 - 严禁修改集成测试用例；认为用例不合理时，先说明理由等我确认
 功能实现完成后，本地启动项目并用 Playwright 走一遍核心路径</code></pre></figure>
-  <p>这套实践与实践一规则文件里的"怎么构建与验证"直接呼应：那条构建与测试命令本该是 Agent 自查的依据，而不是摆设。配上验收闭环之后，工程体验会发生质变——你不再盯着进度逐条指 bug，而是给出需求和验收标准，然后等待一个自证通过的结论；实践三的代码审查依然不可省，但它从"每轮纠错"退到"最终把关"。</p>
+  <p>配上验收闭环之后，工程体验会发生质变——你不再盯着进度逐条指 bug，而是给出需求和验收标准，然后等待一个自证通过的结论；实践三的代码审查依然不可省，但它从"每轮纠错"退到"最终把关"。</p>
 
-  <p>把实践一沉淀的规则文件、实践五的代码地图、实践六的拷问访谈、实践七的验收闭环连起来，就是 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a> 配置下一次任务的完整生命周期。注意两个人机交接点（Gate）——需求与规格的批准都由人拍板，Agent 只在批准后动手：</p>
+  <p>组合起来作为一个流程，其实就是 <a class="demo-link" href="demos/08-project-demo/AGENTS.md">Demo 08</a> </p>
   <figure class="code" data-lang="text"><pre><code>口头需求 / 工单
   │  /grill-with-docs 拷问式访谈（先读 AGENTS.md · CodeMap · CONTEXT.md）
   ▼
@@ -653,7 +627,45 @@ PRD 落盘 .scratch/&lt;feature&gt;/                  [needs-info → ready-for-
   ▼
 验证三关 + drift-check：地图与事实对齐         spec [ready-for-human]
   ▼
-人工 code review 合入，issue / 文档 / 地图随提交归位 —— 下一次任务起点更高</code></pre></figure>
+ 人工 code review 合入，issue / 文档 / 地图随提交归位 —— 下一次任务起点更高</code></pre></figure>
+</section>
+
+<!-- ==================== 第五章 ==================== -->
+<section class="chap" id="ch5">
+  <h2 class="chap-title">五、对工程师意味着什么</h2>
+
+  <h3 id="s5-1">5.1 焦虑不新鲜：每一轮工具变革都走过同样的路</h3>
+  <p>AI Coding 不是第一次改变"写代码"这个动作的成本结构，每一轮生产力工具变革都伴随过同样的焦虑，而身处其中的工程师每一次都完成了过渡：</p>
+  <table>
+    <tr><th>变革</th><th>当时的主流疑虑</th><th>后来的事实</th></tr>
+    <tr><td>汇编 → 高级语言</td><td>编译器生成的代码性能不可接受</td><td>手写汇编退出日常开发，懂底层的工程师反而更稀缺</td></tr>
+    <tr><td>手写代码 → IDE 补全 / 重构</td><td>自动补全打断思路，重构工具不可信</td><td>离开 IDE 重构工具的现代开发流程已不可想象</td></tr>
+    <tr><td>检索式查资料 → 对话式问答</td><td>复制粘贴已足够好用</td><td>正在发生，本文的主题</td></tr>
+  </table>
+  <p>三轮变革的共同规律是：工具消灭的是重复劳动，不是使用工具的人。真正需要担心的不是被 AI 取代，而是被更早完成过渡的同行拉开效率差距。</p>
+
+  <h3 id="s5-2">5.2 三件 AI 做不了、也不该由它做的事</h3>
+  <ul>
+    <li><b>不承担架构决策。</b>选 MySQL 还是 MongoDB、单体还是微服务——AI 能输出对比分析，但拍板依据是团队、预算与历史包袱，这些信息不在它的上下文里。</li>
+    <li><b>不掌握业务理解。</b>"为什么财务模块每月 15 号必须锁账"这类知识藏在组织流程与人的经验中，不在任何训练语料里，必须由工程师翻译给 AI。</li>
+    <li><b>不承担线上责任。</b>AI 可以给排查建议，但对故障报告负责的是提交代码的工程师，责任无法外包给工具。</li>
+  </ul>
+
+  <h3 id="s5-3">5.3 一个统一的心智模型</h3>
+  <p>对三个阶段的工具，一个统一且足够准确的心智模型是：</p>
+  <blockquote>把 AI 当成"一个反应快、知识面广、但产出需要 Code Review 的初级同事"。</blockquote>
+  <p>这个模型的三个特征，分别对应三条使用纪律：</p>
+  <table>
+    <tr><th>特征</th><th>具体表现</th><th>使用纪律</th></tr>
+    <tr><td>反应快</td><td>秒级产出完整代码，全天候响应</td><td>不用"快"作为采纳依据，产出速度与正确性无关</td></tr>
+    <tr><td>知识面广</td><td>主流语言、框架、运维脚本均有积累</td><td>冷门场景要求它给出处，给不出就要警惕</td></tr>
+    <tr><td>需要 Review</td><td>大方向正确，但会编造 API、遗漏边界、风格漂移</td><td>一切产出过编译、测试、Review 三道关，与人写的代码同一标准</td></tr>
+  </table>
+
+  <div class="takeaway">
+    <p class="t">核心观点</p>
+    <p class="key">与这个"同事"协作的方式，本质上就是工程师一直在做的事情：<b>给任务、给上下文、验收产出、Review 代码</b>。转移的是习惯，不是能力。</p>
+  </div>
 </section>
 
 <section class="chap" id="appendix">
@@ -825,7 +837,7 @@ var tocCollapse = (function () {
       }
     });
   }, { rootMargin: '-20% 0px -70% 0px' });
-  ['ch1','s1-1','s1-2','s1-3','ch2','s2-0','s2-1','s2-2','s2-3','s2-4','s2-5','s2-6','s2-7','s2-8','ch3','s3-1','s3-2','s3-3','s3-4','s3-5','ch4','s4-1','s4-2','s4-3','s4-4','s4-5','s4-6','s4-7','route','appendix'].forEach(function (id) {
+    ['ch1','s1-1','s1-2','ch2','s2-0','s2-1','s2-2','s2-3','s2-4','s2-5','s2-6','s2-7','ch3','s3-1','s3-2','s3-3','s3-4','s3-5','ch4','s4-1','s4-2','s4-3','s4-4','s4-5','ch5','s5-1','s5-2','s5-3','appendix'].forEach(function (id) {
     var el = document.getElementById(id);
     if (el) obs.observe(el);
   });
