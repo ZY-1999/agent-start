@@ -1,5 +1,3 @@
-# agent-start：面向传统程序员的 AI Coding 分享
-
 一套完整的分享材料：**一份 HTML 讲义 + 7 个可现场运行的 Live Demo + 1 个 SDD 仓库模板**。
 
 > 讲义标题：《什么是 AI Coding？从代码补全到 Agent 开发：能力边界、典型场景与工程实践》
