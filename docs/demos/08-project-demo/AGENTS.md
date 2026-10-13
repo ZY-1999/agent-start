@@ -2,6 +2,10 @@
 
 ## Agent Notice
 
+### Grill first
+
+每次 agent 接到需求，先用 `/grill-me` 面试用户——当决策应沉淀为 ADR/词汇表时改用 `/grill-with-docs`——持续追问直到完整上下文清晰，然后才开始动手。
+
 ### Issue tracker
 
 本地 markdown issue tracker：issue 存放在根目录 `.scratch/<YYYY-MM-DD>-<feature-slug>/`，是 `spec` / `prd` / `bug` 三类工作的载体。见 `docs/agents/issue-tracker.md`。
