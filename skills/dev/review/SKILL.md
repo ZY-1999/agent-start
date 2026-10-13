@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to \"review since X\""
+description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to \"review since X\", or when a git commit was blocked by the zy-skills review gate"
 ---
 
 # Review — two axes, since a fixed point
@@ -60,6 +60,22 @@ If the spec is missing, skip the Spec sub-agent and note this in the final repor
 Present the two reports under `## Standards` and `## Spec` headings, verbatim or lightly cleaned. Do **not** merge or rerank findings — the two axes are deliberately separate (see _Why two axes_).
 
 End with a one-line summary: total findings per axis, and the worst issue _within each axis_ (if any). Don't pick a single winner across axes — that's the reranking the separation exists to prevent.
+
+### 6. Commit-gate verdict
+
+The zy-skills plugin ships a PreToolUse hook that blocks agent-made `git commit`s in repos that ran `/setup-skills`, until a review approves the diff. When — and only when — this run covered the **uncommitted working state** (fixed point `HEAD`, diff `git diff HEAD`), close with a gate verdict:
+
+- **No hard violations on either axis** (judgement calls and tooling-enforced items don't count) → record approval for this exact diff, so the pending commit goes through:
+
+  ```bash
+  git diff HEAD | git hash-object --stdin > "$(git rev-parse --git-dir)/zy-skills-review-approved"
+  ```
+
+  The marker holds the diff's hash, is consumed by the next gated commit, and stops matching as soon as anything changes — then review must re-run.
+
+- **Any hard violation** → do **not** write the marker. Name the blocking findings in the summary so the author knows what to fix before committing.
+
+Runs that reviewed a committed range (any fixed point other than working-tree-vs-`HEAD`) skip this step entirely.
 
 ## Why two axes
 

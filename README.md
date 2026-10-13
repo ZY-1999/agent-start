@@ -74,4 +74,11 @@ Demo 08 例外：它是独立的**SDD 仓库模板**（`AGENTS.md` 索引 `docs/
 | CodeBuddy               | 本地 marketplace：[.codebuddy-plugin/](./.codebuddy-plugin/marketplace.json)                                                                                     |
 | Cursor                  | 插件清单：[.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json)（含 base/ + sdd/ 全部 20 个）                                                                |
 
+### Hook：提交前 review 门禁（v1.0.2 新增）
+
+插件自带一个 PreToolUse hook（[hooks/](./hooks/)）：在**跑过 `/setup-skills` 的仓库**里，agent 通过 Bash 执行 `git commit` 时会被拦截，要求先对未提交变更跑 `/review`；两个轴都无硬性违规时 `/review` 会把当前 diff 的哈希写入 `.git/zy-skills-review-approved`，随后重试同一提交即可放行（标记一次性消费，diff 一变即失效需重新 review）。
+
+- 只约束 ZCode / Claude Code 会话内 agent 发起的提交；你在自己终端手动 `git commit` 不受影响，是天然的逃生通道。
+- 未跑过 `/setup-skills` 的仓库（没有 `docs/agents/issue-tracker.md`）完全不生效，插件可安全全局安装。
+
 完整的 fork 维护规则与源仓库见 [ZY-1999/skills](https://github.com/ZY-1999/skills)。
