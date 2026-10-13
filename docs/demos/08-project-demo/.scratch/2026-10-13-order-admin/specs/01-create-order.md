@@ -1,7 +1,7 @@
 # 创建订单并证明落库
 
 Type: spec
-Status: ready-for-agent
+Status: ready-for-human
 Parent: #1
 Blocked by: None — can start immediately
 
@@ -70,3 +70,12 @@ Blocked by: None — can start immediately
 - 2026-10-13 — `/to-spec` step 4 落骨架（Status: needs-design）。分解 winner 为 candidate-1（按风险的 6 条垂直切片，裁判第 2 轮 PASS）。
 - 2026-10-13 — step 5 完成设计；step 6 双轴审查 PASS。Status → ready-for-human，待 Gate A。
 - 2026-10-13 — Gate A 通过。Status → ready-for-agent。
+- 2026-10-13 — implemented；Status → ready-for-human
+  - [x] 提交后响应与 `order_db_test` 新行一致 — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `createOrderResponseMatchesPersistedRow`
+  - [x] 订单号形态与 `uk_order_no` — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `generatedOrderNoMatchesPatternAndDuplicateWriteIsRejected`
+  - [x] 总金额后端 HALF_UP，忽略调用方总金额 — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `totalAmountIsComputedByServerAndIgnoresClientValue`
+  - [x] 五状态直接保存 — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `everyStatusCanBeStoredDirectly`
+  - [x] 空库只跑迁移即可创建，clean+migrate 后行为相同 — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `cleanMigrateAllowsCreateAndRepeats`
+  - [ ] 手工：订单管理页新建弹窗 — 未在浏览器走查
+  - Test run: `mvn -f docs/demos/08-project-demo/backend/pom.xml test -Dtest=OrderControllerTest` → 5 passed, 0 failed
+  - Commit: 待本提交完成后回填

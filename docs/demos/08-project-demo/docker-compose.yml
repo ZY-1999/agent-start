@@ -1,0 +1,19 @@
+services:
+  mysql:
+    image: mysql:8
+    pull_policy: if_not_present
+    ports:
+      - "3307:3306"
+    environment:
+      MYSQL_ROOT_PASSWORD: order_demo
+    volumes:
+      - ./docker/mysql/init:/docker-entrypoint-initdb.d
+    command:
+      - --character-set-server=utf8mb4
+      - --collation-server=utf8mb4_unicode_ci
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-porder_demo"]
+      interval: 5s
+      timeout: 5s
+      retries: 30
+      start_period: 20s
