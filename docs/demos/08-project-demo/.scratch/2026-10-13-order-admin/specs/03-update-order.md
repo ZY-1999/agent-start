@@ -1,7 +1,7 @@
 # 修改订单
 
 Type: spec
-Status: ready-for-agent
+Status: ready-for-human
 Parent: #1
 Blocked by: #2
 

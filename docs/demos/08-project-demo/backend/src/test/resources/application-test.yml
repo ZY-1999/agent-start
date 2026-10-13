@@ -5,3 +5,7 @@ spring:
     password: order_demo
   flyway:
     clean-disabled: false
+
+app:
+  demo:
+    seed-on-startup: false

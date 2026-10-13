@@ -1,7 +1,7 @@
 # 演示种子数据与重置
 
 Type: spec
-Status: ready-for-agent
+Status: ready-for-human
 Parent: #1
 Blocked by: #5
 
@@ -11,10 +11,10 @@ Blocked by: #5
 
 ## Acceptance criteria
 
-- [ ] 调用重置后，列表里恰好 8 条未删除订单，五个状态都出现：`PENDING` 2、`PAID` 2、`SHIPPED` 1、`COMPLETED` 2、`CANCELLED` 1。客户名称包含张三、李四、王五、赵六、陈七、周八。测试接缝为 MockMvc + `order_db_test`（Flyway clean+migrate，测试配置不在启动时播种）。证明示例集固定且覆盖看板需要的状态。
-- [ ] 这 8 条的 `create_time` 落在服务器本地时区的今日到今日−6 天：今日 2 条，其余 6 天各 1 条。汇总接口的总订单数为 8，总金额为 `3515.16`，待支付数为 2，已完成数为 2，近 7 天每天订单数都大于 0。证明示例的日期和金额能让看板非空，且总金额仍由后端按 HALF_UP 计算。
-- [ ] 重置前另建的订单，重置后不再出现在列表、前缀搜索和汇总里；再重置一次，未删除条数仍是 8，不是 16。库中被替换掉的行仍在且 `is_deleted = 1`。证明重置是逻辑删除后重放同一批示例，不是追加，也不是物理删除。
-- [ ] 手工：默认启动（允许启动种子）在空库上打开订单页就能看到这 8 条；顶部导航的「重置数据」经确认后回到这 8 条，取消确认则不发请求。
+- [x] 调用重置后，列表里恰好 8 条未删除订单，五个状态都出现：`PENDING` 2、`PAID` 2、`SHIPPED` 1、`COMPLETED` 2、`CANCELLED` 1。客户名称包含张三、李四、王五、赵六、陈七、周八。测试接缝为 MockMvc + `order_db_test`（Flyway clean+migrate，测试配置不在启动时播种）。证明示例集固定且覆盖看板需要的状态。
+- [x] 这 8 条的 `create_time` 落在服务器本地时区的今日到今日−6 天：今日 2 条，其余 6 天各 1 条。汇总接口的总订单数为 8，总金额为 `3515.16`，待支付数为 2，已完成数为 2，近 7 天每天订单数都大于 0。证明示例的日期和金额能让看板非空，且总金额仍由后端按 HALF_UP 计算。
+- [x] 重置前另建的订单，重置后不再出现在列表、前缀搜索和汇总里；再重置一次，未删除条数仍是 8，不是 16。库中被替换掉的行仍在且 `is_deleted = 1`。证明重置是逻辑删除后重放同一批示例，不是追加，也不是物理删除。
+- [x] 手工：默认启动（允许启动种子）在空库上打开订单页就能看到这 8 条；顶部导航的「重置数据」经确认后回到这 8 条，取消确认则不发请求。
 
 ## Scope
 
@@ -56,4 +56,5 @@ Blocked by: #5
 
 ## Comments
 
-- 2026-10-13 — Gate A 期间按用户追加的演示需求落盘。Status: ready-for-agent。单 jar spec 顺延为 #7，并依赖本 spec。
+- 2026-10-13 — Gate A 期间按用户追加的演示需求落盘。单 jar spec 顺延为 #7，并依赖本 spec。
+- 2026-10-14 — `OrderAdminApiTest.resetRestoresEightSamplesWithoutAppending` 与 `mvn -f backend/pom.xml test -Dtest=OrderAdminApiTest,OrderControllerTest`（12 通过）。浏览器：空库启动后的 8 条、前缀「张」、新建后服务端金额 25.00、取消删除与取消重置均保留原行、确认重置回到 8 条示例。WSL2 Docker MySQL `08-project-demo-mysql-1`。

@@ -1,7 +1,9 @@
 package com.demo.order.web;
 
 import com.demo.order.common.Result;
+import com.demo.order.service.BadOrderRequestException;
 import com.demo.order.service.OrderConflictException;
+import com.demo.order.service.OrderNotFoundException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -9,6 +11,7 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,5 +65,38 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(OrderConflictException.class)
     public ResponseEntity<Result<Void>> handleConflict(OrderConflictException ex) {
         return ResponseEntity.status(HttpStatus.CONFLICT).body(Result.fail(409, ex.getMessage()));
+    }
+
+    /**
+     * 页码或页大小不合法时返回 400。
+     *
+     * @param ex 参数异常
+     * @return 空 data 的失败结果
+     */
+    @ExceptionHandler(BadOrderRequestException.class)
+    public ResponseEntity<Result<Void>> handleBadRequest(BadOrderRequestException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.fail(400, ex.getMessage()));
+    }
+
+    /**
+     * 查询参数类型不合法时返回统一的 400。
+     *
+     * @param ex 类型转换异常
+     * @return 空 data 的失败结果
+     */
+    @ExceptionHandler(MethodArgumentTypeMismatchException.class)
+    public ResponseEntity<Result<Void>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(Result.fail(400, "请求参数不合法"));
+    }
+
+    /**
+     * 订单不存在时返回 404。
+     *
+     * @param ex 未找到异常
+     * @return 空 data 的失败结果
+     */
+    @ExceptionHandler(OrderNotFoundException.class)
+    public ResponseEntity<Result<Void>> handleNotFound(OrderNotFoundException ex) {
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(Result.fail(404, ex.getMessage()));
     }
 }
