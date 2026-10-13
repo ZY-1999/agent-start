@@ -78,4 +78,4 @@ Blocked by: None — can start immediately
   - [x] 空库只跑迁移即可创建，clean+migrate 后行为相同 — `backend/src/test/java/com/demo/order/web/OrderControllerTest.java` `cleanMigrateAllowsCreateAndRepeats`
   - [ ] 手工：订单管理页新建弹窗 — 未在浏览器走查
   - Test run: `mvn -f docs/demos/08-project-demo/backend/pom.xml test -Dtest=OrderControllerTest` → 5 passed, 0 failed
-  - Commit: 待本提交完成后回填
+  - Commit: 92cd3ebfcfaf883c85870daa8445413a6a0a5f37
