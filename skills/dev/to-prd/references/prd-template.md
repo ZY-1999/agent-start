@@ -12,12 +12,14 @@ The solution to the problem, from the user's perspective.
 
 ## User Stories
 
-A complete, numbered list of user stories. Each user story should be in the format of:
+A complete, numbered list of user stories. Write each story in the language of the conversation, using that language's canonical user-story format — never mix languages inside one story:
 
-1. As an <actor>, I want a <feature>, so that <benefit>
+- English: `As an <actor>, I want <feature>, so that <benefit>`
+- 中文：`作为<角色>，我希望<功能>，以便<收益>`
 
 <user-story-example>
 1. As a mobile bank customer, I want to see balance on my accounts, so that I can make better informed decisions about my spending
+1. 作为手机银行客户，我希望在首页看到账户余额，以便更好地决定自己的开支
 </user-story-example>
 
 This list of user stories should be extremely extensive and cover all aspects of the feature.
