@@ -44,3 +44,16 @@ Blocked by: None — can start immediately
 ## Rework on failure
 
 失败隔离：仅回退 `/export.xlsx` 端点、web 层组装器与新增测试用例；CSV 链路与既有测试不受影响，重做本 spec 即可。
+
+## Comments
+
+> **Comment** — implemented 2026-10-14; Status → ready-for-human
+> - [x] 端点契约（200 + 标准 MIME + `orders-export-<yyyyMMddHHmmss>.xlsx`） — `backend/src/test/java/com/demo/order/web/OrderControllerApiTest::exportXlsxServesStandardAttachmentReadableWithCsvHeader`
+> - [x] sheet 名「订单」+ 9 列表头与 CSV 一致 — `OrderControllerApiTest::exportXlsxServesStandardAttachmentReadableWithCsvHeader`
+> - [x] 单元格类型与格式（字符串/整数数值/金额数值 + `dataFormatData` index==2、format=="0.00"、时间 `yyyy-MM-dd HH:mm:ss`） — `OrderControllerApiTest::exportXlsxWritesTypedCellsForSumAndDisplay`
+> - [x] 过滤语义与倒序同 CSV — `OrderControllerApiTest::exportXlsxFiltersAndSortsLikePage`
+> - [x] 空结果/非法状态仅表头合法可读回 — `OrderControllerApiTest::exportXlsxEmptyResultAndUnknownStatusAreHeaderOnly`
+> - [x] 公式内容原样写入字符串单元格 — `OrderControllerApiTest::exportXlsxWritesFormulaLikeRemarkAsPlainText`
+> - [x] 回归锚 CSV 零变化 — `OrderControllerApiTest::exportCsvFiltersSortsAndEscapes`（未改动）+ 全量套件
+> - Test run: `JAVA_HOME=~/.sdkman/candidates/java/21.0.12-tem mvn test -DforkCount=0`（backend/，MySQL 3307 healthy）→ 19 passed, 0 failed（ApiTest 14 + OrderControllerTest 5）
+> - Commit: `754d791`
