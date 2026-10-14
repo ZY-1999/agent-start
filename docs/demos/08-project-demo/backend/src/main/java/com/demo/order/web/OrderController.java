@@ -128,6 +128,39 @@ public class OrderController {
     }
 
     /**
+     * 导出未删除订单 Excel。过滤条件与分页查询一致，按创建时间倒序；非法状态导出只有表头的空文件。
+     *
+     * @param keyword 订单号或客户名称前缀
+     * @param status 精确状态
+     * @param response 响应
+     * @throws IOException 写出失败时抛出
+     */
+    @GetMapping("/export.xlsx")
+    public void exportXlsx(@RequestParam(value = "kw", required = false) String keyword,
+            @RequestParam(value = "status", required = false) String status,
+            HttpServletResponse response) throws IOException {
+        List<Order> orders;
+        if (status != null && !status.trim().isEmpty() && !known(status)) {
+            orders = Collections.emptyList();
+        } else {
+            String exact = status == null || status.trim().isEmpty() ? null : status;
+            orders = orderService.export(keyword, exact);
+        }
+        response.setContentType("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + exportXlsxFileName() + "\"");
+        OrderExcel.xlsx(orders, response.getOutputStream());
+    }
+
+    /**
+     * 生成带时间戳的 Excel 导出文件名。
+     *
+     * @return 如 orders-export-20261014153000.xlsx
+     */
+    private String exportXlsxFileName() {
+        return "orders-export-" + LocalDateTime.now().format(EXPORT_NAME_TIME) + ".xlsx";
+    }
+
+    /**
      * 修改订单。订单号保持不变。
      *
      * @param id 主键

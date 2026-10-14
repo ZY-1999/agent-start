@@ -1,5 +1,10 @@
 package com.demo.order.web;
 
+import com.alibaba.excel.EasyExcel;
+import com.alibaba.excel.context.AnalysisContext;
+import com.alibaba.excel.enums.CellDataTypeEnum;
+import com.alibaba.excel.event.AnalysisEventListener;
+import com.alibaba.excel.metadata.data.ReadCellData;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import org.flywaydb.core.Flyway;
@@ -14,12 +19,16 @@ import org.springframework.test.context.ActiveProfiles;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.MvcResult;
 
+import java.io.ByteArrayInputStream;
 import java.math.BigDecimal;
 import java.nio.charset.StandardCharsets;
 import java.sql.Timestamp;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.HashSet;
+import java.util.List;
+import java.util.Map;
 import java.util.Set;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -185,6 +194,146 @@ class OrderControllerApiTest {
                 .andExpect(status().isOk())
                 .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
         assertThat(unknown.substring(1).split("\r\n")).hasSize(1);
+    }
+
+    /**
+     * Excel 导出端点返回标准 MIME 与带时间戳的附件名；工作簿 sheet 名为「订单」，表头与 CSV 完全一致。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportXlsxServesStandardAttachmentReadableWithCsvHeader() throws Exception {
+        MvcResult result = mockMvc.perform(get("/api/orders/export.xlsx"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(result.getResponse().getContentType())
+                .isEqualTo("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        assertThat(result.getResponse().getHeader("Content-Disposition"))
+                .matches("attachment; filename=\"orders-export-\\d{14}\\.xlsx\"");
+
+        ReadBack readBack = readWorkbook(result.getResponse().getContentAsByteArray());
+        assertThat(readBack.sheetName).isEqualTo("订单");
+        assertThat(readBack.rows).hasSize(1);
+        assertThat(texts(readBack.rows.get(0))).containsExactly(
+                "订单号", "客户名称", "商品名称", "数量", "单价", "总金额", "状态", "备注", "创建时间");
+    }
+
+    /**
+     * 订单号/状态/备注/创建时间为字符串单元格且时间格式固定，数量与金额为数值单元格且金额带两位小数显示格式。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportXlsxWritesTypedCellsForSumAndDisplay() throws Exception {
+        String orderNo = insertRow("张三", "COMPLETED", "30.00", LocalDateTime.of(2026, 10, 3, 8, 0, 0), "备注文本");
+
+        MvcResult result = mockMvc.perform(get("/api/orders/export.xlsx"))
+                .andExpect(status().isOk())
+                .andReturn();
+        ReadBack readBack = readWorkbook(result.getResponse().getContentAsByteArray());
+        assertThat(readBack.rows).hasSize(2);
+        Map<Integer, ReadCellData<?>> dataRow = readBack.rows.get(1);
+        assertThat(dataRow.get(0).getType()).isEqualTo(CellDataTypeEnum.STRING);
+        assertThat(dataRow.get(0).getStringValue()).isEqualTo(orderNo);
+        assertThat(dataRow.get(6).getType()).isEqualTo(CellDataTypeEnum.STRING);
+        assertThat(dataRow.get(6).getStringValue()).isEqualTo("已完成");
+        assertThat(dataRow.get(7).getType()).isEqualTo(CellDataTypeEnum.STRING);
+        assertThat(dataRow.get(7).getStringValue()).isEqualTo("备注文本");
+        assertThat(dataRow.get(8).getType()).isEqualTo(CellDataTypeEnum.STRING);
+        assertThat(dataRow.get(8).getStringValue()).isEqualTo("2026-10-03 08:00:00");
+        assertThat(dataRow.get(3).getType()).isEqualTo(CellDataTypeEnum.NUMBER);
+        assertThat(dataRow.get(3).getNumberValue()).isEqualByComparingTo("1");
+        assertThat(dataRow.get(4).getType()).isEqualTo(CellDataTypeEnum.NUMBER);
+        assertThat(dataRow.get(4).getNumberValue()).isEqualByComparingTo("30.00");
+        assertThat(dataRow.get(5).getType()).isEqualTo(CellDataTypeEnum.NUMBER);
+        assertThat(dataRow.get(5).getNumberValue()).isEqualByComparingTo("30.00");
+        assertThat(dataRow.get(4).getDataFormatData().getFormat()).isEqualTo("0.00");
+        assertThat(dataRow.get(4).getDataFormatData().getIndex().intValue()).isEqualTo(2);
+        assertThat(dataRow.get(5).getDataFormatData().getFormat()).isEqualTo("0.00");
+        assertThat(dataRow.get(5).getDataFormatData().getIndex().intValue()).isEqualTo(2);
+    }
+
+    /**
+     * Excel 导出沿用列表过滤语义：关键字只做订单号/客户名称前缀、状态精确匹配，导出恒为创建时间倒序。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportXlsxFiltersAndSortsLikePage() throws Exception {
+        insertRow("老客户", "PENDING", "10.00", LocalDateTime.of(2026, 10, 1, 8, 0, 0));
+        String newerNo = insertRow("新客户", "PAID", "20.00", LocalDateTime.of(2026, 10, 2, 8, 0, 0));
+        String zhangNo = insertRow("张三", "COMPLETED", "30.00", LocalDateTime.of(2026, 10, 3, 8, 0, 0));
+
+        ReadBack all = readWorkbook(mockMvc.perform(get("/api/orders/export.xlsx")).andReturn()
+                .getResponse().getContentAsByteArray());
+        assertThat(all.rows).hasSize(4);
+        assertThat(texts(all.rows.get(1)).get(0)).isEqualTo(zhangNo);
+        assertThat(texts(all.rows.get(2)).get(0)).isEqualTo(newerNo);
+
+        ReadBack byKw = readWorkbook(mockMvc.perform(get("/api/orders/export.xlsx").param("kw", "张"))
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(byKw.rows).hasSize(2);
+        assertThat(texts(byKw.rows.get(1)).get(1)).isEqualTo("张三");
+
+        ReadBack byStatus = readWorkbook(mockMvc.perform(get("/api/orders/export.xlsx").param("status", "PAID"))
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(byStatus.rows).hasSize(2);
+        assertThat(texts(byStatus.rows.get(1)).get(0)).isEqualTo(newerNo);
+
+        ReadBack both = readWorkbook(mockMvc
+                .perform(get("/api/orders/export.xlsx").param("kw", "新").param("status", "PAID"))
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(both.rows).hasSize(2);
+        assertThat(texts(both.rows.get(1)).get(0)).isEqualTo(newerNo);
+
+        ReadBack none = readWorkbook(mockMvc
+                .perform(get("/api/orders/export.xlsx").param("kw", "新").param("status", "PENDING"))
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(none.rows).hasSize(1);
+    }
+
+    /**
+     * 过滤无匹配与非法状态都返回 200 且只有表头的合法工作簿。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportXlsxEmptyResultAndUnknownStatusAreHeaderOnly() throws Exception {
+        insertRow("张三", "PENDING", "10.00", LocalDateTime.of(2026, 10, 1, 8, 0, 0));
+
+        MvcResult noMatch = mockMvc.perform(get("/api/orders/export.xlsx").param("kw", "李四"))
+                .andExpect(status().isOk())
+                .andReturn();
+        assertThat(noMatch.getResponse().getContentType())
+                .isEqualTo("application/vnd.openxmlformats-officedocument.spreadsheetml.sheet");
+        ReadBack emptyResult = readWorkbook(noMatch.getResponse().getContentAsByteArray());
+        assertThat(emptyResult.sheetName).isEqualTo("订单");
+        assertThat(emptyResult.rows).hasSize(1);
+        assertThat(texts(emptyResult.rows.get(0)).get(0)).isEqualTo("订单号");
+
+        ReadBack unknown = readWorkbook(mockMvc
+                .perform(get("/api/orders/export.xlsx").param("status", "UNKNOWN"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(unknown.rows).hasSize(1);
+        assertThat(texts(unknown.rows.get(0)).get(0)).isEqualTo("订单号");
+    }
+
+    /**
+     * 公式样内容原样写入字符串单元格，不加 CSV 的防公式前缀。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportXlsxWritesFormulaLikeRemarkAsPlainText() throws Exception {
+        insertRow("新客户", "PAID", "20.00", LocalDateTime.of(2026, 10, 2, 8, 0, 0), "=SUM(A1)");
+
+        ReadBack readBack = readWorkbook(mockMvc.perform(get("/api/orders/export.xlsx"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsByteArray());
+        assertThat(readBack.rows).hasSize(2);
+        assertThat(readBack.rows.get(1).get(7).getType()).isEqualTo(CellDataTypeEnum.STRING);
+        assertThat(readBack.rows.get(1).get(7).getStringValue()).isEqualTo("=SUM(A1)");
     }
 
     /**
@@ -394,5 +543,72 @@ class OrderControllerApiTest {
      */
     private JsonNode read(MvcResult result) throws Exception {
         return objectMapper.readTree(result.getResponse().getContentAsString(StandardCharsets.UTF_8));
+    }
+
+    /**
+     * 用 EasyExcel 把响应字节读回原始单元格，不经过默认的字符串转换，保留类型与格式信息。
+     *
+     * @param body 响应字节
+     * @return sheet 名与全部行（表头行在前）
+     */
+    private ReadBack readWorkbook(byte[] body) {
+        final List<Map<Integer, ReadCellData<?>>> rows = new ArrayList<Map<Integer, ReadCellData<?>>>();
+        final String[] sheetName = new String[1];
+        EasyExcel.read(new ByteArrayInputStream(body))
+                .registerReadListener(new AnalysisEventListener<Map<Integer, ReadCellData<?>>>() {
+                    @Override
+                    public void invokeHead(Map<Integer, ReadCellData<?>> headMap, AnalysisContext context) {
+                        sheetName[0] = context.readSheetHolder().getSheetName();
+                        rows.add(headMap);
+                    }
+
+                    @Override
+                    public void invoke(Map<Integer, ReadCellData<?>> row, AnalysisContext context) {
+                        rows.add(row);
+                    }
+
+                    @Override
+                    public void doAfterAllAnalysed(AnalysisContext context) {
+                    }
+                })
+                .useDefaultListener(false)
+                .sheet()
+                .doRead();
+        return new ReadBack(sheetName[0], rows);
+    }
+
+    /**
+     * 按列号取一行的字符串值。
+     *
+     * @param row 读回的一行
+     * @return 从第 0 列起的字符串值
+     */
+    private List<String> texts(Map<Integer, ReadCellData<?>> row) {
+        List<String> texts = new ArrayList<String>();
+        for (int column = 0; column < 9; column++) {
+            texts.add(row.get(column).getStringValue());
+        }
+        return texts;
+    }
+
+    /**
+     * EasyExcel 读回的工作簿内容。
+     */
+    private static class ReadBack {
+
+        /** sheet 名。 */
+        private final String sheetName;
+
+        /** 全部行，每行是列号到原始单元格的映射。 */
+        private final List<Map<Integer, ReadCellData<?>>> rows;
+
+        /**
+         * @param sheetName sheet 名
+         * @param rows 全部行
+         */
+        private ReadBack(String sheetName, List<Map<Integer, ReadCellData<?>>> rows) {
+            this.sheetName = sheetName;
+            this.rows = rows;
+        }
     }
 }

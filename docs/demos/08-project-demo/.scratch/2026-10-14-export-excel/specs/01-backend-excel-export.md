@@ -1,7 +1,7 @@
 # 后端 Excel 导出端点（依赖 + 组装 + 端点 + API 测试）
 
 Type: spec
-Status: ready-for-agent
+Status: ready-for-human
 Parent: #1
 Blocked by: None — can start immediately
 
@@ -13,13 +13,13 @@ Blocked by: None — can start immediately
 
 全部可经 `mvn test -DforkCount=0` 独立验证（关键路径在前）：
 
-- [ ] `GET /api/orders/export.xlsx` 返回 200，Content-Type 为 .xlsx 标准 MIME（`application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`），Content-Disposition 为 `attachment; filename="orders-export-<yyyyMMddHHmmss>.xlsx"`（时间戳规则与 CSV 一致）— 证明端点契约成立。
-- [ ] EasyExcel 读回工作簿：sheet 名「订单」；首个非空行为 9 列表头，列名与 CSV 完全一致（订单号、客户名称、商品名称、数量、单价、总金额、状态、备注、创建时间）— 证明列结构与 CSV 对齐。
-- [ ] 单元格类型：订单号/状态（中文 label）/备注/创建时间为字符串单元格，创建时间格式 yyyy-MM-dd HH:mm:ss；数量为整数数值单元格；单价/总金额为数值单元格且两位小数显示格式（`dataFormatData` 断言 index==2 或 format=="0.00"）— 证明数值可直接求和（User Story 3）。
-- [ ] 过滤语义与 CSV 一致：kw 只做订单号/客户名称前缀匹配，status 精确匹配，二者与运算；排序恒为创建时间倒序（新订单在首行）— 证明导出的就是用户正在看的这批订单（User Story 2）。
-- [ ] 空结果（过滤无匹配）与非法状态（如 status=UNKNOWN）均返回 200 + 仅表头的合法 .xlsx，可被 EasyExcel 读回不报错 — 证明脚本化下载不失败（User Story 7）。
-- [ ] 公式注入内容（如备注 `=SUM(A1)`）原样写入字符串单元格，不加 CSV 的防公式前缀 — 证明 .xlsx 类型化单元格免疫公式注入。
-- [ ] 回归锚：既有 CSV 导出用例 `exportCsvFiltersSortsAndEscapes` 不做任何改动且保持通过，其余全部既有测试保持通过 — 证明 CSV 行为零变化（User Story 6）。
+- [x] `GET /api/orders/export.xlsx` 返回 200，Content-Type 为 .xlsx 标准 MIME（`application/vnd.openxmlformats-officedocument.spreadsheetml.sheet`），Content-Disposition 为 `attachment; filename="orders-export-<yyyyMMddHHmmss>.xlsx"`（时间戳规则与 CSV 一致）— 证明端点契约成立。
+- [x] EasyExcel 读回工作簿：sheet 名「订单」；首个非空行为 9 列表头，列名与 CSV 完全一致（订单号、客户名称、商品名称、数量、单价、总金额、状态、备注、创建时间）— 证明列结构与 CSV 对齐。
+- [x] 单元格类型：订单号/状态（中文 label）/备注/创建时间为字符串单元格，创建时间格式 yyyy-MM-dd HH:mm:ss；数量为整数数值单元格；单价/总金额为数值单元格且两位小数显示格式（`dataFormatData` 断言 index==2 或 format=="0.00"）— 证明数值可直接求和（User Story 3）。
+- [x] 过滤语义与 CSV 一致：kw 只做订单号/客户名称前缀匹配，status 精确匹配，二者与运算；排序恒为创建时间倒序（新订单在首行）— 证明导出的就是用户正在看的这批订单（User Story 2）。
+- [x] 空结果（过滤无匹配）与非法状态（如 status=UNKNOWN）均返回 200 + 仅表头的合法 .xlsx，可被 EasyExcel 读回不报错 — 证明脚本化下载不失败（User Story 7）。
+- [x] 公式注入内容（如备注 `=SUM(A1)`）原样写入字符串单元格，不加 CSV 的防公式前缀 — 证明 .xlsx 类型化单元格免疫公式注入。
+- [x] 回归锚：既有 CSV 导出用例 `exportCsvFiltersSortsAndEscapes` 不做任何改动且保持通过，其余全部既有测试保持通过 — 证明 CSV 行为零变化（User Story 6）。
 
 ## Scope
 
