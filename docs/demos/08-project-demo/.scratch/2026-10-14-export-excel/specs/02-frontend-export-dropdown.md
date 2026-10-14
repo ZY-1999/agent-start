@@ -41,3 +41,16 @@ Blocked by: #1（「导出 Excel」项的人工冒烟依赖 `/export.xlsx` 端�
 ## Rework on failure
 
 失败隔离：改动集中在订单页一个文件；回退即恢复单「导出 CSV」按钮，重做本 spec 即可。
+
+## Comments
+
+> **Comment** — implemented 2026-10-14; Status → ready-for-human（验收 2-6 的点击/人工冒烟待收口）
+> - [x] `npm run build`（= tsc --noEmit + vite build）通过 — 三次构建全绿：改动前基线 ✓ 44.58s、提取辅助函数后 ✓ 42.33s、Dropdown 两项后 ✓ 42.89s，0 类型错误（仅既有 chunk 体积警告，非本次引入）
+> - [ ] 「导出」下拉恰「导出 CSV」「导出 Excel」两项 — 结构已静态证实：`frontend/src/pages/OrdersPage.tsx:51-54` `MenuProps['items']` 恰 2 项、`:70-72` antd `Dropdown menu={{items, onClick}}` 包裹「导出」按钮、旧单按钮 `导出 CSV</Button>` grep 计 0；展开后两项可见待人工冒烟
+> - [ ] 「导出 CSV」零回归 — 结构已静态证实：CSV 项 key=`/api/orders/export`，与 Excel 项共用辅助函数 `exportOrders(path)`（`OrdersPage.tsx:39-50`），查询串拼装与 `<a>` append/click/remove 同改造前 `exportCsv` 逐字节一致（kw trim 后非空才 set、status 非空才 set、`?query` 条件拼接）；点击下载 orders-export-<时间戳>.csv 待人工冒烟
+> - [ ] 「导出 Excel」贯通 — 结构已静态证实：Excel 项 key=`/api/orders/export.xlsx`，走同一辅助函数 → 与 CSV 项同构 kw/status 查询串；点击下载 .xlsx 且 Excel 可打开待人工冒烟（依赖 Spec 1 端点，后端测试 19/19 绿）
+> - [ ] 人工冒烟：设置关键字/状态过滤后点「导出 Excel」，内容即当前过滤结果、数量/单价/总金额可直接求和 — 待人工冒烟（User Story 2/3）
+> - [ ] 人工冒烟：表头加粗 + 浅灰底、列宽可读 — 待人工冒烟（User Story 5，样式不进机器断言）
+> - Static checks: grep 结构断言 5 组全过（Dropdown 引入与使用、恰两项含目标路径 key、旧单按钮移除、查询串拼装逻辑不变、两菜单项共用同一辅助函数）
+> - Manual smoke: 本地起后端 `ORDER_DB_PASSWORD=order_demo mvn spring-boot:run` + 前端 `npm run dev`（dev 代理，避免 spring-boot:run 旧 static），逐条点验验收 2-6 后补勾并翻 Status → closed
+> - Commit: `030cf0a`（代码 + codemap 漂移修正 + 状态翻转）
