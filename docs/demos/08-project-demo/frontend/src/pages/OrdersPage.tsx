@@ -67,7 +67,7 @@ export default function OrdersPage() {
       <Select allowClear placeholder="状态" style={{ width: 140 }} options={STATUS_OPTIONS} value={status} onChange={(value) => { setStatus(value); void load(1, size, kw, value) }} />
       <Input.Search allowClear placeholder="订单号或客户名称前缀" style={{ width: 280 }} onSearch={(value) => { setKw(value); void load(1, size, value, status) }} />
       <Button type="primary" onClick={() => { setEditing(null); form.resetFields(); form.setFieldsValue({ quantity: 1, status: 'PENDING' }); setOpen(true) }}>新建订单</Button>
-      <Dropdown menu={{ items: exportMenuItems, onClick: onExportMenuClick }}>
+      <Dropdown menu={{ items: exportMenuItems, onClick: onExportMenuClick }} trigger={['click']}>
         <Button>导出</Button>
       </Dropdown>
     </Space>
