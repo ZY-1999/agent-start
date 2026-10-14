@@ -20,7 +20,7 @@
 
 ### CodeMap
 
-探索代码库时从这里开始：`docs/codemap/` 下的项目级地形索引。本仓库尚未生成（空仓库）——首批代码落地后运行 `/codemap` 生成 `docs/codemap/project.md`；之后用 `/codemap` 添加 feature 地图或刷新；不确定地图是否可信时跑 `/codemap` 的 drift-check，报告漂移就更新受影响地图。
+探索代码库时从这里开始：`docs/codemap/` 下的项目级地形索引。项目级地图已生成：`docs/codemap/project.md`（入口、模块、数据、验证命令与风险区）；用 `/codemap` 添加 feature 地图或刷新项目地图；不确定地图是否可信时跑 `/codemap` 的 drift-check，报告漂移就更新受影响地图。
 
 ### Git contract
 
