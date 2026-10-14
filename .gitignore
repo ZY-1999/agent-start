@@ -1,0 +1,6 @@
+.idea
+**/.idea
+**.iml
+/docs/demos/08-project-demo/backend/target/
+/docs/demos/08-project-demo/frontend/dist/
+/docs/demos/08-project-demo/frontend/node_modules/
