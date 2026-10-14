@@ -15,6 +15,8 @@ Scaffold the per-repo configuration that the skills assume:
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
+One step is environmental rather than per-repo: the plugin also ships two third-party skills — `zentao-cli` and `zentao-tour`, vendored from [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli) — that drive the `zentao` binary. Step 5 verifies that binary and recommends configuring credentials as environment variables in the user's own `~/.bashrc`; it never handles secret values.
+
 ## Existing spec / issue systems are reference only
 
 The repo may already have its own spec / PRD / issue-tracking system — bespoke markdown under `docs/specs/`, an exported knowledge base, a legacy `SPECS.md`, anything of the kind. Treat it as **input, not authority**:
@@ -103,6 +105,10 @@ Every time the agent receives a requirement, interview the user first with `/gri
 ### Git contract
 
 [one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; See `docs/agents/git-contract.md`.
+
+### Zentao skills (third-party)
+
+[one-line summary — optional section: the plugin's `zentao-cli` / `zentao-tour` skills operate Zentao (禅道) through the `zentao` command (`npm install -g zentao-cli`); credentials recommended as environment variables (`ZENTAO_URL` / `ZENTAO_ACCOUNT` / `ZENTAO_TOKEN`|`ZENTAO_PASSWORD`) exported in the user's own `~/.bashrc`, local-profile login as fallback. Drop this section if the repo has no Zentao connection.]
 ```
 
 Then write the four docs files using the seed templates in this skill folder as a starting point:
@@ -114,6 +120,14 @@ Then write the four docs files using the seed templates in this skill folder as 
 
 Then build the project-level CodeMap: run `/codemap` in **project** mode to generate `docs/codemap/project.md`. Feature maps are added later as work needs them — not during setup. (Skip if `/codemap` isn't installed.)
 
-### 5. Done
+### 5. Check the zentao CLI (third-party skills)
 
-Tell the user the setup is complete and which skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch.
+The two zentao skills operate Zentao (禅道) through the `zentao` command, from the [`zentao-cli`](https://www.npmjs.com/package/zentao-cli) npm package. It's a per-machine dependency — setup only verifies it and recommends the credential approach; it never installs, logs in, or handles secret values itself.
+
+- Run `zentao --version`. If the command is missing or errors, say the two zentao skills won't work yet and give the install command: `npm install -g zentao-cli` (or `bun` / `pnpm`; one-off use can go through `npx zentao-cli`). Don't treat it as a setup failure — everything else this skill deploys works without it.
+- Credentials: recommend the user configure environment variables themselves in bash — `ZENTAO_URL`, `ZENTAO_ACCOUNT`, `ZENTAO_TOKEN` (or `ZENTAO_PASSWORD`) exported in `~/.bashrc`, then `source ~/.bashrc`. Env credentials take priority over local profiles and password mode avoids token expiry. Setup never writes or fills these values.
+- Alternative for personal machines: `zentao login --web` where the installed version supports it (older versions: the user runs that version's own login in their terminal).
+
+### 6. Done
+
+Tell the user the setup is complete and which skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch. If step 5 found the `zentao` CLI missing, repeat the install reminder once in this summary.

@@ -1,0 +1,137 @@
+---
+name: zentao-cli
+display_name: 禅道CLI
+display_name_en: ZenTao CLI
+description: 使用 ZenTao CLI 查询和维护禅道中的产品、项目、需求、任务与 Bug，执行状态流转并汇总进展。当用户要求操作禅道数据、查询禅道中的个人待办，或安装、配置和排查 zentao-cli 问题时使用。
+description_zh: 由禅道官方（https://www.zentao.net/）提供的 ZenTao CLI，可查询与维护禅道中的产品、项目、需求、任务和 Bug，支持执行状态流转并汇总进展。适用于操作禅道数据、查询个人待办，以及安装、配置和排查 zentao-cli 问题等场景。
+description_en: Official ZenTao CLI from ZenTao (https://www.zentao.net/). Query and maintain products, projects, requirements, tasks, and bugs in ZenTao; perform status transitions and summarize progress. For operating on ZenTao data, querying personal to-dos, and installing, configuring, or troubleshooting zentao-cli issues.
+license: MIT
+version: 0.3.1
+author: 禅道软件
+maintainer: Sun Hao <sunhao@chandao.com>
+metadata:
+  repository: https://github.com/easysoft/zentao-cli.git
+  keywords: [zentao, 禅道, cli, project-management]
+  version: 0.3.1
+---
+
+# 禅道 CLI
+
+通过 `zentao` 操作禅道。以当前安装版本的离线帮助为命令依据；字段、动作和最低服务器版本可能随 CLI / SDK 更新。
+
+## 开始工作
+
+已有可用的 `zentao` 命令时直接复用。先确认用户要访问的站点、对象范围和操作；上下文已明确的内容不用重复询问。
+
+```bash
+zentao --version
+zentao help
+zentao profile --help
+zentao profile --effective --format=json
+```
+
+- `help`、模块/操作 `--help`、`props` 无需登录。先查帮助再准备请求，不必为查看参数连接服务器。
+- 先确认安装版本支持 `profile --effective`。它只读显示业务命令实际使用的 `source`（`environment` / `profile`）、站点、账号和凭据类型，不输出凭据、不发起网络请求。环境来源的 `configFile=null`；`verified=false` 表示尚未验证，需要时在用户指定范围内执行只读业务查询。
+- 不带 `--effective` 的 `profile` 只列出本地账号；本地未配置时的 `E1006` 不代表完整环境凭据不可用。旧版本不支持新选项时，保留这一区分，不读取凭据文件或打印环境变量来代替诊断。
+- 未安装时按用户环境选择 `npm install -g zentao-cli`、`bun install -g zentao-cli` 或 `pnpm install -g zentao-cli`；一次性运行可用 `npx zentao-cli <参数>`。
+
+用户要求安装或更新技能时，使用 `zentao add-skill <agent>`；需要导出到自定义目录时，使用 `zentao add-skill --output ./exported-skills`。两种形式互斥，都会递归包含参考资料。只处理用户指定目标，重跑前保留同名技能中用户需要的定制。
+
+### 认证与账号选择
+
+已有可用凭证时直接复用。需要首次登录或重新认证时，优先推荐浏览器验证，由 Agent 发起并等待用户完成。终端交互和环境变量用于浏览器不可用、自动化环境或用户明确选择的场景。
+
+业务命令缺少凭证会报错，不会自动弹出登录。先用 `zentao login --help` 确认当前安装版本支持 `--web`；不支持时提示升级 CLI，或使用该版本支持的登录方式。支持时，Agent 执行 `zentao login --web` 并保持进程运行，让用户在本机浏览器页面填写禅道地址、用户名和密码；未自动打开时，将命令输出的本机链接交给用户。等待命令报告登录成功后，再重试原业务命令。不要在对话里收集密码或 Token，不要读取、打印凭证环境变量、本地凭证文件或浏览器表单内容。
+
+可用 `--message <text>` 自定义登录页副标题，提示用户完成后回到当前 Agent，例如 `zentao login --web --message "完成登录后，回到 Codex 即可继续使用禅道。"`；该选项仅显示纯文本。
+
+沿用原命令的配置路径。远程服务器或容器中的本机链接属于 CLI 执行端，不能当作用户电脑上的链接；无法在该执行端打开页面时，让用户在相同执行环境的交互终端执行 `zentao login --no-browser`，或由运行环境提供完整凭证。不要反复启动登录进程。
+
+自动化凭证由运行环境提供：`ZENTAO_URL` + `ZENTAO_ACCOUNT` + `ZENTAO_TOKEN` 或 `ZENTAO_PASSWORD`。同源同时提供 Token 和密码时优先 Token。业务命令优先使用完整环境凭证，再回退到当前保存的 Profile。
+
+完整环境凭证用于业务命令时不读取或写入本地 Profile，不改变本地默认账号，也不继承本地 Profile 的配置；需要时通过命令行选项覆盖 CLI 默认配置。仅在用户要求验证并保存环境凭证时执行 `zentao login --useEnv`。使用已保存 Profile 的业务命令不会更新最近使用时间、重写配置文件或修改权限，可在配置目录只读时运行；登录、退出、切换账号和修改配置仍需要写入权限。
+
+```bash
+zentao profile 'admin@https://zentao.example.com'
+```
+
+上述命令切换本地默认账号；完整环境凭证仍会优先，不能仅凭切换成功认定后续请求使用了该账号。切换后可单独执行 `zentao profile --effective --format=json` 核对，`--effective` 不能与切换账号同时使用。需由运行环境维护者调整凭证来源。
+
+配置路径优先级为 `--config` → `ZENTAO_CONFIG_FILE` → `$XDG_CONFIG_HOME/zentao/zentao.json` → `~/.config/zentao/zentao.json`。XDG 仅接受绝对路径，未设置、为空或为相对路径时使用最后一项。设置 XDG 后不会迁移或回退读取旧文件，沿用用户选定的路径，不通过直接读取文件确认身份。Agent 无权访问默认目录时，可由运行环境注入完整凭据，或挂载一个可读配置目录并用 `--config` 指定；访问权限由运行环境配置，凭据不提交到仓库。
+
+## 查找命令与参数
+
+| 意图 | 命令形式 |
+|------|----------|
+| 列表（仅支持默认列表的模块） | `zentao <module> [范围参数]` |
+| 详情（仅支持 get 的模块） | `zentao <module> <id>` |
+| 创建 / 更新 / 删除 | `zentao <module> create` / `zentao <module> update <id>` / `zentao <module> delete <id>` |
+| 状态流转或命名操作 | `zentao <module> <action> [参数]` |
+| 操作参数、必填项、最低版本 | `zentao <module> <action> --help` |
+| 返回对象的字段定义 | `zentao <module> props --format=json` |
+
+`props` 不是写入字段清单，也不代表当前站点的动态选项。创建、更新、状态流转都以操作帮助为准；先读懂参数用途，再选值。
+
+- 业务字段优先使用 `--field=value`，保留帮助中的大小写。复杂对象、数组或长文本见 [references/writes.md](references/writes.md)。
+- 不要推断每个模块都有 CRUD。`doc`、`my` 无默认列表，必须选择命名操作。
+- 多个路径参数要分别传入；位置 ID / `--id` 仅代表首个路径 ID，不能代替后续 ID。
+- 不知道 ID 时先按产品、项目或执行查找，出现同名对象再澄清，不能套用示例 ID。
+- `browseType` 是各接口自己的服务端筛选值，例如项目 `doing`、需求 `allstory`；不能在不同模块间照搬。
+
+### 常用入口
+
+先用对应操作的 `--help` 确认安装版本支持，再代入真实 ID：
+
+```bash
+zentao product --pick=id,name
+zentao story --product=1 --pick=id,title,status
+zentao bug --product=1 --pick=id,title,status
+zentao task --executionID=1 --pick=id,name,status
+zentao project --browseType=doing --pick=id,name,status
+zentao execution projectExecutions --projectID=5 --browseType=all
+zentao productplan --productID=1
+zentao release --productID=1
+zentao build --project=5
+zentao my tasks --pick=id,name,status
+zentao my bugs --pick=id,title,status
+zentao my todos
+zentao doc myDocs --spaceID=1 --libID=2
+```
+
+需求分为 `epic`（业务需求）、`requirement`（用户需求）、`story`（研发需求）。问题 `issue`、风险 `risk`、会议 `meeting`、工作流 `workflow`、文档 `doc` 等能力通过模块帮助发现，无需套用任务或 Bug 的字段。
+
+### 服务器版本
+
+帮助离线列出完整注册表，不等于服务器支持全部动作。请求前会检查实际服务器版本；最低版本按同一系列比较，例如 `22.5 / biz13.5 / max8.5 / ipd5.5`。具体门槛以该动作帮助为准，不用统一版本号推断所有新增能力。
+
+遇到 `E2010` 时报告当前版本和该动作要求。可改用已支持且语义等价的查询，例如按执行查任务，或逐页查询全局执行再按项目筛选；不能把替代查询当成全量结果，不能为绕过检查修改版本信息。`zentao version` 中的服务器信息来自本地缓存，不是实时兼容性验证。
+
+## 执行与核实
+
+- 查询默认适合阅读；程序处理显式加 `--format=json`。全量统计、过滤、排序、原始响应及 JSON 结构见 [references/data-output.md](references/data-output.md)。
+- 创建、更新和状态流转按用户已授权的目标与字段执行；明确的请求不再重复确认。缺少目标、状态含义或必要信息时，只补问影响本次操作的内容。
+- 用户只要求查看、分析或建议时，先返回结果。演示不代表授权修改已有业务记录。
+- 更新自动补全仅在存在可用详情操作时生效，并且只补当前动作声明的可写字段；不能假设所有模块都有详情、所有字段都能保留。具体边界与示例见 [references/writes.md](references/writes.md)。
+- 删除和批量操作先落实用户授权的对象集合；自动化删除必须显式传 `--yes`。批量部分失败时分开报告成功、失败和跳过的对象，不能整体重试。
+- 根据返回的 ID 查询详情或在所属列表中核实关键字段，再宣告创建、关联、完成等结果。写入超时或返回不明确时先查询是否已生效，尤其不要盲目重试创建。
+
+## 错误处理
+
+保留错误要点，按原因处理；不要将所有错误都归为重新登录。
+
+| 错误码 | 处理 |
+|--------|------|
+| E1001 / E1006 | 凭证不完整或没有可用配置；按上述认证顺序优先发起浏览器登录 |
+| E1003 / E1004 | 账号密码错误或 Token 失效；按上述认证顺序重新登录，使用环境凭证时由运行环境维护者更新 |
+| E1005 | 配置读取失败；JSON 输出的 `error.details.reason` 区分 `invalid_json`、`invalid_structure`、`unreadable`，核对路径、格式或权限，不直接覆盖损坏的配置 |
+| E1007 | 指定 Profile 不存在；使用 profile 查看可用账号 |
+| E1011 | 配置写入失败；核对目录权限和磁盘空间，可通过 `error.details.systemCode` 查看原系统错误码，不重复登录 |
+| E1008 / E1009 / E1010 | 浏览器登录取消、超时或本地服务无法启动；按用户意愿重试，或使用终端交互登录 |
+| E2001 / E2005 | 模块或动作不存在；查本地帮助 |
+| E2002 | 对象或接口未找到；核对 ID、范围和具体错误 URL，不立即断定记录已删除 |
+| E2003 / E2004 / E2007 / E2009 | 缺参数、类型/选项错误或无效 JSON；对照动作帮助修正 |
+| E2006 | 无权限；说明受限操作，交由用户处理授权 |
+| E2008 | 服务端业务或 HTTP 错误；检查具体响应，不以 HTTP 200 或 raw 输出认定成功 |
+| E2010 | 服务器版本不支持；说明要求，选择受支持的等价能力或由用户升级 |
+| E2011 / E2012 | 版本格式或站点配置无法识别；核对站点根地址及其 `?mode=getconfig` 响应 |
+| E1002 / E5001 / E5002 | 地址不可达、超时或证书验证失败；核对网络、地址和证书，写请求先核实结果再决定是否重试 |

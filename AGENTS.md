@@ -27,3 +27,7 @@ Start here when exploring the codebase: a project-level terrain index under `doc
 ### Git contract
 
 Solo on the current branch; commit messages use conventional-commits prefixes (`docs:` / `feat:` / `fix:` …) with Chinese subjects allowed. See `docs/agents/git-contract.md`.
+
+### Zentao skills (third-party)
+
+The plugin ships two third-party skills — `zentao-cli` and `zentao-tour`, vendored from easysoft/zentao-cli under `skills/third-party/` — for operating Zentao (禅道) data: products, projects, stories, tasks, bugs, personal todos. Route Zentao work to them. Per-machine prerequisites: the `zentao` CLI (`npm install -g zentao-cli`) plus credentials — **environment variables recommended** (`ZENTAO_URL` / `ZENTAO_ACCOUNT` / `ZENTAO_TOKEN`|`ZENTAO_PASSWORD` exported in your own `~/.bashrc`; they outrank local profiles and password mode avoids token expiry), local-profile login (`zentao login --web`) as fallback.

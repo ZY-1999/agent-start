@@ -2,10 +2,12 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-10-13`
+- Last updated: `2026-10-14`
+- Updated: `2026-10-14` — 08 由模板示例扩为完整订单管理应用（backend/frontend/单 jar 交付）；新增插件 hooks（commit review 门）；01–07 `DEMO.md` 精简；插件清单 1.0.1→1.0.2
+- Updated: `2026-10-14` — 新增 `skills/third-party/` 第三方桶（zentao-cli 0.3.1 / zentao-tour 0.3.0-beta.1，vendored 自 easysoft/zentao-cli@`ce36cf5`）；`/setup-skills` 新增步骤 5（检查 `zentao` CLI 安装，凭证推荐用户在 `~/.bashrc` 自行 export 环境变量），Agent Notice 模板与根 `AGENTS.md` 增加 Zentao skills 节；插件清单 1.0.2→1.1.0
 - Project: agent-start（内部 git 名 `ongoal-skills`）
-- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 20 个 skills；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
-- Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash
+- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 22 个 skills（20 自研 + 2 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
+- Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash；Demo 08 另含 Java（Spring Boot 2.7 / MyBatis-Plus）与 TypeScript（React 18 + antd 5 + Vite）
 - Runtime / deployment shape: 无运行时。讲义浏览器直接打开；skills 经插件清单/链接脚本安装到各客户端
 - Primary entry types: 人类入口 `README.md` / `docs/index.html`；agent 入口 `AGENTS.md`；安装入口 `scripts/`
 - Confidence:
@@ -50,13 +52,13 @@ Node: agent-start
     - Entry: 浏览器打开；锚点 `#ch1`–`#ch5` / `#s<N>-<M>` / `#appendix`
     - Feature CodeMap: pending
     - Status: `confirmed`
-  - Live Demo（7 个现场 + 1 个模板）:
+  - Live Demo（7 个现场 + 1 个完整项目）:
     - Main modules: `docs/demos/01..08-*/`
-    - Entry: 各目录 `DEMO.md`（08 例外，入口是 `AGENTS.md`）
-    - Feature CodeMap: pending
+    - Entry: 01–07 各目录 `DEMO.md`（精简为 目标/对比/演示步骤/推荐 Prompt 四节）；08 是可运行应用，入口 `docs/demos/08-project-demo/AGENTS.md` + `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）
+    - Feature CodeMap: pending（08 订单管理应用值得单建，见 Backlog）
     - Status: `confirmed`
-  - SDD skills 集合（20 个）:
-    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3)
+  - skills 集合（自研 20 + 第三方 vendored 2）:
+    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3) `skills/third-party/`(2)
     - Entry: 各 `skills/<桶>/<名>/SKILL.md`
     - Feature CodeMap: pending（见 Backlog）
     - Status: `confirmed`
@@ -74,18 +76,24 @@ Node: agent-start
 - Status: `confirmed`
 - Children:
   - `docs/index.html`:
-    - Responsibility: 主讲义，848 行单文件（样式/交互/正文同体）
+    - Responsibility: 主讲义，865 行单文件（样式/交互/正文同体）
     - Key dependencies: 无外部资源，离线可用
     - Risk notes: 正文 id、手写 TOC、JS 里硬编码的 observe id 列表**三处需人工同步**（script 段 `['ch1',...]` 数组）
-  - `docs/demos/<NN>-<slug>/`:
-    - Responsibility: 每个含 `DEMO.md`（脚本/推荐 Prompt/讲解词/失误预案）+ 演示输入 + `ai-output/` 保底
+  - `docs/demos/<NN>-<slug>/`（01–07）:
+    - Responsibility: 每个含 `DEMO.md`（目标 / 传统 vs AI 对比 / 演示步骤 / 推荐 Prompt，2026-10-14 起精简版）+ 演示输入 + `ai-output/` 保底
     - Risk notes: Demo 01–07 编号与讲义 2.1–2.7 强耦合，重排需双改
   - `docs/demos/08-project-demo/`:
-    - Responsibility: 给听众取用的 SDD 仓库**模板示例**（AGENTS.md + docs/agents/）
-    - Risk notes: 与仓库根部的 `AGENTS.md`/`docs/agents/` 内容相似但用途不同——改一处不代表改另一处
+    - Responsibility: SDD 全流程产出的**完整订单管理应用**——Spring Boot 后端（`backend/`，30 个 Java 文件，MyBatis-Plus + Flyway + MockMvc 测试）+ React 前端（`frontend/`，antd/echarts）+ `docker-compose.yml`（mysql:8@3307）+ `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）；单 jar 交付（`mvn package` 自动 npm build 并把 `frontend/dist` 嵌入 static，`java -jar` 8080 即全系统）
+    - Risk notes: 与仓库根部的 `AGENTS.md`/`docs/agents/` 内容相似但用途不同——改一处不代表改另一处；`pom.xml` 的 `maven.compiler.release=8` 需 JDK 9+ 编译（JDK 8 会报"无效的标记: --release"），产物仍是 Java 8 字节码
+  - `hooks/`:
+    - Responsibility: 插件 hooks（`hooks.json` PreToolUse matcher Bash → `pre-commit-review.sh`）；在跑过 `/setup-skills` 的仓库拦截 agent 的 `git commit`，直到 `/review` 批准当前 diff（标记 `$GIT_DIR/zy-skills-review-approved`，hash 一次性精确匹配）
+    - Risk notes: 审批后 diff 再变即失效需重跑 review；用户自己终端 commit 不受门限
   - `skills/<general|dev|sdd>/`:
-    - Responsibility: 插件发布的 skills 源码；每桶一份 README
+    - Responsibility: 插件发布的自研 skills 源码（fork 血脉）；每桶一份 README
     - Risk notes: 改动会经三份平台清单分发，需同步检查（见 Risk Areas）
+  - `skills/third-party/`:
+    - Responsibility: 外部 vendored skills（现含 easysoft/zentao-cli 的 zentao-cli / zentao-tour）；原样引入，README 记录上游 commit 基线与版本
+    - Risk notes: **不参与** fork 上游同步映射；更新走上游整目录覆盖；两个 skill 互为兄弟目录（内部相对链接依赖此布局）；运行依赖全局 `zentao` CLI（npm `zentao-cli`）
   - `docs/agents/`:
     - Responsibility: 本仓库契约（issue-tracker / triage-labels / domain / git-contract），`/setup-skills` 于 2026-10-13 部署
   - `scripts/`:
@@ -101,7 +109,8 @@ Node: agent-start
   - UI / 文档: `docs/index.html`（浏览器直接打开）
   - CLI / commands: `scripts/link-skills.sh`、`scripts/link-opencode-skills.sh`（安装）、`scripts/list-skills.sh`（枚举）
   - Agent 配置入口: `AGENTS.md`（根目录，`## Agent Notice`）
-  - 插件清单: `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`）、`.cursor-plugin/plugin.json`（v1.0.1，逐个列出 skills 路径）、`.codebuddy-plugin/`
+  - 插件清单: `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`）、`.cursor-plugin/plugin.json`（v1.1.0，逐个列出 skills 路径）、`.codebuddy-plugin/`；hooks 经各清单的 hooks 声明分发（`hooks/hooks.json`）
+  - Demo 08 运行入口: `docker-compose.yml`（MySQL@3307，root/order_demo）→ `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar`（8080，Flyway 自动建表 + 种子数据）
 - Evidence: 各文件已读
 - Next Drill-Down: 无
 
@@ -113,6 +122,7 @@ Node: agent-start
 - Children:
   - 核心映射（改动时三处对齐）:
     - Demo 01–07 ↔ 讲义 2.1–2.7 场景 ↔ `demos/<NN>/DEMO.md`
+    - Demo 08 订单能力 ↔ `.scratch/2026-10-13-order-admin/specs/01..07` ↔ `backend/` 实现与 `frontend/` 页面
     - 讲义四章实践 ↔ 相关skills 标注 ↔ `skills/` 源目录
   - 状态机: issue 生命周期 `needs-triage`/`needs-info` → `ready-for-human` → `ready-for-agent` / `wontfix`（见 `docs/agents/triage-labels.md`）
   - Config namespaces: 无
@@ -126,7 +136,8 @@ Node: agent-start
 - Status: `confirmed`
 - Children:
   - 上游 fork: [mattpocock/skills](https://github.com/mattpocock/skills)，fork 维护规则见 ZY-1999/skills（README 尾注）
-  - 运行时第三方依赖: 无（HTML 零外部资源）
+  - 第三方 vendored 源: [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli)（`skills/third-party/`，MIT；基线 commit `ce36cf5`）
+  - 运行时第三方依赖: 无（HTML 零外部资源）；zentao 两个 skill 例外——需全局安装 `zentao` CLI（npm 包 `zentao-cli`，`/setup-skills` 环境检查探测）
   - 安装目标端: Claude Code / OpenCode / CodeBuddy / Cursor / ZCode
 - failure surfaces: 上游演进与本地 fork 的漂移（README 声明有维护规则，细节未核实）
 - Evidence: README、插件清单
@@ -141,6 +152,12 @@ Node: agent-start
   - skills 发布流: `skills/<桶>/<名>/SKILL.md` → 三份平台清单（`.claude-plugin/` `.codebuddy-plugin/` `.cursor-plugin/`）+ `scripts/link-*.sh` → 各客户端生效
     - Modules: skills/, 插件清单, scripts/
     - Effect: 新增/改名 skill 若不同步清单，Cursor 等按清单安装的平台会缺
+  - commit review 门（插件 hooks 分发后）: agent `git commit` → PreToolUse `hooks/pre-commit-review.sh` → 无有效审批则拒绝 → `/review` 通过后写 hash 标记 → 同一 diff 重试 commit 放行
+    - Modules: hooks/, skills/dev/review/, 各 SDD 仓库的 `docs/agents/issue-tracker.md`（opt-in 开关）
+    - Effect: 装了新版插件的客户端里，SDD 仓库的 agent 提交必须先过 review
+  - Demo 08 构建交付流: `mvn -f backend/pom.xml package` → exec 调 `npm run build`（frontend/，首次需 `npm ci`）→ dist 拷入 jar static → `java -jar` 单进程提供前端 + `/api`
+    - Modules: backend/, frontend/, docker-compose.yml
+    - Effect: 改前端或后端都必须重打包重启才能生效
   - 分享消费流: `docs/index.html` 章节 → `demos/<NN>/DEMO.md` 排练 → 现场
   - SDD 任务流（本仓库自身开工时）: `AGENTS.md` → `docs/agents/*` 契约 → `.scratch/<feature>/` issue 载体
 - Evidence: README 安装矩阵 + 契约文件
@@ -151,8 +168,8 @@ Node: agent-start
 - Type: `validation`
 - Status: `confirmed`
 - Validation Entry:
-  - Test commands: 无测试套件
-  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 20 个 SKILL.md
+  - Test commands: Demo 08 后端 `mvn -f docs/demos/08-project-demo/backend/pom.xml test`（MockMvc：订单 CRUD 口径 + SPA 回退）
+  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 22 个 SKILL.md；Demo 08——compose/容器起 MySQL@3307 → `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar` → `curl http://127.0.0.1:8080/`（入口 HTML）与 `/api/orders?pageNum=1&pageSize=5`（8 条种子）
   - Local run: 链接脚本幂等可重跑（README 声明，OpenCode 版 Windows 走 junction）
   - Logs / metrics: 无
 - proves: 页面可打开、skills 清单完整
@@ -171,6 +188,9 @@ Node: agent-start
   - 08 模板与根配置混淆:
     - Source: `docs/demos/08-project-demo/` 与根部 `AGENTS.md`/`docs/agents/` 结构相同
     - Affected capabilities: 契约、Demo
+  - 08 构建 JDK 陷阱:
+    - Source: `backend/pom.xml` 用 `maven.compiler.release=8`，JDK 8 的 javac 不支持 `--release` 标志，需 JDK 9+ 编译
+    - Affected capabilities: Demo 08 构建
   - index.html 三处人工同步:
     - Source: 正文 id / TOC 手写列表 / JS observe 数组
     - Affected capabilities: 讲义
@@ -186,10 +206,15 @@ Node: agent-start
 - Status: `confirmed`
 - Backlog:
   - skills 目录地形图:
-    - Why: 20 个 skill 分三桶，改/增 skill 是本仓库最高频操作，且牵动分发链
+    - Why: 22 个 skill 分四桶（含 third-party vendored），改/增 skill 是本仓库最高频操作，且牵动分发链
     - Likely entry: `skills/*/README.md`
     - Likely files: 各 `SKILL.md` + 插件清单
     - Priority: 高（下次动 skills 前建）
+  - Demo 08 订单管理应用 feature 图:
+    - Why: 08 已是全仓库唯一的可运行应用（前后端 + specs + 构建链），后续改动的高频目标
+    - Likely entry: `docs/demos/08-project-demo/AGENTS.md` 与 `.scratch/2026-10-13-order-admin/01-order-admin-system.md`
+    - Likely files: `backend/src/main/java/com/demo/order/`（web/service/dao 分层）、`frontend/src/pages/`、`OrderControllerTest`/`OrderControllerApiTest`
+    - Priority: 中（下次改 08 功能前建）
 - Next Drill-Down: 无
 
 ## 3. Compact Indexes
@@ -199,18 +224,20 @@ Node: agent-start
 | Capability | Main Modules | Entry | Feature CodeMap | Status |
 | ---------- | ------------ | ----- | --------------- | ------ |
 | 讲义 | `docs/index.html` | 浏览器打开 | pending | confirmed |
-| Demo | `docs/demos/01..08-*` | 各 `DEMO.md` | pending | confirmed |
-| skills 集合 | `skills/{general,dev,sdd}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
-| 安装分发 | `scripts/` + 三份插件清单 | `link-*.sh` | pending | confirmed |
+| Demo（01–07 现场） | `docs/demos/01..07-*` | 各 `DEMO.md`（精简版） | pending | confirmed |
+| Demo 08 应用 | `docs/demos/08-project-demo/{backend,frontend}` | `AGENTS.md` + `.scratch/` PRD/specs | pending（Backlog） | confirmed |
+| skills 集合 | `skills/{general,dev,sdd,third-party}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
+| 安装分发 | `scripts/` + 三份插件清单 + `hooks/` | `link-*.sh` | pending | confirmed |
 
 ### Module Index Table
 
 | Module / Package | Path | Responsibility | Key Dependencies | Risk Notes |
 | ---------------- | ---- | -------------- | ---------------- | ---------- |
 | 讲义 | `docs/index.html` | 五章正文 + 交互 | 无 | 三处人工同步 |
-| Demo | `docs/demos/` | 演示脚本与保底材料 | 讲义章节编号 | 编号强耦合 |
-| 08 模板 | `docs/demos/08-project-demo/` | 听众取用的 SDD 示例 | 无 | 勿与根部配置混淆 |
+| Demo（01–07） | `docs/demos/01..07-*` | 演示脚本与保底材料 | 讲义章节编号 | 编号强耦合 |
+| 08 订单应用 | `docs/demos/08-project-demo/` | SDD 全流程示例：前后端 + specs + 单 jar | mysql@3307、JDK 9+ 编译 | 勿与根部配置混淆 |
 | skills 源 | `skills/` | 插件发布源 | 上游 fork | 分发需同步清单 |
+| hooks | `hooks/` | commit review 门（PreToolUse） | `/review` skill 审批标记 | 审批随 diff 变化失效 |
 | 契约 | `docs/agents/` | 本仓库 SDD 契约 | 无 | — |
 | 脚本 | `scripts/` | 链接与枚举 | 各客户端目录 | 幂等设计 |
 
@@ -219,6 +246,8 @@ Node: agent-start
 | Flow | Modules | Entry | Effect | Drill-Down |
 | ---- | ------- | ----- | ------ | ---------- |
 | skills 发布 | skills/ + 插件清单 + scripts/ | `link-*.sh` | 各平台可用 | 无 |
+| commit review 门 | hooks/ + review skill | `hooks/hooks.json` | SDD 仓库 agent 提交须过 `/review` | 无 |
+| 08 构建交付 | backend/ + frontend/ | `backend/pom.xml` | 单 jar 含前端，8080 全系统 | Backlog feature 图 |
 | 分享消费 | index.html + demos/ | `DEMO.md` | 现场演示 | 无 |
 | SDD 任务 | AGENTS.md + docs/agents/ + .scratch/ | `AGENTS.md` | issue 载体与流转 | 无 |
 
@@ -229,6 +258,7 @@ Node: agent-start
 - `docs/index.html`: 主讲义
 - `docs/demos/README.md`: Demo 总览 + 排练指南
 - `docs/agents/git-contract.md`: 分支与提交契约
+- `hooks/hooks.json` + `hooks/pre-commit-review.sh`: commit review 门
 - `scripts/list-skills.sh`: skills 对账命令
 
 ## 4. Maintenance Notes
