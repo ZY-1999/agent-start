@@ -19,8 +19,13 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import javax.servlet.http.HttpServletResponse;
 import javax.validation.Valid;
+import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Collections;
+import java.util.List;
 
 /**
  * 订单 HTTP 接口。
@@ -40,6 +45,9 @@ public class OrderController {
 
     /** 示例数据。 */
     private final DemoDataService demoDataService;
+
+    /** 导出文件名里的时间部分。 */
+    private static final DateTimeFormatter EXPORT_NAME_TIME = DateTimeFormatter.ofPattern("yyyyMMddHHmmss");
 
     /**
      * @param orderService 订单业务
@@ -83,6 +91,40 @@ public class OrderController {
         }
         String exact = status == null || status.trim().isEmpty() ? null : status;
         return Result.ok(OrderPageResponse.from(orderService.page(keyword, exact, page, size)));
+    }
+
+    /**
+     * 导出未删除订单 CSV。过滤条件与分页查询一致，按创建时间倒序；非法状态导出只有表头的空文件。
+     *
+     * @param keyword 订单号或客户名称前缀
+     * @param status 精确状态
+     * @param response 响应
+     * @throws IOException 写出失败时抛出
+     */
+    @GetMapping("/export")
+    public void export(@RequestParam(value = "kw", required = false) String keyword,
+            @RequestParam(value = "status", required = false) String status,
+            HttpServletResponse response) throws IOException {
+        List<Order> orders;
+        if (status != null && !status.trim().isEmpty() && !known(status)) {
+            orders = Collections.emptyList();
+        } else {
+            String exact = status == null || status.trim().isEmpty() ? null : status;
+            orders = orderService.export(keyword, exact);
+        }
+        response.setCharacterEncoding("UTF-8");
+        response.setContentType("text/csv;charset=UTF-8");
+        response.setHeader("Content-Disposition", "attachment; filename=\"" + exportFileName() + "\"");
+        response.getWriter().write(OrderCsv.csv(orders));
+    }
+
+    /**
+     * 生成带时间戳的导出文件名。
+     *
+     * @return 如 orders-export-20261014153000.csv
+     */
+    private String exportFileName() {
+        return "orders-export-" + LocalDateTime.now().format(EXPORT_NAME_TIME) + ".csv";
     }
 
     /**

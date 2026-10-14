@@ -35,6 +35,18 @@ export default function OrdersPage() {
     } catch (error) { message.error(error instanceof Error ? error.message : '保存失败') }
     finally { setSubmitting(false) }
   }
+  const exportCsv = () => {
+    const params = new URLSearchParams()
+    const keyword = kw.trim()
+    if (keyword) params.set('kw', keyword)
+    if (status) params.set('status', status)
+    const query = params.toString()
+    const link = document.createElement('a')
+    link.href = '/api/orders/export' + (query ? '?' + query : '')
+    document.body.appendChild(link)
+    link.click()
+    link.remove()
+  }
   const columns: ColumnsType<Order> = [
     { title: '订单号', dataIndex: 'orderNo' }, { title: '客户', dataIndex: 'customerName' }, { title: '商品', dataIndex: 'productName' },
     { title: '数量', dataIndex: 'quantity' }, { title: '单价', dataIndex: 'unitPrice' }, { title: '总金额', dataIndex: 'totalAmount' },
@@ -49,6 +61,7 @@ export default function OrdersPage() {
       <Select allowClear placeholder="状态" style={{ width: 140 }} options={STATUS_OPTIONS} value={status} onChange={(value) => { setStatus(value); void load(1, size, kw, value) }} />
       <Input.Search allowClear placeholder="订单号或客户名称前缀" style={{ width: 280 }} onSearch={(value) => { setKw(value); void load(1, size, value, status) }} />
       <Button type="primary" onClick={() => { setEditing(null); form.resetFields(); form.setFieldsValue({ quantity: 1, status: 'PENDING' }); setOpen(true) }}>新建订单</Button>
+      <Button onClick={exportCsv}>导出 CSV</Button>
     </Space>
     <Table rowKey="id" loading={loading} columns={columns} dataSource={records} pagination={{ current: page, pageSize: size, total, showSizeChanger: true, pageSizeOptions: [10, 20, 50], onChange: (nextPage, nextSize) => { void load(nextPage, nextSize) } }} />
     <Modal title={editing ? '编辑订单' : '新建订单'} open={open} confirmLoading={submitting} onCancel={() => setOpen(false)} onOk={() => form.submit()} destroyOnClose>

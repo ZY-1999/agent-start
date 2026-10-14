@@ -30,6 +30,15 @@ public interface OrderMapper extends BaseMapper<Order> {
             @Param("limit") int limit, @Param("offset") int offset);
 
     /**
+     * 按前缀和状态查出全部未删除订单，不分页，供导出。
+     *
+     * @param keyword 订单号或客户名称前缀，空则不按关键字过滤
+     * @param status 精确状态，空则不按状态过滤
+     * @return 未删除订单，按创建时间和主键倒序
+     */
+    List<Order> selectActiveAll(@Param("keyword") String keyword, @Param("status") String status);
+
+    /**
      * 统计符合前缀和状态的未删除订单数。
      *
      * @param keyword 订单号或客户名称前缀，空则不按关键字过滤

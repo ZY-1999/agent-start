@@ -42,6 +42,15 @@ public interface OrderService {
     OrderPage page(String keyword, String status, Integer page, Integer size);
 
     /**
+     * 查出全部未删除订单，供导出。关键字与状态含义同分页查询，按创建时间倒序。
+     *
+     * @param keyword 订单号或客户名称前缀
+     * @param status 精确状态；非法状态由调用方先处理
+     * @return 未删除订单，按创建时间和主键倒序
+     */
+    java.util.List<Order> export(String keyword, String status);
+
+    /**
      * 修改订单内容。保留原订单号，总金额按服务端重算。已逻辑删除的行仍可修改，删除标记不变。
      *
      * @param id 主键

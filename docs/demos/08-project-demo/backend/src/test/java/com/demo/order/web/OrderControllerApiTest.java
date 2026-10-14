@@ -32,7 +32,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
- * 列表、修改、删除、汇总、重置和前端回退。
+ * 列表、修改、删除、汇总、重置、导出和前端回退。
  *
  * @author 张颖
  * @date 2026/10/13
@@ -144,6 +144,47 @@ class OrderControllerApiTest {
                 .andExpect(jsonPath("$.data.total").value(0));
         mockMvc.perform(get("/api/orders").param("kw", "百分"))
                 .andExpect(jsonPath("$.data.total").value(1));
+    }
+
+    /**
+     * 导出复用筛选条件并按创建时间倒序；备注转义逗号、引号和公式前缀，非法状态只有表头。
+     *
+     * @throws Exception 请求失败时抛出
+     */
+    @Test
+    void exportCsvFiltersSortsAndEscapes() throws Exception {
+        insertRow("老客户", "PENDING", "10.00", LocalDateTime.of(2026, 10, 1, 8, 0, 0),
+                "备注,含\"引号\"");
+        String newerNo = insertRow("新客户", "PAID", "20.00", LocalDateTime.of(2026, 10, 2, 8, 0, 0),
+                "=SUM(A1)");
+        insertRow("张三", "COMPLETED", "30.00", LocalDateTime.of(2026, 10, 3, 8, 0, 0));
+
+        MvcResult all = mockMvc.perform(get("/api/orders/export"))
+                .andExpect(status().isOk())
+                .andReturn();
+        String csv = all.getResponse().getContentAsString(StandardCharsets.UTF_8);
+        assertThat(csv).startsWith(OrderCsv.BOM);
+        assertThat(all.getResponse().getContentType()).isEqualTo("text/csv;charset=UTF-8");
+        assertThat(all.getResponse().getHeader("Content-Disposition"))
+                .startsWith("attachment; filename=\"orders-export-");
+        String[] lines = csv.substring(1).split("\r\n");
+        assertThat(lines).hasSize(4);
+        assertThat(lines[0]).isEqualTo("\"订单号\",\"客户名称\",\"商品名称\",\"数量\",\"单价\",\"总金额\",\"状态\",\"备注\",\"创建时间\"");
+        assertThat(lines[1]).contains("张三").contains("已完成").contains("2026-10-03 08:00:00");
+        assertThat(lines[2]).contains(newerNo).contains("新客户").contains("已支付")
+                .contains("\"'=SUM(A1)\"").contains("2026-10-02 08:00:00");
+        assertThat(lines[3]).contains("老客户").contains("待支付").contains("\"备注,含\"\"引号\"\"\"");
+
+        String filtered = mockMvc.perform(get("/api/orders/export").param("status", "PAID"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        assertThat(filtered.substring(1).split("\r\n")).hasSize(2);
+        assertThat(filtered).contains(newerNo).doesNotContain("张三");
+
+        String unknown = mockMvc.perform(get("/api/orders/export").param("status", "UNKNOWN"))
+                .andExpect(status().isOk())
+                .andReturn().getResponse().getContentAsString(StandardCharsets.UTF_8);
+        assertThat(unknown.substring(1).split("\r\n")).hasSize(1);
     }
 
     /**
@@ -297,7 +338,7 @@ class OrderControllerApiTest {
     }
 
     /**
-     * 插入一行未删除订单。
+     * 插入一行未删除订单，不带备注。
      *
      * @param customer 客户名称
      * @param status 状态
@@ -306,12 +347,26 @@ class OrderControllerApiTest {
      * @return 订单号
      */
     private String insertRow(String customer, String status, String amount, LocalDateTime time) {
+        return insertRow(customer, status, amount, time, null);
+    }
+
+    /**
+     * 插入一行未删除订单。
+     *
+     * @param customer 客户名称
+     * @param status 状态
+     * @param amount 单价与总金额
+     * @param time 创建时间
+     * @param remark 备注，可为空
+     * @return 订单号
+     */
+    private String insertRow(String customer, String status, String amount, LocalDateTime time, String remark) {
         String orderNo = String.format("ORD%017d", sequence.incrementAndGet());
         jdbcTemplate.update(
                 "INSERT INTO t_order (order_no, customer_name, product_name, quantity, unit_price, total_amount, "
-                        + "status, is_deleted, create_time, update_time) VALUES (?,?,?,?,?,?,?,0,?,?)",
+                        + "status, remark, is_deleted, create_time, update_time) VALUES (?,?,?,?,?,?,?,?,0,?,?)",
                 orderNo, customer, "商品", Integer.valueOf(1), new BigDecimal(amount), new BigDecimal(amount), status,
-                Timestamp.valueOf(time), Timestamp.valueOf(time));
+                remark, Timestamp.valueOf(time), Timestamp.valueOf(time));
         return orderNo;
     }
 

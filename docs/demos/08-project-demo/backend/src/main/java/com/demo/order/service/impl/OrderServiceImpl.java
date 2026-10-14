@@ -20,6 +20,7 @@ import org.springframework.transaction.support.TransactionTemplate;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 import java.util.concurrent.ThreadLocalRandom;
 
 /**
@@ -118,6 +119,18 @@ public class OrderServiceImpl implements OrderService {
         long total = orderMapper.countActive(kw, exactStatus);
         int offset = (pageNo - 1) * pageSize;
         return new OrderPage(total, pageNo, pageSize, orderMapper.selectActivePage(kw, exactStatus, pageSize, offset));
+    }
+
+    /**
+     * 查出全部未删除订单，供导出。过滤规则与分页查询一致。
+     *
+     * @param keyword 订单号或客户名称前缀
+     * @param status 精确状态
+     * @return 未删除订单，按创建时间和主键倒序
+     */
+    @Override
+    public List<Order> export(String keyword, String status) {
+        return orderMapper.selectActiveAll(likePrefix(keyword), blankToNull(status));
     }
 
     /**
