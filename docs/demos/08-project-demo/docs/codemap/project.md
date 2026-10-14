@@ -172,8 +172,8 @@ Node: order-admin
 - Purpose: 主要跨模块链路
 - Major Flows:
   - 创建订单: `OrdersPage 表单` → `api/order.ts#createOrder` → `OrderController#create` → `OrderServiceImpl#create`（`nextOrderNo`=ORD+yyyyMMddHHmmss+3位随机；`DuplicateKeyException` 最多重试 3 次，`REQUIRES_NEW` 独立事务）→ `OrderMapper.insert`
-  - 导出 CSV: `OrdersPage 导出按钮`（拼 kw/status 到 `<a>` 下载）→ `OrderController#export`（非法状态→空列表）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll`（`create_time DESC, id DESC`）→ `OrderCsv.csv`（BOM + 全字段引号转义 + 公式前缀加 `'`）→ 流式响应
-  - 导出 Excel: `OrderController#exportXlsx`（与 CSV 同一套过滤/非法状态语义）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll` → `OrderExcel.xlsx`（EasyExcel 注解行模型，金额/数量为数值单元格，写出直连响应流）
+  - 导出 CSV: `OrdersPage 导出下拉·CSV 项`（拼 kw/status 到 `<a>` 下载）→ `OrderController#export`（非法状态→空列表）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll`（`create_time DESC, id DESC`）→ `OrderCsv.csv`（BOM + 全字段引号转义 + 公式前缀加 `'`）→ 流式响应
+  - 导出 Excel: `OrdersPage 导出下拉·Excel 项`（同一 `<a>` 下载辅助函数，仅路径为 `/export.xlsx`）→ `OrderController#exportXlsx`（与 CSV 同一套过滤/非法状态语义）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll` → `OrderExcel.xlsx`（EasyExcel 注解行模型，金额/数量为数值单元格，写出直连响应流）
   - 打包: `mvn package` → prepare-package 先 npm build 再拷 `frontend/dist` → `classpath:/static` → `SpaResourceConfig` 兜底回退 index.html
   - 启动播种: `DemoSeedRunner` → `DemoDataService#seedIfEmpty`（无未删除订单时写 8 条，日期=今天-daysAgo 12:00）
 - Evidence: 各链路源码通读
@@ -277,7 +277,7 @@ Node: order-admin
 - `backend/…/web/OrderCsv.java`: CSV 组装规则
 - `backend/…/web/OrderExcel.java`: Excel 组装规则（EasyExcel 行模型）
 - `backend/src/test/…/OrderControllerApiTest.java`: 端点行为锚点
-- `frontend/src/pages/OrdersPage.tsx`: 订单页（含导出按钮）
+- `frontend/src/pages/OrdersPage.tsx`: 订单页（含「导出」下拉：CSV / Excel 两项）
 - `frontend/src/api/order.ts`: 前后端契约
 - `docker-compose.yml`: 本地 MySQL
 - `PROJECT_KNOWLEDGE.md`: 本机构建/测试环境坑（未入库）

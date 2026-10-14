@@ -1,7 +1,7 @@
 # 前端导出下拉菜单（CSV / Excel）
 
 Type: spec
-Status: ready-for-agent
+Status: ready-for-human
 Parent: #1
 Blocked by: #1（「导出 Excel」项的人工冒烟依赖 `/export.xlsx` 端点已存在；CSV 项行为不变，只是入口被改造）
 

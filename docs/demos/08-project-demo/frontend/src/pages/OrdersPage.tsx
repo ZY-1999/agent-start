@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
-import { Button, Form, Input, InputNumber, Modal, Select, Space, Table, message } from 'antd'
+import { Button, Dropdown, Form, Input, InputNumber, Modal, Select, Space, Table, message } from 'antd'
 import type { ColumnsType } from 'antd/es/table'
+import type { MenuProps } from 'antd'
 import { createOrder, deleteOrder, fetchOrders, updateOrder, type Order, type OrderPayload } from '../api/order'
 import { STATUS_OPTIONS, statusLabel } from '../status'
 interface OrderForm { customerName: string; productName: string; quantity: number; unitPrice: string; status: string; remark?: string }
@@ -35,18 +36,23 @@ export default function OrdersPage() {
     } catch (error) { message.error(error instanceof Error ? error.message : '保存失败') }
     finally { setSubmitting(false) }
   }
-  const exportCsv = () => {
+  const exportOrders = (path: string) => {
     const params = new URLSearchParams()
     const keyword = kw.trim()
     if (keyword) params.set('kw', keyword)
     if (status) params.set('status', status)
     const query = params.toString()
     const link = document.createElement('a')
-    link.href = '/api/orders/export' + (query ? '?' + query : '')
+    link.href = path + (query ? '?' + query : '')
     document.body.appendChild(link)
     link.click()
     link.remove()
   }
+  const exportMenuItems: MenuProps['items'] = [
+    { key: '/api/orders/export', label: '导出 CSV' },
+    { key: '/api/orders/export.xlsx', label: '导出 Excel' },
+  ]
+  const onExportMenuClick: MenuProps['onClick'] = ({ key }) => exportOrders(key)
   const columns: ColumnsType<Order> = [
     { title: '订单号', dataIndex: 'orderNo' }, { title: '客户', dataIndex: 'customerName' }, { title: '商品', dataIndex: 'productName' },
     { title: '数量', dataIndex: 'quantity' }, { title: '单价', dataIndex: 'unitPrice' }, { title: '总金额', dataIndex: 'totalAmount' },
@@ -61,7 +67,9 @@ export default function OrdersPage() {
       <Select allowClear placeholder="状态" style={{ width: 140 }} options={STATUS_OPTIONS} value={status} onChange={(value) => { setStatus(value); void load(1, size, kw, value) }} />
       <Input.Search allowClear placeholder="订单号或客户名称前缀" style={{ width: 280 }} onSearch={(value) => { setKw(value); void load(1, size, value, status) }} />
       <Button type="primary" onClick={() => { setEditing(null); form.resetFields(); form.setFieldsValue({ quantity: 1, status: 'PENDING' }); setOpen(true) }}>新建订单</Button>
-      <Button onClick={exportCsv}>导出 CSV</Button>
+      <Dropdown menu={{ items: exportMenuItems, onClick: onExportMenuClick }}>
+        <Button>导出</Button>
+      </Dropdown>
     </Space>
     <Table rowKey="id" loading={loading} columns={columns} dataSource={records} pagination={{ current: page, pageSize: size, total, showSizeChanger: true, pageSizeOptions: [10, 20, 50], onChange: (nextPage, nextSize) => { void load(nextPage, nextSize) } }} />
     <Modal title={editing ? '编辑订单' : '新建订单'} open={open} confirmLoading={submitting} onCancel={() => setOpen(false)} onOk={() => form.submit()} destroyOnClose>
