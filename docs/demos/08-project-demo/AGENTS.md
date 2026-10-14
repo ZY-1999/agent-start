@@ -26,6 +26,10 @@
 
 分支策略为 **solo**（直接在当前分支开发，不建 feature 分支）；提交信息无额外强制约定。`/sdd-flow` 和 `/tdd` 的提交与分支决策遵循它。见 `docs/agents/git-contract.md`。
 
+### Zentao skills（第三方）
+
+插件自带 `zentao-cli` / `zentao-tour` 两个第三方技能，通过 `zentao` 命令（`npm install -g zentao-cli`）操作禅道；凭据建议以环境变量（`ZENTAO_URL` / `ZENTAO_ACCOUNT` / `ZENTAO_TOKEN` 或 `ZENTAO_PASSWORD`）在用户自己的 `~/.bashrc` 中导出，本地 profile 登录作为回退。本机 `zentao` CLI 已安装。
+
 ### Java 开发规范
 
 Java 代码与工程规范：命名风格、代码格式、OOP / 集合 / 并发规约、Javadoc 注释、应用分层（Web / Service / Manager / DAO）与二方库依赖、系统安全；按【强制】/【推荐】/【参考】分级。写 Java 代码时遵循。见 `docs/agents/JAVA开发规范.md`。
