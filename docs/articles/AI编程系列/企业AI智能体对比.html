@@ -1,0 +1,434 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>企业里的四类 AI 智能体：编程 Agent、知识智能体、工作流自动化与办公智能体 · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout ul, .callout ol { margin: 6px 0; padding-left: 22px; }
+  .callout li { margin: 5px 0; }
+  .callout.reco {
+    border: 1px solid #d5d9f2;
+    border-left: 4px solid var(--accent);
+    background: #f7f8fd;
+  }
+  .callout.reco h4 { color: var(--accent-dark); }
+  .callout.warn {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    background: #fdf7ee;
+  }
+  .callout.warn h4 { color: var(--warn); }
+
+  .term {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .term .t { font-weight: 600; color: var(--text); display: block; margin-bottom: 2px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+  .y { color: var(--good); font-weight: 700; }
+  .n2 { color: var(--bad); font-weight: 700; }
+  .p { color: var(--warn); font-weight: 600; }
+  .hl td { background: #eef3fe !important; }
+
+  /* 五列对比总表：紧凑字号，保证 880px 版心内不横向溢出 */
+  table.dense { min-width: 0; font-size: 12.5px; }
+  table.dense th, table.dense td { padding: 8px 8px; line-height: 1.55; }
+  table.dense thead th { font-size: 12.5px; padding: 9px 8px; }
+  table.dense td.dim { font-size: 12.5px; }
+  table.dense .footnote { font-size: 11px; }
+
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 姊妹篇 · 面向决策者与平台团队 · 独立成文可单读</span>
+    <h1>企业里的四类 AI 智能体<br>编程 Agent、知识智能体、工作流自动化与办公智能体</h1>
+    <p class="sub">产品文档里都写着"智能体"，真的是一样的吗？按"干什么活、产出什么、谁验收"拆开看，会清楚得多。</p>
+    <p class="meta">通读约 15 分钟 · 编程 Agent 部分沿用系列已核验口径（2026-10-16） · 相关阅读：<a href="AI编程现状速览.html">行业现状</a> · <a href="AI编程名词课.html">名词课</a> · <a href="AI编码模型选型.html">模型选型</a> · <a href="AI编程客户端选型.html">客户端选型</a> · <a href="AI编程落地指南.html">落地指南</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">先分类：企业里常见的四类"智能体"</a></li>
+    <li><a href="#s2">核心对比：一张总表看懂差别</a></li>
+    <li><a href="#s3">关键分界：有没有"确定性裁判"</a></li>
+    <li><a href="#s4">常见错配与正确姿势</a></li>
+    <li><a href="#s5">知识智能体专场：选型六问</a></li>
+    <li><a href="#s6">采购与落地：一页决策</a></li>
+    <li><a href="#s7">结论：四类是器官，不是替代品</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>先分类：企业里常见的四类"智能体"</h2>
+  <p class="lead">产品名称可能相似，实际工作对象并不一样。按任务、产出和验收方式分类，选型才有可比性。</p>
+
+  <div class="grid2">
+    <div class="mini">
+      <h5>① 编程 Agent（Harness）</h5>
+      <p>替你写代码：读仓库、改文件、跑测试、看报错、改到绿。产出代码与 PR。代表：Claude Code、Cursor、Copilot、ZCode、CodeBuddy 等（逐家对比见<a href="AI编程客户端选型.html">系列之四</a>）。</p>
+    </div>
+    <div class="mini">
+      <h5>② 企业知识智能体</h5>
+      <p>站在公司知识上回答问题：检索内部文档后作答，产出答案、摘要、工单回复。代表：Dify、Coze（扣子）、RAGFlow 等平台上自建的问答应用，以及套件内建的知识助手。</p>
+    </div>
+    <div class="mini">
+      <h5>③ 工作流自动化 Agent</h5>
+      <p>替你跑流程、连系统：触发、编排、调 API、写工单、发通知。产出动作与流转。代表：Zapier、Make、n8n 及各类"Agent 化"的编排与 RPA 平台。</p>
+    </div>
+    <div class="mini">
+      <h5>④ 办公智能体</h5>
+      <p>长在你每天用的套件里：起草、总结、翻译、改格式。产出文档草稿与纪要。代表：M365 Copilot、Workspace 的 Gemini、WPS AI、飞书智能伙伴等。</p>
+    </div>
+  </div>
+
+  <p>这四类对应四种常见问题：编码和返工拖慢交付，资料散落导致重复答疑，跨系统流程靠人工搬运，日常时间被纪要和初稿占满。它们更像组合件，不是互相替代的四选一。企业未必需要一次配齐，应该先看瓶颈在哪里。这个分法与系列之四中"补全、Agent、审查 Bot 各管一段"的思路相同，只是把视角从研发团队拉到了全公司。</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>核心对比：一张总表看懂差别</h2>
+  <p class="lead">十个维度一次对齐；✓ / △ / ✗ 表示该项能力的强弱。产品能力迭代很快，具体以各官网为准。</p>
+
+  <div class="tablewrap">
+    <table class="dense">
+      <thead>
+        <tr>
+          <th style="width:12%">维度</th>
+          <th style="width:22%">编程 Agent</th>
+          <th style="width:22%">知识智能体</th>
+          <th style="width:22%">工作流自动化</th>
+          <th style="width:22%">办公智能体</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">一句话定位</td><td>给模型配一双手，改真实仓库</td><td>给知识配一张嘴，检索后作答</td><td>给流程配一双腿，连系统跑步骤</td><td>给办公套件配个助手，在聊天、文档、邮件里帮忙</td></tr>
+        <tr><td class="dim">干的活</td><td>读改代码、跑测试、循环到绿</td><td>检索内部知识，生成答案与草稿</td><td>触发—编排—调用，含 AI 决策点</td><td>起草、总结、翻译、排版</td></tr>
+        <tr><td class="dim">产出与验收</td><td>代码 / PR；测试 + CI + 人审，可自动验证</td><td>答案 / 工单回复；只能人判对错 + 抽检</td><td>动作与流转；看流程走没走通 + 回滚</td><td>文档草稿 / 纪要；人直接采用与否</td></tr>
+        <tr><td class="dim">技术底座</td><td>编码模型 + harness（工具、沙箱、循环）</td><td>RAG（切片、检索、重排）+ 提示工程</td><td>编排引擎 + 连接器 + 模型决策点</td><td>套件内嵌模型 + 套件权限与数据上下文</td></tr>
+        <tr class="hl"><td class="dim">Agent loop 自主循环</td><td class="y">✓ 完整（读 → 改 → 跑 → 看 → 再改）</td><td class="n2">✗ 多为单轮检索问答</td><td class="p">△ 半自主（人工节点、审批穿插）</td><td class="n2">✗ 单点辅助</td></tr>
+        <tr><td class="dim">错了的代价</td><td>编译不过、测试变红，多在本地暴露</td><td>一本正经地胡说，错误流向决策与客户</td><td>发错邮件、改错单，动作难以撤销</td><td>小错高频，人眼兜底</td></tr>
+        <tr><td class="dim">验证手段</td><td>测试、CI、评审、扫描，整套最成熟</td><td>评测集、引用率、人工抽检</td><td>幂等设计、试运行、审批、回滚</td><td>人眼即验收</td></tr>
+        <tr><td class="dim">数据敏感面</td><td>代码与凭据出网</td><td>知识库全集 + 权限模型出网</td><td>系统凭据与操作权限</td><td>邮件、文档、会议内容</td></tr>
+        <tr><td class="dim">买还是建</td><td>订阅成品为主（见系列之四）</td><td>平台自建为主，运营持续投入</td><td>平台编排自建</td><td>随套件订阅</td></tr>
+        <tr><td class="dim">成熟度（2026）</td><td>第一梯队，迭代最快</td><td>中；上限在检索质量而非模型</td><td>中；胜在确定性而非智能</td><td>跟随套件节奏铺开</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">注：✗ 只表示"不具备或很弱"，不代表产品差，每类的取舍见第 03 节的解释。</p>
+
+  <p>表里值得多看一眼的是"Agent loop 自主循环"。编程 Agent 通常拥有最完整的"执行—验证—修正"闭环，因为代码任务已有编译、测试和 CI 等反馈机制。其他类型也能做循环，但验证往往没这么直接，能放开的自主权自然不同。</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>关键分界：有没有"确定性裁判"</h2>
+  <p class="lead">四类产品为什么采用不同的交互和权限设计，关键在于任务有没有可靠的机器反馈。</p>
+
+  <div class="term">
+    <p><span class="t">术语卡：确定性裁判</span></p>
+    <p>这里指不依赖主观判断、可以重复执行的验证机制。编译器是否报错、测试是否通过、CI 是否放行，都是编程任务的裁判；流程系统的状态校验、幂等检查和回滚机制也能提供反馈。至于"答案是否完整""纪要是否准确"，机器可以辅助评分，却很难替代业务人员做最终判断。</p>
+  </div>
+
+  <p>裁判决定了两件事：</p>
+  <ol>
+    <li>自主权能放多大。有可靠反馈的任务，Agent 做错后更容易被及时拦下并重试，因此编程 Agent 适合运行"读 → 改 → 验 → 再改"的循环。没有同等级反馈时，错误答案可能直接进入客服回复或管理决策，知识智能体就应停在建议和草稿环节。</li>
+    <li>治理怎么设计。<a href="AI编程落地指南.html">系列之五</a>强调"No change should land unread"，是让机器验证和人工判断各守一道关：测试、CI 负责可自动检查的部分，人负责需求是否满足、风险是否可接受。知识答案、文档和高风险流程动作缺少硬性裁判时，人工确认更不能省。</li>
+  </ol>
+
+  <div class="callout warn">
+    <h4>给选型者的一个判据</h4>
+    <p>评估"智能体"产品时先问："它做对了，靠什么判定？"如果只能回答"让模型再检查一次"，就不该贸然放开高风险权限。编译、测试、状态校验、审批与回滚都算具体答案；验证机制越弱，人工确认越要靠前。</p>
+  </div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>常见错配与正确姿势</h2>
+  <p class="lead">边界不清，预算和权限就容易配错。下面五种情况尤其常见。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:34%">常见错配</th><th style="width:32%">后果</th><th>正确姿势</th></tr></thead>
+      <tbody>
+        <tr><td>拿知识智能体（Dify / Coze 应用）写代码</td><td>没有代码工具、沙箱与验证循环，产出的是"参考代码"，搬运与验证还是人</td><td>写代码走编程 Agent（<a href="AI编程客户端选型.html">系列之四</a>）</td></tr>
+        <tr><td>拿编程 Agent 当知识库问制度、问规范</td><td>没有权限分级的 RAG，答案靠上下文里塞多少算多少，还可能幻觉</td><td>知识问答走知识智能体；编程 Agent 需要知识时，用 MCP 接知识库</td></tr>
+        <tr><td>在编排平台上自建编程 harness</td><td>上下文工程、沙箱、验证循环全要自己造轮子，质量长期追不上成品</td><td>平台管流程；写代码订阅成品 harness</td></tr>
+        <tr><td>让知识智能体"执行制度"（如自动审批）</td><td>提示词不是门禁，答案也不担流程责任；错了没人拦</td><td>制度执行挂确定性规则（审批流、hooks）；智能体只负责解释与起草</td></tr>
+        <tr><td>办公智能体全员铺开当"生产力革命"</td><td>草稿质量参差，没有验收动作就没有可核算的收益</td><td>圈定高频低风险场景（纪要、周报、初稿），配模板与验收动作</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>这些错配有个共同点：产品的执行能力和任务的验收方式没有对上。先明确产出由谁验、错了怎么撤，再决定买哪类工具、给多大权限。</p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>知识智能体专场：选型六问</h2>
+  <p class="lead">知识智能体看起来最容易搭，长期效果却很依赖资料治理和运营，值得单独展开。</p>
+
+  <div class="term">
+    <p><span class="t">术语卡：RAG</span></p>
+    <p>把公司资料检索出来喂给模型，再让它作答，适合"让 AI 查内部知识"的场景（口径同<a href="AI编程名词课.html">名词课</a>）。它的本质是给模型配一个"先查再说"的工作方法，缓解但不消灭幻觉。</p>
+  </div>
+
+  <ol>
+    <li>别只盯模型。RAG 的切片、元数据、检索与重排会直接影响答案质量。上线前先处理重复文档、过期版本、目录和权限元数据；知识库本身混乱，换更贵的模型也很难稳定补救。</li>
+    <li>权限即合规。检索必须按人过滤到文档级：谁能问、能看到哪一档，跟着他在源系统的权限走。知识智能体最常见的事故不是模型胡说，而是权限过滤失效，智能体变成越权读档的通道（HR 文档、薪酬表、未公开材料被全员可检索）。上线前把"越权检索"列为专项测试。</li>
+    <li>答案必须带引用。无来源的答案不上线；引用可点开，人工抽检才有抓手。这也是知识智能体与"裸聊模型"的分水岭：能不能为答案指认出处。</li>
+    <li>拒答优于编造。"知识库里没有"就是正确答案。检索置信度低时拒答并转人工，比硬编一条像模像样的答案好得多，幻觉治理的优先级高于模型选型。</li>
+    <li>评测先于上线，抽检贯穿运营。用真实问题和标准答案建离线评测集，上线后持续抽检。除了满意度，还要看引用是否支持结论、人工纠正率和拒答准确性；语气讨喜不代表答案正确。</li>
+    <li>资产要能复用。把知识能力沉淀成 MCP server 之后，编程 Agent、工作流、办公助手都能消费同一份知识库。别让知识锁死在单一平台的应用格式里，这和<a href="AI编程客户端选型.html">系列之四</a>的结论是同一条：模型留着换，资产要能带走。</li>
+  </ol>
+
+  <div class="callout warn">
+    <h4>安全侧补两条</h4>
+    <p>知识智能体引入两类新攻击面：<strong>间接提示词注入</strong>（恶意内容藏在被检索的文档里，劫持智能体行为）与<strong>知识库投毒</strong>（污染源文档即污染所有答案）。这两类都在 OWASP LLM Top 10 的清单上；对外提供服务时，还要按对外 AI 产品的监管口径另做评估（见<a href="AI编程落地指南.html">系列之五</a>合规一节）。</p>
+  </div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="no">06</span>采购与落地：一页决策</h2>
+  <p class="lead">先确认业务缺口，再看产品；顺序反过来，很容易为了工具找场景。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:26%">你缺的是</th><th style="width:20%">该上哪类</th><th style="width:24%">预算形态</th><th>第一步</th></tr></thead>
+      <tbody>
+        <tr><td>写代码的手：交付瓶颈在编码与返工</td><td>编程 Agent</td><td>席位订阅或按量（见系列之三、之四）</td><td>选 1~2 个试点团队跑 90 天路线（见<a href="AI编程落地指南.html">系列之五</a>）</td></tr>
+        <tr><td>查资料的嘴：同一个问题答三遍、新人上手慢</td><td>知识智能体</td><td>平台自建一次 + 持续运营人力</td><td>先治知识库与权限模型，再上问答（本篇第 05 节六问）</td></tr>
+        <tr><td>跑流程的腿：人力耗在跨系统搬运与人工触发</td><td>工作流自动化</td><td>按执行量 / 平台席位</td><td>挑一条高频流程先做确定性编排，AI 决策点后加</td></tr>
+        <tr><td>写文档的手：时间泡在纪要、周报、初稿</td><td>办公智能体</td><td>随套件席位</td><td>圈高频低风险场景，配模板与验收动作</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>两条横向提醒：</p>
+  <ul>
+    <li>数据边界按类分别评估。四类的敏感面完全不同（代码 / 知识全集 / 系统凭据 / 邮件文档），不要做一次"AI 出网评估"就全部放行，见总表"数据敏感面"一行。</li>
+    <li>治理底线四类共用一套。人在回路、责任在人、默认不信任、可追溯，条款可以直接沿用<a href="AI编程落地指南.html">系列之五</a>；差别只在验证手段各配各的：编程配 CI 门禁，知识配评测抽检，流程配审批回滚，办公配人眼验收。</li>
+  </ul>
+
+  <blockquote>
+    <p>采购时别急着问"有多智能"，先问"产出怎么验收"。验收说不清，工具类别、权限边界和预算都很难定准。</p>
+  </blockquote>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="no">07</span>结论：四类是器官，不是替代品</h2>
+  <p class="lead">把前面的分析收成三条可执行的判断。</p>
+
+  <ol>
+    <li>四类各有分工，没有全能冠军。编程、知识、流程、办公解决的是不同瓶颈，选型从"缺什么"出发，不要从谁的宣传更响出发。</li>
+    <li>自主权跟着验证能力走。代码和流程有较强的自动反馈，可以在隔离环境里逐步放开；答案和文档更依赖业务判断，应把人工确认留在发布之前。看到"全自动"的宣传，先检查它的验证与回滚机制。</li>
+    <li>资产跟着协议走。MCP、SKILL.md、开放格式让四类共享同一批资产：同一个知识库、同一套规矩、同一批技能。优先选协议开放的那家，四类之间才不会出现四座数据孤岛。</li>
+  </ol>
+
+  <blockquote>
+    <p>验证做到哪，自主权就放到哪。机器能可靠检查的任务，可以在边界内让它多跑几步；检查不了的，仍应把 AI 放在建议席。</p>
+  </blockquote>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>依据与相关阅读（核验口径 2026-10-16）</h4>
+    <ul>
+      <li>本文为横向对比分析，独立成文；编程 Agent 部分的事实与数字沿用系列已核验口径：<a href="AI编程现状速览.html">① 行业现状</a> · <a href="AI编程名词课.html">② 名词课</a> · <a href="AI编码模型选型.html">③ 编码模型选型</a> · <a href="AI编程客户端选型.html">④ 客户端（Harness）选型</a> · <a href="AI编程落地指南.html">⑤ 落地指南</a> </li>
+      <li>知识 / 流程 / 办公三类的平台与产品（Dify、Coze、RAGFlow、Zapier、Make、n8n、M365 Copilot、Workspace Gemini、WPS AI、飞书智能伙伴等）以各官网实时页面为准；文中只取品类级判断，不做逐家报价。</li>
+      <li>安全条目对应 OWASP LLM Top 10（提示词注入、RAG 投毒类风险，owasp.org）；对外产品合规口径见系列之五。</li>
+    </ul>
+    <p>本文概念基于各主流产品公开文档与工程实践整理（2026-10-16 口径），建议随供应商政策每季度复核一次。</p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>

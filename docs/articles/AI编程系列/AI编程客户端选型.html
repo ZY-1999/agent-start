@@ -1,0 +1,709 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 编程客户端（Harness）选型指南：五类产品、八项标准与主要选手 · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout.reco {
+    border: 1px solid #d5d9f2;
+    border-left: 4px solid var(--accent);
+    background: #f7f8fd;
+  }
+  .callout.reco h4 { color: var(--accent-dark); }
+  .callout.warn {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    background: #fdf7ee;
+  }
+  .callout.warn h4 { color: var(--warn); }
+
+  .term {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .term .t { font-weight: 600; color: var(--text); display: block; margin-bottom: 2px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .feat { display: flex; gap: 18px; margin: 26px 0; }
+  .feat .n {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 17px;
+    font-family: ui-monospace, Consolas, monospace;
+  }
+  .feat h3 { margin: 4px 0 6px; font-size: 18px; }
+  .feat p { margin: 0; font-size: 15.5px; color: var(--text-soft); }
+  @media (max-width: 640px) { .feat { gap: 12px; } .feat .n { width: 34px; height: 34px; font-size: 15px; } }
+
+  .toolcard {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 26px 28px;
+    margin: 22px 0;
+    box-shadow: var(--shadow);
+  }
+  .toolcard .head { display: flex; align-items: baseline; gap: 12px; flex-wrap: wrap; margin-bottom: 4px; }
+  .toolcard .head h3 { margin: 0; font-size: 21px; }
+  .toolcard .vendor { color: var(--text-soft); font-size: 14.5px; }
+  .toolcard .tag {
+    display: inline-block; font-size: 12.5px; padding: 2px 10px; border-radius: 999px;
+    background: var(--accent-light); color: var(--accent-dark); border: 1px solid var(--accent-border);
+    margin-left: auto; font-weight: 600;
+  }
+  .toolcard .pros, .toolcard .cons { margin: 10px 0 0; padding-left: 0; list-style: none; }
+  .toolcard .pros li, .toolcard .cons li { position: relative; padding-left: 26px; margin: 7px 0; font-size: 15.5px; }
+  .toolcard .pros li::before { content: "＋"; position: absolute; left: 2px; color: var(--good); font-weight: 700; }
+  .toolcard .cons li::before { content: "！"; position: absolute; left: 2px; color: var(--warn); font-weight: 700; }
+  .toolcard .who { margin-top: 14px; padding-top: 12px; border-top: 1px dashed var(--border); font-size: 14.5px; color: var(--text-soft); }
+  .toolcard .who b { color: var(--text); }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+  .y { color: var(--good); font-weight: 700; }
+  .n2 { color: var(--bad); font-weight: 700; }
+  .p { color: var(--warn); font-weight: 600; }
+  .hl td { background: #eef3fe !important; }
+
+  .price-note { font-size: 13.5px; color: var(--text-soft); margin-top: -14px; }
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  /* 宽表（八家总表）：紧凑字号与间距，保证 880px 版心内不出现横向滚动 */
+  table.dense { min-width: 0; font-size: 11.5px; }
+  table.dense th, table.dense td { padding: 7px 6px; line-height: 1.5; }
+  table.dense thead th { font-size: 11.5px; padding: 8px 6px; }
+  table.dense td.dim { font-size: 11.5px; }
+  table.dense .footnote { font-size: 10.5px; }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 之四 · 面向技术负责人、平台与效能团队</span>
+    <h1>AI 编程客户端（Harness）选型指南<br>五类产品、八项标准与主要选手</h1>
+    <p class="sub">选编程 Agent，重点往往不在"哪家模型更聪明"，而在模型外面那套工作系统：它怎么读仓库、怎么跑测试、怎么管权限、失败后怎么重试。</p>
+    <p class="meta">数据核验截至 2026-10-16 · 价格与政策以各官网实时页面为准 · 通读约 20 分钟 · 配套：<a href="AI编程现状速览.html">行业现状</a> · <a href="AI编程名词课.html">名词课</a> · <a href="AI编码模型选型.html">模型选型</a> · <a href="AI编程落地指南.html">落地指南</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">Harness 是什么：模型只是发动机</a></li>
+    <li><a href="#s2">先分类：常见的五类产品形态</a></li>
+    <li><a href="#s3">三个问题定方向</a></li>
+    <li><a href="#s4">评估标准：八项能力 + 采购三问</a></li>
+    <li><a href="#s5">主要选手逐个看</a></li>
+    <li><a href="#s6">八家主力功能对比总表</a></li>
+    <li><a href="#s7">开放性与合规</a></li>
+    <li><a href="#s8">价格与成本口径</a></li>
+    <li><a href="#s9">结论与建议</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>Harness 是什么：模型只是发动机</h2>
+  <p class="lead">不少产品能调用同一批模型，用起来却差很多。差别主要在模型外面。</p>
+
+  <p>大模型本身只负责生成后续内容。网页聊天框里的它看不见你的文件系统，改不了代码，也跑不了命令。要让它在真实仓库里干活，还得配眼睛、双手、记性和刹车：</p>
+
+  <div class="grid2">
+    <div class="mini"><h5>眼睛</h5><p>读文件、搜代码、看仓库结构的工具，让它"看得见"你的工程。</p></div>
+    <div class="mini"><h5>双手</h5><p>改文件、执行 shell 命令、跑测试、操作 git 的工具调用。</p></div>
+    <div class="mini"><h5>记性与工作方法</h5><p>上下文管理：任务长了会压缩摘要、维护项目记忆，不在第 40 分钟忘了第 4 分钟的目标。</p></div>
+    <div class="mini"><h5>刹车与规矩</h5><p>权限控制：删文件、<code>git push</code>、改配置这类危险动作必须先过你确认，敏感目录直接禁入。</p></div>
+  </div>
+
+  <div class="term">
+    <p><span class="t">术语卡：Harness Agent</span></p>
+    <p><strong>以 LLM 为引擎</strong>，配上工具调用、上下文管理、权限控制和任务循环的执行框架，让模型能在真实仓库里自主完成"理解 → 修改 → 验证 → 修正"的多步任务。英文 harness 本义是"马具"，马是模型，缰绳、马鞍就是 harness。你听到的 Claude Code、Cursor、Copilot、ZCode，本质都是 harness + 各家模型的组合。</p>
+  </div>
+
+  <blockquote>
+    <p>选 Agent 工具，核心是选 harness：上下文怎么组织、工具怎么设计、权限怎么管、失败后怎么重试。同一个模型接上不同客户端，表现可以差很多。上下文喂错会答非所问，权限太松会闯祸，没有验证循环就容易改一行错一行。</p>
+  </blockquote>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>先分类：常见的五类产品形态</h2>
+  <p class="lead">名字可以很多。按"AI 在哪里干活、人怎么参与"看，市面上常见形态大致是五种。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:20%">类别</th><th style="width:34%">工作位置与参与方式</th><th style="width:22%">适合的活</th><th>主要风险</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">IDE 补全插件</td><td>编辑器内贴着你写，边写边按 Tab</td><td>手速、样板、重复模式</td><td>价值容易被低估</td></tr>
+        <tr><td class="dim">AI 原生 IDE</td><td>整个编辑器围绕 AI，对话 + Agent 面板</td><td>中大型改动、跨文件重构</td><td>上下文整仓上云</td></tr>
+        <tr><td class="dim">终端 CLI Agent</td><td>终端里跑，直接操作仓库，逐步确认</td><td>全仓任务、批量改造、CI 集成</td><td>权限大，必须配沙箱</td></tr>
+        <tr><td class="dim">云端异步 Agent</td><td>厂商云上开机器跑，派任务回头收 PR</td><td>机械化改造、依赖升级</td><td>代码上传第三方；账单失控</td></tr>
+        <tr><td class="dim">审查 / 运维 Bot</td><td>挂在 PR 或流水线上，看结论定采纳</td><td>代码审查、安全扫描</td><td>只能是辅助，不能替代 Approver</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>再叠一层"部署形态"，它决定能不能给敏感项目用：公网 SaaS（上下文出网）→ 企业版 SaaS 零留存条款（出网但受合同约束）→ 自托管 Runner（模型在云、执行在内网）→ 完全私有化（数据不出内网）。</p>
+
+  <blockquote>
+    <p>先问这个项目的数据能不能出网，再比功能强弱。敏感级没定，后面的对比很容易空转。</p>
+  </blockquote>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>三个问题定方向</h2>
+  <p class="lead">看产品页之前，先回答这三个问题。</p>
+
+  <div class="feat"><div class="n">1</div><div>
+    <h3>这个团队的代码能不能出公司网络？</h3>
+    <p>不能 → 只剩一条路：私有化客户端 + 本地/私域模型（国产专属版 / 开源自托管 Harness）。这个问题不解决，后面都不用看。</p>
+  </div></div>
+  <div class="feat"><div class="n">2</div><div>
+    <h3>瓶颈是打字手速，还是任务吞吐？</h3>
+    <p>手速 → IDE 补全 / AI 原生 IDE，成本低上手快。吞吐 → CLI Agent / 云端异步 Agent，但必须配套沙箱、审批与限额。</p>
+  </div></div>
+  <div class="feat"><div class="n">3</div><div>
+    <h3>工程化配套成熟吗？（测试、CI、评审制度）</h3>
+    <p>不成熟 → 先用补全层、人重把关，别急着上"自动改全仓"；成熟 → 放开 Agent 模式，用 CI 兜住质量。</p>
+  </div></div>
+
+  <p>不少团队最后会配成这样：IDE 补全加 CLI Agent 做日常，全仓挂审查 Bot，云端异步只给一两个团队试点。补全管手速，Agent 管任务吞吐，Bot 减轻人审压力。它们更像组合件，不是三选一。</p>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>评估标准：八项能力 + 采购三问</h2>
+  <p class="lead">先把标准写下来，再看具体产品。下面八条缺了哪条，日常都会别扭。</p>
+
+  <div class="feat"><div class="n">1</div><div>
+    <h3>完整的 Agent Loop：读 → 改 → 跑 → 看 → 再改</h3>
+    <p>改完代码必须自己跑测试或编译、自己读报错、自己接着修，循环到通过为止。只会"输出一段代码让你自己粘"的工具还停留在对话时代。</p>
+  </div></div>
+  <div class="feat"><div class="n">2</div><div>
+    <h3>上下文工程：大仓库、长任务不迷路</h3>
+    <p>真实任务动辄读几十个文件、跑几小时。好的 harness 会做压缩摘要、维护项目记忆（如 <code>AGENTS.md</code>）、建代码导航，让它在第三个小时还记得第三分钟的目标。</p>
+  </div></div>
+  <div class="feat"><div class="n">3</div><div>
+    <h3>权限与安全：刹得住，才敢放手</h3>
+    <p>agent 能删文件能推代码，威力大风险也大。看三样：确认门禁、命令沙箱、敏感文件保护（<code>.env</code>、密钥禁读禁改）。检验方式很朴素：不敢让它碰生产配置，就是刹车不过关。</p>
+  </div></div>
+  <div class="feat"><div class="n">4</div><div>
+    <h3>扩展体系：MCP、Skills、Hooks</h3>
+    <p>MCP 是连接外部系统的开放标准，接上内部数据库、工单系统，agent 干的就不是"写通用代码"而是"干你们的活"；Skills 把固定流程沉淀成可复用技能；Hooks 在关键节点强制执行规矩。没有扩展体系的 agent，天花板就是出厂默认。</p>
+  </div></div>
+  <div class="feat"><div class="n">5</div><div>
+    <h3>模型开放性（BYOK）：能换发动机</h3>
+    <p>模型排名月月在变，今天的冠军不一定是明天的。好 harness 不把你锁死在一家模型上：支持配置多供应商，日常用便宜模型、关键任务上旗舰。</p>
+  </div></div>
+  <div class="feat"><div class="n">6</div><div>
+    <h3>自动化与并行：人不在，活照干</h3>
+    <p>后台任务、定时任务、多 Agent 并行、远程唤起（下班前在 IM 里丢任务，地铁上收结果）。这是 harness agent 相对补全类工具的代差优势。</p>
+  </div></div>
+  <div class="feat"><div class="n">7</div><div>
+    <h3>团队知识沉淀：新 Agent 直接继承老规矩</h3>
+    <p>项目规范写进 <code>AGENTS.md</code> 放进仓库，所有人的 agent 打开项目自动继承同一套规矩。团队统一工具的真正收益在这里：行为从"随缘"变成"有章可循"。</p>
+  </div></div>
+  <div class="feat"><div class="n">8</div><div>
+    <h3>低门槛：5 分钟能装好，报错看得懂</h3>
+    <p>中文界面、图形化安装、清晰的额度提示，这些不起眼的因素常常决定一个工具在团队里的真实存活率。</p>
+  </div></div>
+
+  <h3>企业采购侧再单独问三件事</h3>
+  <ul>
+    <li>数据流向与部署形态：代码是否出网？留存与训练条款？能否私有化（对照第 02 节的四档）？</li>
+    <li>企业治理：SSO/SCIM、席位与额度管理、审计日志、仓库/模型/MCP 访问控制，大团队必问，小团队可延后。</li>
+    <li>集成面：覆盖你们的 IDE、终端、CI、代码平台和 IM 吗？缺一项就得有人手工补桥。</li>
+  </ul>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>主要选手逐个看</h2>
+  <p class="lead">八位选手，信息截至 2026-10-16。采购前以官网实时页面为准。</p>
+
+  <div class="toolcard">
+    <div class="head"><h3>ZCode</h3><span class="vendor">智谱（GLM）· GLM-5.3 官方 Harness</span><span class="tag">本文主推</span></div>
+    <p>智谱推出的桌面端编程 Agent 客户端（Windows / macOS / Linux 全平台，含 ARM 版），深度适配 GLM-5.3 / GLM-5.3-Flash，中文原生界面。形态上不是命令行工具，而是完整的图形工作台：对话区、终端、Git 面板、任务管理一屏俱全。</p>
+    <ul class="pros">
+      <li>开箱即用的中文体验：中文界面与文档、人民币直购，新用户体验套餐（首次使用起 5 天内每天 800 万 token，GLM-5.3 300 万 + GLM-5.3-Flash 500 万）足够在真实项目里把 Agent 跑顺再决定订阅，团队推广摩擦最小。</li>
+      <li>长程任务（Goal）：专为几小时级目标设计，持续规划-执行-验证，带进度分解与 token 统计。</li>
+      <li>远程唤起：微信 / 飞书 / Telegram 给 Bot 发消息即可远程启动任务。</li>
+      <li>扩展体系齐全：MCP、Skills（SKILL.md 开放格式）、插件市场、Hooks、自定义命令。</li>
+      <li>一份订阅，多工具共享：GLM Coding Plan 的额度可在 ZCode、Claude Code、Codex、OpenCode 等 20+ 官方支持的工具间通用，起步用它，横向对比其他 harness 不必重新付费。</li>
+    </ul>
+    <ul class="cons">
+      <li>客户端不开源，深度定制只能走扩展点。</li>
+      <li>插件与技能生态比 Claude 系年轻，社区沉淀还在积累。</li>
+    </ul>
+    <p class="who"><b>适合：</b>想装好就用、中文无障碍、价格友好、还能接内部系统的团队。推荐理由见第 09 节。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>Claude Code</h3><span class="vendor">Anthropic · 能力标杆</span><span class="tag">对照组</span></div>
+    <p>终端 Agent 的开创者，形态最全：CLI、VS Code / JetBrains 插件、桌面、移动端、GitHub Actions / GitLab CI、Slack 集成。工程实践文档是品类里写得最完整的，可以直接抄。</p>
+    <ul class="pros">
+      <li>编码能力第一梯队，生态存量最大，出问题最容易搜到答案。</li>
+      <li>企业管控完整：受管设置（<code>managed-settings.json</code>）优先级高于用户配置，可锁模型、登录方式与 MCP 白名单；商业版不用代码训练、标准留存 30 天。</li>
+      <li>OS 级沙箱实践最好：权限弹窗减少 84%。</li>
+    </ul>
+    <ul class="cons">
+      <li>价格偏高且企业定价不公开（团队席参考 $25 / $125 每月）；大陆无直连服务，海外账号、支付与数据出境合规要公司层面过。</li>
+      <li>顶级档 Mythos 有资质与出口管制门槛，2026 年出过临时访问中断。</li>
+    </ul>
+    <p class="who"><b>适合：</b>有海外订阅条件、追求能力上限、需要标杆做对照的团队。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>Cursor</h3><span class="vendor">2026-08 并入 SpaceX（与 xAI 同属马斯克系）· 一体化平台</span></div>
+    <p>AI 原生 IDE 加云端 Agent 平台：IDE + CLI + 云任务（Cloud Agents、Projects）+ 审查（Bugbot / Security Review）+ 变更监控（Rollouts）。多模型可选：Grok、Claude、Gemini、自研 Composer。</p>
+    <ul class="pros">
+      <li>企业治理项最全：SSO/SCIM、审计日志、自管密钥（CMEK）、数据驻留、PrivateLink。</li>
+      <li>支持自托管执行机器（Team Pools），工具执行留在自有网络。</li>
+      <li>Plus $8/月（仅 Grok 模型）；编程主力更接近 Premium $30/月，Teams $30/席起。</li>
+    </ul>
+    <ul class="cons">
+      <li>Agent 主循环仍在厂商云上，整仓上下文会出网，自托管不等于私有化。</li>
+      <li>并入 SpaceX 后与 xAI/Grok 深度绑定（同属马斯克系），供应商风险要写进合同条款。</li>
+    </ul>
+    <p class="who"><b>适合：</b>需要 IDE 手感加云端异步任务、并能接受上下文出网的团队。Plus 档偏社交/轻量，日常编码建议从 Premium 看起。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>GitHub Copilot</h3><span class="vendor">GitHub · 平台内建</span><span class="tag">治理即产品</span></div>
+    <p>治理"产品即合规"：以下门禁全是产品默认行为，不需要自己配。</p>
+    <ul class="pros">
+      <li>草稿 PR 必须人工评审并合并；代理不能 approve/merge；代理署名的 PR 还需额外一次人工批准。</li>
+      <li>企业版内建 CodeQL、依赖扫描、secret scanning；审计日志保留 180 天。</li>
+      <li>Business $19 / Enterprise $39 每人每月，代码在 GitHub 上的团队迁移成本最低。</li>
+    </ul>
+    <ul class="cons">
+      <li>GitHub Enterprise Server 上可用，但模型推理仍经 GitHub/Azure 云端处理，无真正私有化选项。</li>
+      <li>审计日志不含客户端本地会话，取证时要另想办法。</li>
+    </ul>
+    <p class="who"><b>适合：</b>代码在 GitHub 云上、要"开箱即用合规"的组织。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>Codex</h3><span class="vendor">OpenAI · 开源 CLI + 多形态</span></div>
+    <p>CLI 完全开源（Rust，Apache-2.0，GitHub 10 万+ star，可审计可自建），另有 VS Code / JetBrains 扩展、桌面与云端任务；CLI 与 ChatGPT 桌面端、VS Code 扩展共享同一份 <code>~/.codex/config.toml</code>，一次配置三处可用。</p>
+    <ul class="pros">
+      <li>过公司安全审查最省事：代码可审计、可自建、可改造。</li>
+      <li>BYOK 最彻底：可接任意 OpenAI 兼容端点（OpenRouter、Azure、DeepSeek 等），包括用 GLM Coding Plan 的额度驱动它。</li>
+      <li>ChatGPT 订阅附带，多形态切换（Plus $20/月 即可用）。</li>
+    </ul>
+    <ul class="cons">
+      <li>与 Claude Code 同样的国内可用性门槛：官方服务需海外账号与支付。</li>
+      <li>终端为中心的极客风，扩展生态不如 Claude 系；企业治理细节逐项确认。</li>
+    </ul>
+    <p class="who"><b>适合：</b>喜欢终端工作流、看重开源可审计、想把 agent 接到自选模型端点上的工程师。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>Antigravity</h3><span class="vendor">Google · Gemini CLI 的继任者</span></div>
+    <p>2026-06 起接替 Gemini CLI 承接免费层与 Google One 用户（原 CLI 仍开源 Apache-2.0）。桌面、CLI、多 IDE 扩展（含 Zed、Xcode）形态齐全。</p>
+    <ul class="pros">
+      <li>终端沙箱默认开启，安全团队加分项。</li>
+      <li>支持并发后台子代理、git worktree 隔离、Hooks。</li>
+    </ul>
+    <ul class="cons">
+      <li>产品线正在整合：Code Assist 新订阅已停售、CLI 更替中，采购路径先找厂商确认；默认旗舰模型仅高档订阅可用。</li>
+    </ul>
+    <p class="who"><b>适合：</b>已使用 Google Cloud / Workspace 的团队；看重"默认安全"的场景。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>CodeBuddy</h3><span class="vendor">腾讯 · 国产客户端代表</span><span class="tag">私有化主力</span></div>
+    <p>国产客户端以 CodeBuddy 为代表。插件 + 自研 IDE + CLI 全形态（业内首批），企业专享版专有云（100 席起），支持自定义模型（含 Ollama 本地模型），体验版免费（每月 500 积分）。同类还有字节 Trae、阿里通义灵码 / Qoder、百度 Comate 与华为 CodeArts，这里不逐一展开。</p>
+    <ul class="pros">
+      <li>明确可私有化 / 数据不出域，人民币直购、合规沟通成本低。</li>
+      <li>支持多模型切换（混元 / GLM / DeepSeek，含 Ollama 本地模型），不锁死模型，议价空间大。</li>
+      <li>价格只有海外旗舰的零头：体验版免费（每月 500 积分），标准版 ¥99 / 高级版 ¥199 / 旗舰版 ¥999 每月，企业专享 ¥316/人/月（专有云）。</li>
+    </ul>
+    <ul class="cons">
+      <li>Agent 长任务能力通常比海外第一梯队晚半步。</li>
+      <li>官网无"信创"字样，有信创要求的必须单独索取资质与适配清单，"支持私有化"不等于"信创合规"。</li>
+    </ul>
+    <p class="who"><b>适合：</b>合规优先、预算敏感、私有化刚需的团队。</p>
+  </div>
+
+  <div class="toolcard">
+    <div class="head"><h3>自研与开源 Harness</h3><span class="vendor">自研 Harness · Cline · Roomote · Aider 等</span></div>
+    <p>自研 harness 的典型路线是"多模型可插拔 + 编排优先 + 本地优先"：分档沙箱（故障时默认只读）、审批无应答即拒绝、本地会话日志、凭据只存引用。开源侧 Cline（100+ 模型、企业版有 SSO 与 RBAC）、Roomote（云单租户或自托管 Docker，10 人内免费）、Aider（极简 CLI，自带 key）各占一个生态位。</p>
+    <ul class="pros">
+      <li>模型随便换，不锁厂商；数据、凭据、日志默认留在本地。</li>
+      <li>可脚本化接进 CI，自由度最高；自研 harness 还能与 Claude Code / Codex 共享 hooks 配置。</li>
+    </ul>
+    <ul class="cons">
+      <li>企业级集中管控、审计汇聚、凭据托管（OS 钥匙串 / KMS）要自己补建。</li>
+      <li>文件沙箱是策略围栏，不是内核级隔离，高安全场景要加固。</li>
+    </ul>
+    <p class="who"><b>适合：</b>平台 / 效能团队；要"自选模型 + 强编排 + 本地留痕"的场景。</p>
+  </div>
+
+  <div class="callout">
+    <h4>矩阵读法</h4>
+    <p>没有一家是全能冠军。先锁定你必须具备的两三项（比如"私有化 + 审计 + MCP"），再看哪家满足，不要比总分。</p>
+  </div>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2><span class="no">06</span>八家主力功能对比总表</h2>
+  <p class="lead">把第 05 节八位选手按第 04 节的 8 项标准逐项对齐（✓ 支持 / ✗ 不支持 / △ 部分支持）。</p>
+
+  <div class="tablewrap">
+    <table class="dense">
+      <thead>
+        <tr>
+          <th style="width:11%">能力</th>
+          <th>ZCode<br><span class="footnote">智谱</span></th>
+          <th>Claude Code<br><span class="footnote">Anthropic</span></th>
+          <th>Cursor<br><span class="footnote">SpaceX / xAI</span></th>
+          <th>Copilot<br><span class="footnote">GitHub</span></th>
+          <th>Codex<br><span class="footnote">OpenAI</span></th>
+          <th>Antigravity<br><span class="footnote">Google</span></th>
+          <th>CodeBuddy<br><span class="footnote">腾讯 · 国产代表</span></th>
+          <th>开源 Harness<br><span class="footnote">Cline / Roomote / Aider</span></th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="dim">产品形态</td><td>桌面客户端<br><span class="footnote">Win / macOS / Linux</span></td><td>CLI + 桌面/网页</td><td>AI 原生 IDE + CLI + 云端 Agent</td><td>GitHub 内建<br><span class="footnote">IDE 插件 + 代理平台</span></td><td>CLI + IDE 插件<br><span class="footnote">+ Web / Cloud</span></td><td>桌面 + CLI + 多 IDE 扩展</td><td>插件 + 自研 IDE + CLI<br><span class="footnote">业内首批全形态</span></td><td>插件 / CLI / 自托管<br><span class="footnote">按工具不同</span></td></tr>
+        <tr><td class="dim">默认模型</td><td>GLM-5.3 系</td><td>Claude 系</td><td>Grok / Claude / Gemini / Composer</td><td>GPT 系 + 多模型可选</td><td>GPT 系</td><td>Gemini 系<br><span class="footnote">旗舰需高档订阅</span></td><td>混元 / DeepSeek 等</td><td>不绑定<br><span class="footnote">100+ 模型任接</span></td></tr>
+        <tr class="hl"><td class="dim">① Agent Loop 闭环</td><td class="y">✓ 完整</td><td class="y">✓ 完整</td><td class="y">✓ 完整<br><span class="footnote">IDE 内 + 云任务</span></td><td class="y">✓ 完整</td><td class="y">✓ 完整</td><td class="y">✓ 完整<br><span class="footnote">并发后台子代理</span></td><td class="y">✓ 完整<br><span class="footnote">长任务欠第一梯队半步</span></td><td class="y">✓ 完整</td></tr>
+        <tr class="hl"><td class="dim">② 上下文工程</td><td class="y">✓ 压缩/记忆/导航</td><td class="y">✓ 标杆</td><td class="y">✓ 整仓索引 + Memories</td><td class="p">△ 基础<br><span class="footnote">指令文件 + 仓库上下文</span></td><td class="y">✓</td><td class="y">✓</td><td class="p">△ 基础</td><td class="p">△ 自行管理</td></tr>
+        <tr class="hl"><td class="dim">③ 权限与安全</td><td class="y">✓ 门禁+沙箱+Hooks</td><td class="y">✓ 门禁+Hooks<br><span class="footnote">沙箱减弹窗 84%</span></td><td class="p">△<br><span class="footnote">隐私模式，门禁在企业侧</span></td><td class="y">✓ 门禁即产品<br><span class="footnote">PR 必须人审</span></td><td class="y">✓ 沙箱+审批</td><td class="y">✓ 终端沙箱默认开启</td><td class="p">△</td><td class="p">△ 策略围栏<br><span class="footnote">非内核级隔离</span></td></tr>
+        <tr class="hl"><td class="dim">④ 扩展·MCP</td><td class="y">✓</td><td class="y">✓ 生态最大</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td><td class="y">✓</td></tr>
+        <tr class="hl"><td class="dim">④ 扩展·Skills / 插件</td><td class="y">✓ SKILL.md + 插件市场</td><td class="y">✓ Agent Skills 开放标准</td><td class="p">△ 扩展 + rules</td><td class="p">△<br><span class="footnote">prompts 仓库化 + 扩展</span></td><td class="n2">✗ 以配置为主</td><td class="p">△<br><span class="footnote">Gems 自定义代理</span></td><td class="p">△ 插件体系</td><td class="p">△ 各家机制不同</td></tr>
+        <tr class="hl"><td class="dim">⑤ 换模型（BYOK）</td><td class="y">✓ 客户端内配置多供应商</td><td class="p">△ 企业走 Bedrock / Vertex</td><td class="p">△ 平台内多模型<br><span class="footnote">与 xAI 绑定加深</span></td><td class="p">△ 平台内多模型<br><span class="footnote">无自带端点</span></td><td class="y">✓ 任意兼容端点</td><td class="p">△ Gemini 系为主</td><td class="y">✓ 多模型切换<br><span class="footnote">含 Ollama 本地模型</span></td><td class="y">✓ 天然 BYOK</td></tr>
+        <tr class="hl"><td class="dim">⑥ 自动化 / 并行</td><td class="y">✓ Goal + Bot 远程 + 后台/定时</td><td class="y">✓ 后台 / 云任务</td><td class="y">✓ Cloud Agents + Rollouts</td><td class="y">✓ 代理平台 + Actions</td><td class="y">✓ Codex Cloud</td><td class="y">✓ 并发子代理 + worktree 隔离</td><td class="p">△ 自动任务（限额）</td><td class="p">△ 自行编排 / 接 CI</td></tr>
+        <tr class="hl"><td class="dim">⑦ 项目规范文件</td><td class="y">✓ AGENTS.md</td><td class="y">✓ CLAUDE.md</td><td class="y">✓ .cursor/rules</td><td class="y">✓ copilot-instructions</td><td class="y">✓ AGENTS.md</td><td class="p">△ Gems 沉淀为主</td><td class="y">✓ 规则文件</td><td class="p">△ 各家不同<br><span class="footnote">.clinerules 等</span></td></tr>
+        <tr class="hl"><td class="dim">⑧ 中文与上手门槛</td><td class="y">✓ 原生中文，图形界面</td><td class="n2">✗ 英文为主，终端门槛</td><td class="p">△ 英文界面<br><span class="footnote">IDE 手感，门槛低</span></td><td class="p">△ 英文为主<br><span class="footnote">GitHub 用户零学习</span></td><td class="n2">✗ 英文为主，终端门槛</td><td class="n2">✗ 英文为主</td><td class="y">✓ 原生中文</td><td class="n2">✗ 英文，需自己搭</td></tr>
+        <tr><td class="dim">客户端开源</td><td class="n2">✗</td><td class="n2">✗</td><td class="n2">✗</td><td class="n2">✗</td><td class="y">✓ CLI · Apache-2.0</td><td class="p">△<br><span class="footnote">原 Gemini CLI 开源</span></td><td class="n2">✗</td><td class="y">✓ 主体开源</td></tr>
+        <tr><td class="dim">国内直连可用</td><td class="y">✓ 人民币直购</td><td class="n2">✗ 需海外账号</td><td class="n2">✗ 需海外账号</td><td class="n2">✗ 需海外账号</td><td class="n2">✗ 需海外账号</td><td class="n2">✗ 需海外账号<br><span class="footnote">Google 服务门槛</span></td><td class="y">✓ 人民币直购</td><td class="p">△ 取决于模型端点</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">注：✗ 只表示"不具备或很弱"，不代表产品差，每家的取舍见第 05 节卡片；开源 Harness 为分组列，组内各家有差异；国产客户端以 CodeBuddy 为代表；各家能力迭代很快，以官方文档为准。</p>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2><span class="no">07</span>开放性与合规</h2>
+  <p class="lead">"开放"可以指开发者扩展，也可以指企业合规，最好分开看。</p>
+
+  <h3>维度一：开发者扩展性，agent 能不能长出你的业务能力</h3>
+  <p><strong>MCP</strong>是 AI 工具的"USB-C 接口"：任何系统按规范实现一个 MCP Server，agent 就能连接使用。总表八家全部支持 MCP，其中 Claude 系生态存量最大。<strong>Skills / 插件</strong>解决流程沉淀，且 Agent Skills 采用开放的 SKILL.md 格式（Anthropic 发起的开放标准），ZCode 等工具直接兼容同一格式，你沉淀的技能资产不绑定单一工具，换工具迁移成本低。<strong>BYOK</strong>解决不被锁死：Codex CLI 最彻底（开源 + 任意兼容端点）；ZCode 支持客户端内配多供应商，且 GLM Coding Plan 一份额度可在 20+ 工具间共享，等于"订阅模型、harness 随便挑"。</p>
+  <p>若只看这几个维度：代码开源，Codex CLI 最彻底；协议开放、模型可换、一份订阅跨工具，ZCode 更省事；生态存量，Claude 系最大。国产客户端在私有化和中文体验上补得很快，长任务能力通常仍晚半步。</p>
+
+  <h3>维度二：企业合规，法务和安全团队能不能过</h3>
+  <p>这部分经常比功能更早把选项筛掉：</p>
+  <ul>
+    <li>数据出境与服务可用性：OpenAI 与 Anthropic 目前均不向中国大陆直接提供服务，用 Claude Code / Codex 意味着海外主体、海外支付、网络方案，以及代码（提示词）跨境传输的合规评估。这不是技术问题，是公司代码要不要出境的立场问题，需要数据安全团队书面确认。</li>
+    <li>国内主体方案：智谱（ZCode）与腾讯（CodeBuddy）均为国内主体、人民币结算、数据处理路径清晰；两者都有企业级方案可谈。</li>
+    <li>供应商条款必查：训练用途（商业版通常"不训练"，免费档常有例外，白名单要写到"档位"）、留存期（Anthropic 商业版 30 天，零留存需单独启用）、审计能力（Copilot 日志 180 天且不含本地会话）、IP 责任（微软对 M365 Copilot 有条件赔偿，GitHub 明示用户自担，不得默认厂商兜底）。</li>
+    <li>敏感场景：无论选哪家，密钥文件（<code>.env</code> 等）都应进 agent 的禁读清单，harness 的权限机制在这里从"加分项"变成"必选项"。</li>
+  </ul>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <h2><span class="no">08</span>价格与成本口径</h2>
+  <p class="lead">个人开发按月订阅最直观。下表只取个人月价，企业席位另议。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead>
+        <tr>
+          <th style="width:17%">工具 / 订阅</th>
+          <th>免费额度</th>
+          <th>入门档</th>
+          <th>主力档</th>
+          <th>旗舰 / 企业档</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="hl">
+          <td class="dim">ZCode<br><span class="footnote">GLM Coding Plan</span></td>
+          <td>体验套餐：5 天 × 每天 800 万 token<br><span class="footnote">GLM-5.3 300 万 + GLM-5.3-Flash 500 万；另有夜间畅用活动</span></td>
+          <td>Lite<br><strong>包季折合 ¥94.4/月</strong><br><span class="footnote">月付 ¥118</span></td>
+          <td>Pro<br><strong>包季折合 ¥430.4/月</strong><br><span class="footnote">月付 ¥538</span></td>
+          <td>Max<br><strong>包季折合 ¥862.4/月</strong><br><span class="footnote">月付 ¥1,078</span></td>
+        </tr>
+        <tr>
+          <td class="dim">Claude Code<br><span class="footnote">Claude 订阅</span></td>
+          <td>不含 Free 计划<br><span class="footnote">Pro 起；API 起始额度可测试</span></td>
+          <td>Pro<br><strong>$20 ≈ ¥142/月</strong></td>
+          <td>Max 5x<br><strong>$100 ≈ ¥710/月</strong></td>
+          <td>Max 20x<br><strong>$200 ≈ ¥1,420/月</strong><br><span class="footnote">团队席 $25/$125，企业询价</span></td>
+        </tr>
+        <tr>
+          <td class="dim">Codex<br><span class="footnote">ChatGPT 订阅</span></td>
+          <td>含 ChatGPT Free<br><span class="footnote">额度有限，官方不公布数字；CLI /status 可查</span></td>
+          <td>Plus<br><strong>$20 ≈ ¥142/月</strong></td>
+          <td>Pro<br><strong>$200 ≈ ¥1,420/月</strong></td>
+          <td>Pro 500<br><strong>$500 ≈ ¥3,550/月</strong></td>
+        </tr>
+        <tr>
+          <td class="dim">Cursor</td>
+          <td>Free：有限 Agent / Chat 请求<br><span class="footnote">官方不再给出确切请求次数</span></td>
+          <td>Plus<br><strong>$8/月</strong><br><span class="footnote">仅 Grok 模型</span></td>
+          <td>Premium<br><strong>$30/月</strong>；Teams $30+/席</td>
+          <td>Super / Ultra<br><strong>$100 / $200/月</strong></td>
+        </tr>
+        <tr>
+          <td class="dim">Copilot</td>
+          <td>2,000 次补全 + 少量 AI Credits/月<br><span class="footnote">聊天/代理功能计入额度</span></td>
+          <td>Pro<br><strong>$10/月</strong></td>
+          <td>Pro+<br><strong>$39/月</strong></td>
+          <td>Business <strong>$19</strong> / Enterprise <strong>$39</strong> 每席</td>
+        </tr>
+        <tr>
+          <td class="dim">Antigravity<br><span class="footnote">Google</span></td>
+          <td>Individual $0：Tab 补全与 Command 无限<br><span class="footnote">Agent 按每周限额，数字不公开</span></td>
+          <td>—</td>
+          <td>Google AI Pro<br><strong>$19.99/月</strong></td>
+          <td>Google AI Ultra<br><strong>$99.99~199.99/月</strong></td>
+        </tr>
+        <tr>
+          <td class="dim">CodeBuddy<br><span class="footnote">腾讯 · 国产代表</span></td>
+          <td>体验版免费<br><span class="footnote">每月 500 积分；补全 5,000 次/月</span></td>
+          <td>标准版<br><strong>¥99/月</strong></td>
+          <td>高级版<br><strong>¥199/月</strong>；旗舰版 ¥999</td>
+          <td>企业专享<br><strong>¥316/人/月</strong><br><span class="footnote">专有云，100 席起</span></td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="price-note">汇率按 $1 ≈ ¥7.1 估算（2026-10）。GLM Coding Plan 国内页展示的 ¥94.4 / ¥430.4 / ¥862.4 是连续包季折合月价，月付分别为 ¥118 / ¥538 / ¥1,078。Cursor Plus 仅含 Grok 模型，第三方模型从 Premium 起按 API 价另计。智谱 2026 年内已多次调整价格体系，各家免费额度和限免活动变化很快，下单前以官网实时页面为准。</p>
+
+  <h3>三个看价要点</h3>
+  <p>① 额度口径不一样，别只看月费。GLM Coding Plan 是积分制（5 小时窗口 + 周额度双轨刷新，非高峰消耗按 50% 抵扣）；Claude / Codex 是"5 小时滚动窗口限速"；CodeBuddy 是月积分。横向只比月费意义有限，建议先用免费/体验额度跑自己的真实任务再定档。</p>
+  <p>② 隐性成本往往超过订阅价本身。海外工具的海外支付、账号管理、网络访问与合规评估，摊到人均通常不低于订阅费的 30%~50%；这部分在国内直连的工具上接近于零。</p>
+  <p>③ API 计费适合轻用，重度开发几乎总是订阅划算。agent 一个真实任务动辄消耗数十万 token，订阅制包量明显更优，"Coding Plan"这类产品形态就是为这出现的。官方用量基准供参考：约 $13 / 开发者 / 活跃日、$150~250 / 人 / 月，Agent 团队的 token 消耗可达普通会话的 7 倍，云端异步任务务必配"断路器"（时长 / token / 并发 / 花费上限）。</p>
+</section>
+
+<!-- ============ 09 ============ -->
+<section id="s9">
+  <h2><span class="no">09</span>结论与建议</h2>
+  <p class="lead">标准、合规和价格都摆完了，可以做选择。</p>
+
+  <p>形态上，多数团队不必赌单一工具：IDE 补全加 CLI Agent 做日常，审查 Bot 挂全仓，云端异步只试点。一个客户端很难同时解决手速、吞吐和合规。</p>
+
+  <div class="callout reco">
+    <h4>国内团队主力推荐：ZCode</h4>
+    <p>按第 04 节八项标准，ZCode 都能给出可用答案：图形界面、原生中文、MCP / Skills / Hooks 齐备，SKILL.md 还是开放格式。一份 GLM Coding Plan 也能拿去驱动 Claude Code、Codex、OpenCode 等其他 harness，相当于先订阅模型、再换工具。国内主体、人民币直购；Lite 连续包季折合 ¥94.4/月（月付 ¥118），试错成本不高。</p>
+  </div>
+
+  <p>其他选手的位置：</p>
+  <ul>
+    <li>Claude Code / Codex 作为对照组：有海外订阅条件且合规评估通过的团队，值得保留一两个席位做横向基准，模型强、生态成熟。而且 Codex CLI 开源可接任意端点，GLM Coding Plan 的额度也能驱动它，等于"用国内账单体验海外 harness"。</li>
+    <li>Cursor 作为一体化选项：治理项最全、上手快，适合中小团队快速铺开；但要清楚它的云端 Agent 上下文会出网。</li>
+    <li>Copilot 作为平台顺手选项：代码本来就在 GitHub 云上的团队，它的门禁与审计最省心。</li>
+    <li>国产专门客户端作为合规底座：以 CodeBuddy 企业专享版的专有云交付为代表，是信创和私有化刚需的主路径。</li>
+    <li>自研 / 开源自托管作为自由度天花板：平台团队想自己掌控推理来源和审计闭环时选它，代价是企业级治理自己建。</li>
+  </ul>
+
+  <p>模型几个月就会换代，跑分冠军也会轮换。更值得投的是能跟着仓库走的资产：MCP 接口、团队 Skills、AGENTS.md。优先选协议开放、格式开放、模型可换的客户端，换发动机时才不会把沉淀丢掉。</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>数据来源（核验于 2026-10-16）</h4>
+    <ul>
+      <li>ZCode 官网与 GLM Coding Plan 档位：<a href="https://zcode.z.ai">zcode.z.ai</a> · <a href="https://docs.bigmodel.cn/cn/coding-plan/overview">docs.bigmodel.cn</a> · 国内订阅页（包季折合价）：<a href="https://www.bigmodel.cn/glm-coding">bigmodel.cn/glm-coding</a></li>
+      <li>Claude Code 与订阅：<a href="https://claude.com/pricing">claude.com/pricing</a> · <a href="https://code.claude.com/docs/en/managed-settings">code.claude.com/docs</a>（安全、受管设置、数据使用、成本、champion-kit 各页）</li>
+      <li>Codex CLI 开源仓库（Apache-2.0）：<a href="https://github.com/openai/codex">github.com/openai/codex</a> · <a href="https://api-docs.deepseek.com/quick_start/agent_integrations/codex">DeepSeek 接入 Codex 说明</a></li>
+      <li>Cursor 定价与企业页：<a href="https://cursor.com/pricing">cursor.com/pricing</a> · <a href="https://cursor.com/enterprise">cursor.com/enterprise</a> · <a href="https://cursor.com/blog/joining-spacex">并入 SpaceX</a>；GitHub Copilot 治理与审计：<a href="https://docs.github.com/en/copilot">docs.github.com/copilot</a>；Antigravity：<a href="https://antigravity.google">antigravity.google</a></li>
+      <li>国产代表 CodeBuddy（codebuddy.cn）；Cline（docs.cline.bot）、Roomote（roomote.dev）</li>
+    </ul>
+    <p>本文由《AI 编程 Agent 选型指南》与《公司 AI 编程普及与落地指南》客户端章节合并改写；价格与能力核验于 2026-10-16。</p>
+    <p>利益披露：本文为独立选型分析，"主推"判断仅基于第 04 节八项标准与国内合规约束；如与文中厂商存在合作或赞助关系，发布时须在此明确披露。</p>
+    <p>系列阅读：<a href="AI编程现状速览.html">① 行业现状</a> · <a href="AI编程名词课.html">② 名词课</a> · <a href="AI编码模型选型.html">③ 编码模型选型</a> · <a href="AI编程落地指南.html">⑤ 落地指南：规范、实操与 90 天路线</a> </p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>

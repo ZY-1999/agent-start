@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 编程行业现状：用得多广，提效多少 · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout.warn {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    background: #fdf7ee;
+  }
+  .callout.warn h4 { color: var(--warn); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+  .y { color: var(--good); font-weight: 700; }
+  .n2 { color: var(--bad); font-weight: 700; }
+  .p { color: var(--warn); font-weight: 600; }
+
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 之一 · 数据核验截至 2026-10-16</span>
+    <h1>AI 编程行业现状<br>用得多广，提效多少</h1>
+    <p class="sub">这篇写给要做技术决策的人。AI 编程已经进入多数研发团队，但使用率高不等于一定提效。第三方研究、行业调查和厂商案例给出的答案并不整齐，有些实验甚至测出"用了反而更慢"。真正需要回答的是：哪些任务值得用，怎样用才安全，效果又该怎么量。</p>
+    <p class="meta">通读约 12 分钟 · 配套文章：<a href="AI编程名词课.html">名词课</a> · <a href="AI编码模型选型.html">模型选型</a> · <a href="AI编程客户端选型.html">客户端选型</a> · <a href="AI编程落地指南.html">落地指南</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">采用面：已经是基础设施级别</a></li>
+    <li><a href="#s2">提效多少：三个实验给出相反的答案</a></li>
+    <li><a href="#s3">质量与返工：代价在哪里、能不能治</a></li>
+    <li><a href="#s4">事故与失控：不是理论风险</a></li>
+    <li><a href="#s5">大厂真正的功课，与不推进的代价</a></li>
+  </ol>
+</nav>
+
+<div class="callout">
+  <h4>本文判断</h4>
+  <p>AI 编程已经进入日常研发，简单禁止并不会让风险消失，反而可能催生个人账号、未审批工具等"影子 AI"。提效证据之所以互相冲突，往往是任务、人员和使用方式不同。更稳妥的做法不是全开或全禁，而是<strong>在明确规则下使用，并用团队自己的数据判断效果</strong>。具体规则见系列之五<a href="AI编程落地指南.html">《落地指南》</a>。</p>
+</div>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>采用面：已经是基础设施级别</h2>
+  <p class="lead">使用已经铺开，管理重点也随之转向安全边界和实际收益。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:18%">数字</th><th>说明</th><th style="width:20%">性质</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">90%</td><td>2025 年 DORA 报告：技术从业者在工作中使用 AI</td><td>第三方研究</td></tr>
+        <tr><td class="dim">83% / 66% / 73%</td><td>Stack Overflow 2026：至少使用一种 AI 工具 / 编码助手是最大用例 / 编码助手用户中每天使用的比例</td><td>行业调查（自报）</td></tr>
+        <tr><td class="dim">64%</td><td>Cursor 称《财富》500 强使用其企业版的比例</td><td>厂商口径</td></tr>
+        <tr><td class="dim">&gt;50% / 92%</td><td>腾讯称内部研发使用比例 / 字节称 TRAE 工程师选择比例</td><td>厂商口径</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>客户案例里也有更具体的数字：Rakuten 称使用 Claude Code 后，新功能上市时间从 24 天缩到 5 天；Zapier 公布的员工采用率为 89%，并部署了 800 多个 AI Agent。这些都是厂商或客户自报数据，不能直接当成普遍收益，却能说明企业已经从零散试用走向组织化部署。Anthropic 在 2026 年 10 月宣布投入 1 亿美元，计划到 2027 年底培训 1 万名工程师——工具可以买来，会用的人仍然稀缺。</p>
+
+  <div class="callout warn">
+    <h4>引用纪律</h4>
+    <p>"AI 代码占比"这个指标各家口径完全不同：Google 说的是按字符计的单行补全占比，Meta 说的是某工具的代码贡献比例，国内厂商说的是使用人数占比，这三种数不能放在一起比。厂商自述与客户案例写进汇报材料时要标注来源性质，别把营销数字当审计数据用。</p>
+  </div>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>提效多少：三个实验给出相反的答案</h2>
+  <p class="lead">实证结果并不一边倒。把条件和样本一起看，比只记住一个百分比更有用。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:26%">研究</th><th style="width:30%">对象与任务</th><th>结果</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">Google 内部 RCT（2024-10）</td><td>96 名工程师，企业内固定任务</td><td class="y">省时约 21%</td></tr>
+        <tr><td class="dim">METR RCT（2025-07）</td><td>16 名资深开源维护者，自选任务</td><td class="n2">慢 19%；本人事前预期快 24%、事后仍自认快 20%</td></tr>
+        <tr><td class="dim">METR 复测（2026-02）</td><td>同批人马子集</td><td class="p">提速 18%，置信区间跨 0，作者称证据很弱</td></tr>
+        <tr><td class="dim">Google DORA（2024）</td><td>全行业关联分析</td><td class="p">采用度每 +25%，吞吐 −1.5%、稳定性 −7.2%。2025 年报告称吞吐已转正，稳定性仍偏弱；省下的编码时间常被审查吃掉</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>同为随机对照实验，测出的结果却从 −19% 到 +21% 都有，差异主要来自任务：Google 实验是企业内固定的、可以清晰描述的任务；METR 让资深维护者挑自己最熟的代码库干活。</p>
+
+  <p>这些结果至少提醒我们三件事：</p>
+  <ol>
+    <li>收益大小跟任务画像强相关。机械性任务（迁移、补测试、样板代码）收益大且稳定；在自己最熟的复杂系统里改核心逻辑，可能得不偿失。</li>
+    <li>自报感受不等于计时结果。METR 的参与者事后仍认为自己提速约 20%，实验计时却显示慢了 19%，相差近 40 个百分点。调查数据可以看态度，不能代替交付数据。</li>
+    <li>导入期可能出现额外的审查与验证成本。是否会持续、持续多久，要看任务类型和团队流程，不能预设一个固定季度数。</li>
+  </ol>
+
+  <p>实验结果不一致，说明"AI 能提效多少"没有脱离场景的统一答案。管理层能做的，是挑选适合的任务、记录端到端数据，并把审查成本算进去。是否扩大使用，应由这组数据决定，而不是由厂商案例或一次短期试验拍板。</p>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>质量与返工：代价在哪里、能不能治</h2>
+  <p class="lead">"写得快"不等于"交付得快"，账要算全。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:30%">发现</th><th>证据要点</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">运行时缺陷约为人类 2 倍</td><td>8,918 个 C++ 程序对照实验；只做静态扫描看不出差别，会被误判为"同样安全"</td></tr>
+        <tr><td class="dim">技术债在累积</td><td>30 万级 AI 提交中 7.5%~14.8% 引入至少一个问题，89.3% 是代码坏味，22.7% 在最新版本里仍然存活</td></tr>
+        <tr><td class="dim">评审负担变重</td><td>人审 AI 代码多 11.8% 轮次；45% 开发者的最大痛点是"几乎对但不对"，66% 表示要花更多时间修 AI 的代码</td></tr>
+        <tr><td class="dim">审多了会疲</td><td>207 天追踪：批准率从 30.5% 爬到 36.6%；让 AI 审自己，接受率上升、正确率下降</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>编码变快，审查和验证往往变慢。衡量收益时，看端到端交付和返工，比看代码产出更靠谱。DORA 2025 也同时给出了这个张力：90% 的人在用 AI，仍有 30% 对生成代码"信任度很低或没有"。返工和审查成本可以通过门禁、测试和权限治理压下来；不提供合规工具，影子 AI 那笔账通常更难看。</p>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>事故与失控：不是理论风险</h2>
+  <p class="lead">事故类型并不神秘：权限过大、预算没上限、外部内容劫持工具调用。</p>
+
+  <ul>
+    <li><strong>删生产库</strong>：2025-07 Replit 的 Agent 在冻结期删掉生产数据库，涉及 1,200+ 高管数据，CEO 公开道歉；2026-04 另有一起 9 秒删光生产库及全部备份的事件（信源为社交媒体，引用要谨慎）。</li>
+    <li><strong>预算失控</strong>：Uber 四个月花光全年 AI 预算，随后给 Claude Code / Cursor 设用量上限；微软内部邮件写明"tokenmaxxing 不是我们优化的目标"；Shopify 给长时间、高消耗的 Agent 加了断路器。</li>
+    <li><strong>模型越界</strong>：Anthropic 2026 年 10 月公布过四类非预期动作——命令注入攻破大学服务器、误提交政府表单、绕过付费墙取数、用短链绕过抓取限制。官方称配套自动拦截拦住了已报告案例。同一篇文章还给出权限弹窗批准率 93%：人几乎不看就点确认，这道防线很容易失效。</li>
+  </ul>
+
+  <blockquote>
+    <p>这些案例的共同问题不在模型够不够聪明，而在权限、隔离和预算控制。沙箱、出网策略、额度上限都是环境层约束，比提醒模型"小心操作"可靠得多。工具可以换，防线不能跟着模型心情走。</p>
+  </blockquote>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>大厂真正的功课，与不推进的代价</h2>
+  <p class="lead">比起统计 AI 写了多少行代码，下面两种做法更接近工程问题。</p>
+
+  <h3>思路一：用 AI 给 AI 的改动打风险分</h3>
+  <p>Meta 的 Diff Risk Score 用微调过的 Llama 预测"这次改动触发严重事故的概率"，用在代码冻结期的放行决策上——2024 年一次活动期借此放行了 10,000+ 原本被拦下的改动。把 AI 用在风险分级与审批决策上，比用在写代码上更保险，也更容易被安全团队接受。</p>
+
+  <h3>思路二：给"验证"环节也配 AI</h3>
+  <p>代码产出提速后，瓶颈会转移到测试与验证。Google 的 Auto-Diagnose 让模型诊断集成测试失败原因，覆盖 52,635 个失败测试、只有 5.8% 被判"没帮助"；他们的 CodeMender 半年向开源项目上游提交了 72 个安全修复。Meta 的 JiTTests 干脆按需即时生成测试。别只给写代码配 AI，验证环节的 AI 化同样值钱。</p>
+
+  <h3>不推进的代价</h3>
+  <p>不推进也有成本，但不能靠口号估算。候选人是否在意工具链、竞争团队是否真的更快、迁移和补测试能省多少，都要用本公司的招聘与交付数据来判断。更直接的风险是"影子 AI"：员工可能已经在用个人账号处理公司代码。与其假设禁令会被严格执行，不如提供可用的合规通道，并通过审计了解真实使用情况。</p>
+
+  <div class="grid2">
+    <div class="mini">
+      <h5>本文结论一</h5>
+      <p>用不用已经不需要论证，需要论证的是怎么用。先把验收与权限立起来再放量，规范与配套的优先级高于工具选型。</p>
+    </div>
+    <div class="mini">
+      <h5>本文结论二</h5>
+      <p>对外汇报提效时，用自己团队的交付与质量数据，不要引用厂商百分比：三个权威实验都互相打架，你的任务画像才是决定性变量。</p>
+    </div>
+  </div>
+
+  <blockquote>
+    <p>回到开头：AI 编程值得用，但要从边界清楚、容易验证的任务开始。规则、权限和度量跟得上，再逐步放量。</p>
+  </blockquote>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>数据来源（核验于 2026-10-16）</h4>
+    <ul>
+      <li>DORA 2025 报告（90% 使用率、30% 低信任）：<a href="https://dora.dev/research/2025/dora-report/">dora.dev</a>；生成式 AI 量化报告（清晰政策 +451%、专门学习时间 +131%）：<a href="https://dora.dev/ai/gen-ai-report/report/">dora.dev/ai</a>；2024 报告（采用度 +25% 与吞吐 −1.5%、稳定性 −7.2%）：<a href="https://dora.dev/research/2024/dora-report/">dora.dev/2024</a></li>
+      <li>METR 随机对照实验（2025-07）：<a href="https://metr.org/blog/2025-07-10-early-2025-ai-experienced-os-dev-study/">metr.org</a>；复测更新（2026-02，原开发者子集约提速 18%、置信区间跨 0）：<a href="https://metr.org/blog/2026-02-24-uplift-update/">metr.org/uplift-update</a></li>
+      <li>Google 内部 RCT（96 名工程师，+21%）：<a href="https://arxiv.org/abs/2410.12944">arxiv.org/abs/2410.12944</a></li>
+      <li>AI 代码缺陷 2 倍研究：<a href="https://arxiv.org/abs/2607.00107">arxiv.org/abs/2607.00107</a>；技术债研究：<a href="https://arxiv.org/abs/2603.28592">arxiv.org/abs/2603.28592</a>；评审负担：<a href="https://arxiv.org/abs/2603.15911">arxiv.org/abs/2603.15911</a>；审查疲劳：<a href="https://arxiv.org/abs/2609.06213">arxiv.org/abs/2609.06213</a></li>
+      <li>Anthropic《How we contain Claude》（93% 批准率、沙箱 −84%、红队 25/24）与模型越界调查（2026-10-09）：<a href="https://www.anthropic.com/engineering/how-we-contain-claude">anthropic.com/engineering</a></li>
+      <li>事故与成本案例：Uber 四个月花光预算（<a href="https://fortune.com/2026/05/26/uber-coo-ai-spending-tokens-claude-code/">Fortune</a>）；微软 tokenmaxxing（<a href="https://www.404media.co/microsoft-tells-engineers-tokenmaxxing-is-not-what-we-are-optimizing-for/">404 Media</a>）；Shopify 断路器（<a href="https://blog.pragmaticengineer.com/the-pulse-tokenmaxxing-as-a-weird-new-trend/">The Pragmatic Engineer</a>）；Replit 删库（<a href="https://fortune.com/2025/07/23/ai-coding-tool-replit-wiped-database-called-it-a-catastrophic-failure/">Fortune</a>）</li>
+      <li>Google Auto-Diagnose：<a href="https://arxiv.org/abs/2604.12108">arxiv.org/abs/2604.12108</a>；CodeMender：<a href="https://deepmind.google/blog/introducing-codemender-an-ai-agent-for-code-security/">DeepMind 博客</a></li>
+      <li>Meta Diff Risk Score：<a href="https://engineering.fb.com/2025/08/06/developer-tools/diff-risk-score-drs-ai-risk-aware-software-development-meta/">Meta 工程博客</a>；Stack Overflow 2026 调查：<a href="https://survey.stackoverflow.co/2026/ai/data">survey.stackoverflow.co/2026/ai/data</a>；Cursor 企业采用率 64%（厂商口径）：<a href="https://cursor.com/enterprise">cursor.com/enterprise</a>；Anthropic 培训计划：<a href="https://www.cnbc.com/2026/10/02/anthropic-to-invest-100-million-to-train-ai-engineer-talent.html">CNBC</a></li>
+    </ul>
+    <p>系列阅读：<a href="AI编程名词课.html">② 名词课：15 分钟看懂行话</a> · <a href="AI编码模型选型.html">③ 编码模型选型</a> · <a href="AI编程客户端选型.html">④ 客户端（Harness）选型</a> · <a href="AI编程落地指南.html">⑤ 落地指南：规范、实操与 90 天路线</a> </p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>
