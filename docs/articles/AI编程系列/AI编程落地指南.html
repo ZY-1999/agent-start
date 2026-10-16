@@ -1,0 +1,737 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>公司 AI 编程落地指南：使用规范、实操与 90 天路线 · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+  pre {
+    background: var(--code-bg);
+    color: var(--code-ink);
+    border: 1px solid #141826;
+    border-radius: 8px;
+    padding: 14px 18px;
+    overflow-x: auto;
+    font-size: 13.5px;
+    line-height: 1.7;
+  }
+  pre code { border: none; background: none; padding: 0; color: inherit; }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout ul, .callout ol { margin: 6px 0; padding-left: 22px; }
+  .callout li { margin: 5px 0; }
+  .callout.reco {
+    border: 1px solid #d5d9f2;
+    border-left: 4px solid var(--accent);
+    background: #f7f8fd;
+  }
+  .callout.reco h4 { color: var(--accent-dark); }
+  .callout.warn {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    background: #fdf7ee;
+  }
+  .callout.warn h4 { color: var(--warn); }
+  .callout.danger {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--bad);
+    background: #fdf1f0;
+  }
+  .callout.danger h4 { color: var(--bad); }
+
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  .mini ul { margin: 0; padding-left: 18px; }
+  .mini li { font-size: 14px; color: var(--text-soft); margin: 5px 0; line-height: 1.7; }
+  .mini .goal { margin: 8px 0 0; padding-top: 8px; border-top: 1px dashed var(--border); font-size: 13.5px; color: var(--text); }
+  .mini .days { font-size: 12.5px; color: var(--text-mute); letter-spacing: .4px; }
+  @media (max-width: 720px) { .grid3 { grid-template-columns: 1fr; } }
+
+  .light { display: inline-block; width: 11px; height: 11px; border-radius: 50%; margin-right: 8px; vertical-align: 0; }
+  .light.g { background: var(--good); }
+  .light.a { background: var(--warn); }
+  .light.r { background: var(--bad); }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 之五 · 面向研发管理层、效能与安全团队</span>
+    <h1>公司 AI 编程落地指南<br>使用规范、实操与 90 天路线</h1>
+    <p class="sub">前面几篇谈了现状、名词、模型和客户端。这一篇落到公司内部：规矩怎么立、工具怎么用、90 天怎么推进、风险谁来扛。</p>
+    <p class="meta">通读约 25 分钟 · 配套：<a href="AI编程现状速览.html">行业现状</a> · <a href="AI编程名词课.html">名词课</a> · <a href="AI编码模型选型.html">模型选型</a> · <a href="AI编程客户端选型.html">客户端选型</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">三条红线与六条原则</a></li>
+    <li><a href="#s2">场景三级清单：绿灯 / 黄灯 / 红灯</a></li>
+    <li><a href="#s3">数据与安全防线</a></li>
+    <li><a href="#s4">评审、度量与合规</a></li>
+    <li><a href="#s5">实操指南：装好、用好、别踩坑</a></li>
+    <li><a href="#s6">90 天落地路线：成本与推广</a></li>
+    <li><a href="#s7">风险清单与应对</a></li>
+    <li><a href="#s8">附录：模板与 FAQ</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 01 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>三条红线与六条原则</h2>
+  <p class="lead">先把不能碰的边界写清楚，再发席位。红线宜少，执行宜硬。</p>
+
+  <div class="callout danger">
+    <h4>三条红线（违反按安全事件处理）</h4>
+    <ul>
+      <li>数据与凭据：密钥、客户数据、未公开信息，不贴给未审批的外部模型。判据简单，不愿发全员邮件的内容，不要贴给 AI。</li>
+      <li>不碰生产：AI 会话不持生产写权限，危险命令必须被确定性规则硬拦，而不是靠人点确认。</li>
+      <li>必须人审：AI 生成的 PR 必须由人评审，禁止自审自批。No change should land unread。</li>
+    </ul>
+  </div>
+
+  <p>红线管住事故，日常判断可以靠下面六条：</p>
+  <ol>
+    <li>人在回路：AI 可以写，必须由人审；任何环节不得"因为 AI 说可以就合并"。</li>
+    <li>责任在人：提交者就是责任人，事故复盘不许拿"AI 生成的"当免责理由。</li>
+    <li>默认不信任：AI 产出按外部来源代码的标准审查，评审、测试、扫描一样不少。</li>
+    <li>数据最小化：只给完成任务必需的信息，能脱敏就脱敏，能本地就本地。</li>
+    <li>能力分级授权：权限越大要求越严，默认只读或可改代码，不可碰生产。</li>
+    <li>可追溯：每个 AI 参与的变更，都能查到用的什么工具、什么模型、谁审的。</li>
+  </ol>
+
+  <div class="callout reco">
+    <h4>如果只做三件事</h4>
+    <p>① 发布三级清单与三条红线（本篇第 02、03 节）；② 给每个仓库配规则文件与受管安全配置（第 05 节）；③ 每两周给工程师半天正式学习时间（第 06 节）。</p>
+  </div>
+</section>
+
+<!-- ============ 02 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>场景三级清单：绿灯 / 黄灯 / 红灯</h2>
+  <p class="lead">绿灯直接用，黄灯加评审，红灯按安全事件处理。建议放进团队 Wiki 和新人手册，比口头提醒管用。</p>
+
+  <h3><span class="light g"></span>绿灯：鼓励自由使用（无需审批）</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:44%">场景</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td>代码补全、注释、命名</td><td>IDE 内联补全，提效最直接</td></tr>
+        <tr><td>写单测、造测试数据（非真实客户数据）</td><td>AI 强项，有测试兜底</td></tr>
+        <tr><td>文档、README、发布说明</td><td>低风险高收益</td></tr>
+        <tr><td>解释陌生代码、读开源库、翻译报错</td><td>学习加速器</td></tr>
+        <tr><td>脚本、正则、SQL 草稿（只读库）</td><td>执行前人工复核</td></tr>
+        <tr><td>本地 / 测试环境的小范围重构</td><td>有测试与 CI 保护</td></tr>
+        <tr><td>日志分析、问题定位假设</td><td>结论由人验证</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><span class="light a"></span>黄灯：可用，但走加强流程（评审 / 审批）</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:36%">场景</th><th>附加要求</th></tr></thead>
+      <tbody>
+        <tr><td>生产业务逻辑代码</td><td>逐行评审 + 单测覆盖率不低于基线 + CI 全绿</td></tr>
+        <tr><td>数据库 Schema 变更、迁移脚本</td><td>DBA 审批；影子库先验证；必须有回滚脚本</td></tr>
+        <tr><td>认证、鉴权、加密、支付计费</td><td>安全负责人参与评审；禁止 AI 生成密钥证书</td></tr>
+        <tr><td>依赖升级、新库引入</td><td>SCA 白名单 + 许可证审查；不允许 AI 擅自引新依赖</td></tr>
+        <tr><td>IaC、CI/CD 流水线</td><td>平台团队评审；非生产环境先验证</td></tr>
+        <tr><td>对外 API 契约变更</td><td>契约测试 + 兼容性评审</td></tr>
+        <tr><td>性能敏感路径、核心算法</td><td>要基准测试数据，不接受"AI 说这样更快"</td></tr>
+        <tr><td>批量修改（&gt;10 文件或 &gt;400 行）</td><td>拆分提交、分批评审，拒绝"巨型 AI PR"</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3><span class="light r"></span>红灯：禁止，违反按安全事件处理</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:44%">禁止项</th><th>原因</th></tr></thead>
+      <tbody>
+        <tr><td>密钥、Token、证书、私钥贴进 AI 对话</td><td>凭据直接泄露，可能已在外部留存</td></tr>
+        <tr><td>客户数据、个人信息贴给未审批的外部模型</td><td>违反《个人信息保护法》与合同义务</td></tr>
+        <tr><td>未公开财务、并购、核心算法交给外部模型</td><td>商业秘密风险</td></tr>
+        <tr><td>用个人账号 / 未审批工具上传公司代码</td><td>出境不可控、无审计</td></tr>
+        <tr><td>AI 直接操作生产（改配置、删数据、发版）</td><td>不可逆事故</td></tr>
+        <tr><td>AI 代码未经审查提交主干或发布</td><td>责任链断裂</td></tr>
+        <tr><td>生成规避授权、破解、爬虫绕过类代码</td><td>法律与合规风险</td></tr>
+        <tr><td>把未获授权的渗透测试 / 漏洞利用请求交给通用模型</td><td>超出厂商使用政策与法律授权范围，可能触发封号与法律风险</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 03 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>数据与安全防线</h2>
+  <p class="lead">数据一旦贴出去就很难收回。防线应放在账号、目录、出网和命令拦截上，不要指望模型自己守规矩。</p>
+
+  <h3>数据与密钥红线的落地清单</h3>
+  <ol>
+    <li>统一用公司审批的企业账号，禁止个人订阅处理公司代码。</li>
+    <li>仓库不得出现明文密钥；<code>.env</code>、<code>secrets/</code>、证书同时进 <code>.gitignore</code> 和 AI 忽略配置（<code>.cursorignore</code> 等）。</li>
+    <li>配置 AI 的禁读清单：财务、法务、HR、密钥、生产配置目录一律拒读，多数客户端默认允许读这些路径，必须显式关掉。</li>
+    <li>敏感项目能内网就内网。</li>
+    <li>供应商条款先审："不用于训练""最短留存""不跨境"写进合同。注意免费档与商业档的数据用途可能不同（如 Amazon Q Free 档可用于训练、Pro 档排除），白名单要写到"档位"。</li>
+    <li>必须外发时先脱敏：用结构等价的假数据。</li>
+    <li>审计日志先确认能查到什么、留多久，Copilot 企业日志 180 天且不含本地会话，Claude 默认不记提示词正文（API 数据留存 30 天与"审计能否取回提示词正文"是两回事），想当然会到取证时空手而归。日志建议流式接入 SIEM。</li>
+    <li>离职转岗即时回收许可与 API Key，纳入资产清单。</li>
+  </ol>
+
+  <h3>最重要的一条：防线放在环境层</h3>
+  <p>三个实测数字决定了这个判断：用户对权限弹窗的批准率 93%，靠人点确认等于没拦；OS 级沙箱上线后权限弹窗减少 84%，环境隔离能替代大部分"人肉确认"；钓鱼诱导 AI 外发凭据的实验 25 次成功 24 次，意图判断拦不住，物理隔离才拦得住。落地五件事：</p>
+  <ol>
+    <li>凭据与敏感目录显式拒读（<code>.env</code>、<code>secrets/**</code>、<code>~/.ssh</code>、<code>~/.aws/credentials</code>）；</li>
+    <li>出网白名单：只放行必需域名；</li>
+    <li>危险动作硬拦：删除、强推、生产库操作用确定性规则（hooks）拦截；</li>
+    <li>受管配置下发：用企业级受管设置强制覆盖用户本地配置，锁定权限规则、MCP 白名单、模型清单；</li>
+    <li>CI 硬门禁：AI 生成的 PR 必过 SAST、依赖扫描、secret scanning 三件套。</li>
+  </ol>
+
+  <h3>工具与模型治理（企业级）</h3>
+  <ul>
+    <li>统一网关：所有 AI 请求经网关转发，统一鉴权、限流、计费、日志与模型白名单；</li>
+    <li>工具白名单：明确允许的客户端清单，新工具评审后准入；</li>
+    <li>模型分级：按项目敏感级定义可用档位，高敏项目只允许私有化或零留存条款的模型；</li>
+    <li>MCP 白名单：厂商不做第三方 MCP server 的安全审计，"接入审核"不等于"数据可信"，接入前自行评估数据访问范围；</li>
+    <li>会话可见性：部分产品的云会话默认对"有仓库可见权限的人"开放，私有仓库要收紧；</li>
+    <li>规则与提示词版本化：规则文件与 prompt 库走版本控制与 PR 评审；</li>
+    <li>应急预案：核心流程至少备两条可替换通道（如"海外旗舰 + 国产旗舰"），每季度演练一次切换，明确降级预案，2026 年出现过顶级模型因管制被临时下架的先例。</li>
+  </ul>
+
+  <h4>供应商条款必查项（采购前逐条确认）</h4>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:22%">检查项</th><th style="width:38%">要问的问题</th><th>已知的差异</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">训练用途</td><td>我的代码会进训练集吗？</td><td>商业版通常"不训练"，免费档常有例外</td></tr>
+        <tr><td class="dim">留存期</td><td>数据留多久？能否零留存？</td><td>Anthropic 商业版 30 天；零留存需单独启用且会禁用部分功能</td></tr>
+        <tr><td class="dim">审计能力</td><td>能拿到什么日志？</td><td>GitHub 180 天不含会话；Anthropic 不记提示词正文</td></tr>
+        <tr><td class="dim">IP 责任</td><td>生成代码侵权谁担责？</td><td>微软对 M365 Copilot 有条件赔偿；GitHub 明示用户自担，不得默认厂商兜底</td></tr>
+        <tr><td class="dim">公共代码匹配</td><td>能阻止与公开代码雷同的建议吗？</td><td>GitHub 付费档均可开启，应作为默认</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">客户端与供应商的逐家对比见系列之四《<a href="AI编程客户端选型.html">客户端（Harness）选型指南</a>》。</p>
+</section>
+
+<!-- ============ 04 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>评审、度量与合规</h2>
+  <p class="lead">写在 Wiki 里的规范容易被跳过。门禁要挂到 PR 和 CI 上，度量盯交付和质量，合规把日志留住。</p>
+
+  <h3>评审与质量门禁</h3>
+  <ol>
+    <li>AI 不能自审：AI 写的代码必须人类评审，Bot 只能当补充；仓库都要有 CODEOWNERS 与分支保护，AI 生成的 PR 同样需要至少一名人类 Approver。主流厂商已把"代理不得自批"做成产品默认。</li>
+    <li>测试不达标不合并：新增/修改逻辑必须有对应测试，明确覆盖率门槛。</li>
+    <li>大改必须拆分：单 PR 有效改动建议 ≤400 行，AI 一次生成上千行的一律要求拆分。</li>
+    <li>规则挂到动作上：规则文件是建议性的，hooks 是确定性的，能自动拦的不要靠文档提醒。</li>
+  </ol>
+  <blockquote>
+    <p>No change should land unread，没有人读过的改动不允许合入。建议把这句直接写进公司规范当总原则。</p>
+  </blockquote>
+  <p>评审 AI 代码时优先看六处：边界与异常（空值、并发、时区、幂等）；安全（注入、越权、SSRF、日志泄密）；资源释放与循环内 IO；是否引入未审批依赖；兼容与回滚路径；以及"看起来太顺"的部分：AI 最容易在看不出问题的地方编造接口、漏掉错误处理。</p>
+
+  <h3>度量：证明有效，并防"唯指标"</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:16%">层次</th><th style="width:36%">指标</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">过程</td><td>周活跃率、补全采纳率、AI 参与 PR 占比</td><td>衡量普及；采纳率行业常见区间 20%~35%</td></tr>
+        <tr><td class="dim">结果</td><td>PR 前置时间、部署频率、需求吞吐</td><td>DORA 五指标为主，看"变快还是变慢"</td></tr>
+        <tr><td class="dim">质量</td><td>变更失败率、回滚率、缺陷密度、返工工时、评审时长</td><td>AI 提效常伴随这些指标恶化，单独盯</td></tr>
+        <tr><td class="dim">成本</td><td>人均 token 成本、单 PR 成本</td><td>与提效折算 ROI</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout warn">
+    <h4>严禁用"AI 代码行数 / AI 代码占比"做考核</h4>
+    <p>它同时激励两种坏行为：生成冗余代码，以及把现有代码让 AI 重写一遍。这个指标业界也没有统一定义，各家口径不能互比。考核绑定交付结果与质量；DORA 官方建议用"单次被采纳变更的成本"与"返工率"替代输出量。</p>
+  </div>
+
+  <h3>合规要点（请法务复核后定稿）</h3>
+  <ul>
+    <li>内部自用不属于《生成式人工智能服务管理暂行办法》的管辖范围（第二条：仅研发应用、未向公众提供服务不适用），但个人信息与商业秘密红线不变。反过来，把 AI 做进对外产品功能则要按算法备案与安全评估口径另议。</li>
+    <li>对外交付物里的 AI 生成内容按《人工智能生成合成内容标识办法》（2025-09 施行）处理：显式 + 隐式标识，日志留存不少于 6 个月。</li>
+    <li>数据出境：年度累计出境 100 万人以上个人信息（或 1 万人以上敏感信息）需申报安全评估，评估有效期 3 年。往海外模型贴一段含手机号的日志，也算数。</li>
+    <li>EU AI Act（面向欧盟市场时）：内部编程工具不在高风险清单；透明度义务 2026-08 起适用。</li>
+    <li>安全扫描对齐 OWASP：供应链失效（A03:2025）对应 AI 引入的依赖风险；自建 AI 应用注意提示词注入（LLM Top 10 首位）。</li>
+  </ul>
+</section>
+
+<!-- ============ 05 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>实操指南：装好、用好、别踩坑</h2>
+  <p class="lead">客户端界面各不相同，下面这些动作大多通用。</p>
+
+  <h3>第一天 checklist</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:22%">步骤</th><th>要点</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">1. 企业账号登录</td><td>不用个人账号，确认 SSO 与团队席位</td></tr>
+        <tr><td class="dim">2. 配模型与网关</td><td>指向公司统一网关，确认档位与限额</td></tr>
+        <tr><td class="dim">3. 配忽略清单</td><td>密钥、客户数据、大二进制、构建产物对 AI 不可见</td></tr>
+        <tr><td class="dim">4. 选权限模式</td><td>起步用"只读探索 / 每步确认"，熟练后再放宽</td></tr>
+        <tr><td class="dim">5. 添加规则文件</td><td>仓库根目录放 <code>AGENTS.md</code>，这是最高杠杆动作，模板见附录 A</td></tr>
+        <tr><td class="dim">6. 跑通小任务</td><td>让它修一个带测试的简单 bug，观察它怎么读文件、怎么验证</td></tr>
+        <tr><td class="dim">7. 装质量钩子</td><td>提交前自动 lint / format / 单测，让改动立刻有反馈</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>规则文件：把团队规范翻译给 AI</h3>
+  <p>在仓库根目录放一个规则文件，每次会话自动进上下文，等价于每次都给 AI 做一遍新人培训。写法三个要点：短而具体（100~200 行，越长越被忽略）；写"怎么做"（命令、目录、约定），不写"要努力"这类空话；覆盖技术栈版本、目录职责、构建测试命令、代码风格、禁止事项、提交信息格式。模板见附录 A。</p>
+
+  <div class="callout reco">
+    <h4>进阶：规则长成流程，就封装成 Skill</h4>
+    <p>规则文件解决"每次都在场"的项目约定；当某套规则长成固定流程——新仓库接入团队规范、发版前检查、事故复盘——更好的载体是 Skill（<code>SKILL.md</code> 开放格式，放仓库里按需加载）：AI 只在对应场景把它调进上下文，平时不占窗口。典型做法是 setup 类 skill（如 <code>/setup-skills</code>）：在新仓库跑一次，自动生成规则文件与配套约定，把"老带新"的口头交接变成全团队可复用的资产。规则文件管常态，Skill 管流程，两层配合。</p>
+  </div>
+
+  <h3>上下文管理：决定效果的第一因素</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:30%">做法</th><th>说明</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">先探索，再动手</td><td>让它先读代码给计划，确认后再改，用好 Plan 模式</td></tr>
+        <tr><td class="dim">给对文件</td><td>明确 @ 相关文件，比让它全仓乱搜更快更准</td></tr>
+        <tr><td class="dim">换任务换会话</td><td>长会话污染上下文，及时 <code>/clear</code> 或新开</td></tr>
+        <tr><td class="dim">小步快跑</td><td>一次一件事，改完立刻验证提交，不要"一把梭重写模块"</td></tr>
+        <tr><td class="dim">让它自己验证</td><td>要求跑测试并贴出结果，不接受"我看应该没问题"</td></tr>
+        <tr><td class="dim">压缩与交接</td><td>大任务先写方案文档，新会话按文档执行</td></tr>
+        <tr><td class="dim">善用子代理</td><td>探索、审查这类"读得多说得少"的活交给子代理，别塞满主上下文</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>日常五类高价值用法（按 ROI 排序）</h3>
+  <ol>
+    <li>写测试：补单测、补边界用例、造测试数据。风险最低收益最直接。</li>
+    <li>读代码 / 接手遗留系统：解释调用链、画流程、列出"改这里会影响谁"。</li>
+    <li>修 bug：给报错栈 + 复现步骤 + 相关文件，要求"先给根因假设再改"。</li>
+    <li>样板与重复劳动：CRUD、DTO、日志埋点、配置迁移、批量改名。</li>
+    <li>审查辅助：让 AI 以挑刺角色审 diff，结论由人判断。</li>
+  </ol>
+  <p>要谨慎的用法：让 AI 设计核心架构、"顺手重构"你不熟悉的模块、直接生成大规模迁移脚本跑生产、读完成仓后"整体优化"。这四类要么收益为负，要么属于红灯。</p>
+
+  <h3>三种典型工作流</h3>
+  <p><strong>A. 交互式</strong>（人在旁边，最常见）：</p>
+  <pre><code>明确任务与验收标准 → 让它给计划 → 确认/修正计划 → 小步实现
+→ 跑测试与构建 → 人工复查 diff → 写清 PR 描述 → 提交</code></pre>
+  <p><strong>B. 异步 / 云端</strong>（任务放出去，回头收 PR）：</p>
+  <pre><code>把任务描述（含约束、验收标准、禁改文件）交给云端 Agent
+→ 它产出 PR → 人在本地验证 → 补齐测试与文档 → 合并</code></pre>
+  <p>适用机械性改造、依赖升级、批量修 lint；必须配沙箱、只读权限、CI 门禁、人工终审。</p>
+  <p><strong>C. 编排式</strong>（复杂任务拆多代理并行）：</p>
+  <pre><code>主代理拆解任务 → 子代理并行（探索 / 实现 / 测试 / 审查）
+→ 主代理汇总 → 人审最终产出 → 合并</code></pre>
+  <p>适用大型迁移、全仓审计；成本与风险同步放大，先试点再推广。</p>
+
+  <h3>十个常见反模式</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:32%">反模式</th><th style="width:32%">后果</th><th>正确做法</th></tr></thead>
+      <tbody>
+        <tr><td>上下文塞满无关文件</td><td>关键信息被淹没，答非所问</td><td>精准 @ 文件 + 换新会话</td></tr>
+        <tr><td>"帮我优化一下这个项目"</td><td>大范围无意义改动</td><td>限定范围与验收标准</td></tr>
+        <tr><td>不看 diff 直接提交</td><td>混入后门、调试代码、密钥</td><td>强制看 diff，写进规范</td></tr>
+        <tr><td>让它"保证没问题"</td><td>得到的是语气，不是证据</td><td>要求跑测试并贴输出</td></tr>
+        <tr><td>用它替代理解</td><td>团队能力退化，事故时无人能修</td><td>AI 解释 + 人复述验收</td></tr>
+        <tr><td>长会话一路用到底</td><td>质量随上下文膨胀下降</td><td>任务切换就清空</td></tr>
+        <tr><td>忽略 AI 新增的依赖</td><td>供应链风险</td><td>依赖变更必须过 SCA 白名单</td></tr>
+        <tr><td>让 AI 直接连生产库</td><td>不可逆事故</td><td>只读副本 / mock</td></tr>
+        <tr><td>无测试的"能跑就行"</td><td>回归缺陷</td><td>先写测试再实现（TDD 很适合 AI）</td></tr>
+        <tr><td>只靠 AI 审查 AI</td><td>盲区叠加</td><td>人类 Approver 不可省</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>经验沉淀</h3>
+  <p>把各仓库的规则文件、好用的提示词、hook 脚本集中到一个内部仓库持续迭代；每个团队配 1~2 个"冠军"负责答疑和收案例；建一个案例库，"做得好的 20 个、翻车的 20 个"。翻车案例比成功案例值钱，它是红线清单最真实的来源。</p>
+</section>
+
+<!-- ============ 06 ============ -->
+<section id="s6">
+  <h2><span class="no">06</span>90 天落地路线：成本与推广</h2>
+  <p class="lead">先在一两个团队打样，用真实数据和翻车案例扩面，再写成制度。不要第一天就全员发席位。</p>
+
+  <div class="grid3">
+    <div class="mini">
+      <span class="days">阶段一 · 第 1~30 天</span>
+      <h5>准备与试点</h5>
+      <ul>
+        <li>成立虚拟小组，选 1~2 个代码库健康、有测试、业务压力大的试点团队</li>
+        <li>搭统一网关、账号与审计</li>
+        <li>发布《使用规范》v0.9 与三级清单</li>
+        <li>先测基线：PR 前置时间、失败率、缺陷密度</li>
+      </ul>
+      <p class="goal">验收：≥80% 周活跃、3 个可量化提效案例、零安全事件</p>
+    </div>
+    <div class="mini">
+      <span class="days">阶段二 · 第 31~60 天</span>
+      <h5>扩面与制度化</h5>
+      <ul>
+        <li>规范 v1.0 进流程：PR 模板、分支保护、CI 门禁</li>
+        <li>全员培训，每团队配冠军</li>
+        <li>灰度推广，覆盖率 ≥60%</li>
+        <li>建规则/prompt/hook 库；补齐沙箱与权限基线</li>
+      </ul>
+      <p class="goal">验收：制度落地，安全基线核查通过</p>
+    </div>
+    <div class="mini">
+      <span class="days">阶段三 · 第 61~90 天</span>
+      <h5>规模化与深水区</h5>
+      <ul>
+        <li>覆盖测试、运维、数据、产品等相邻角色</li>
+        <li>试点审查 Bot 与云端异步 Agent</li>
+        <li>高敏项目私有化方案落地</li>
+        <li>度量看板上线，复盘修订 v1.1</li>
+      </ul>
+      <p class="goal">验收：工具 / 质量 / 成本三张看板月度运行</p>
+    </div>
+  </div>
+
+  <h3>培训大纲（分层）</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:22%">对象</th><th style="width:10%">时长</th><th>内容</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">全员研发</td><td>2h</td><td>AI 能干与不能干什么；安装配置；红线与三级清单；上下文管理；现场演练（补测试 + 修 bug）</td></tr>
+        <tr><td class="dim">骨干冠军</td><td>1d</td><td>规则文件写法、hooks 与自动化、子代理编排、审查辅助、案例复盘</td></tr>
+        <tr><td class="dim">Tech Lead / 管理者</td><td>2h</td><td>度量怎么读、质量把关、成本管理</td></tr>
+        <tr><td class="dim">安全 / 合规 / 法务</td><td>2h</td><td>供应商条款审查、数据边界、审计取证、开源许可</td></tr>
+        <tr><td class="dim">平台 / 运维</td><td>半天</td><td>网关与限额、审计日志、沙箱与网络策略、私有化部署</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>成本模型</h3>
+  <p>AI 编程成本 = 席位订阅 + 模型 token 费 + 网关平台费 + 培训推广 + 返工与审查。各家订阅价格与用量口径见系列之四《<a href="AI编程客户端选型.html">客户端选型指南</a>》第 08 节；这里只补三条本篇独有的账：</p>
+  <ul>
+    <li>厂商公开的用量参考大约是 $13 / 开发者 / 活跃日、$150~250 / 人 / 月，约 90% 的开发者低于 $30/活跃日。Agent 团队的 token 消耗可以到普通会话的数倍，账单要按任务类型分开看。</li>
+    <li>失控真实发生过：Uber 四个月花光全年 AI 预算后限流；微软设用量上限；Shopify 给 agent 上"断路器"。所以云端 Agent 必配四道闸：单任务最长时长、最大 token、最大并发、单日花费上限，再按团队归因、月度复盘。</li>
+    <li>省钱的常见做法：任务分级选模型（见系列之三）；打开提示缓存，把规则文件放在固定前缀位置；控制上下文长度，别整仓塞进对话；给云端 Agent 设上限；月底把"单 PR 成本"和交付结果放一起看。</li>
+  </ul>
+
+  <h3>推广机制：被验证有效的做法</h3>
+  <p>冠军机制，每人每周 40 分钟：15 分钟在团队频道分享一条"这周我用 AI 干了什么/踩了什么坑"；20 分钟答疑、帮同事跑通第一次；5 分钟拉一个新人上手。30 天剧本：第 1 周建频道、第 2 周开始每周 show-and-tell、第 3 周结对、第 4 周交棒第二位冠军，避免单点依赖。红线：安全与合规问题一律转交管理员，冠军不得即兴作答。</p>
+  <p>给时间：每两周固定半天"AI 工程时间"，用来学工具、改规则文件、写案例，并计入正常工时。业余自学很难铺开。DORA 的生成式 AI 报告里，工作时间内提供专门学习时间，与团队采用度 +131% 相关。</p>
+  <p>用真实任务验收。试点结束时每人交一个 AI 显著参与的 PR，再交一个翻车案例。翻车记录往往更能暴露红线该写什么。</p>
+  <p>头一两个季度，审查和验证成本可能先上去，交付稳定性也可能变差。立项时写清楚：第一季度看采纳率和使用质量，第二季度再看吞吐与稳定性，避免刚好在最难看的时候被叫停。DORA 还观察到，清晰的 AI 使用政策与采用度 +451% 相关；这是关联结果，不是保证每个团队都能复制同一幅度。</p>
+</section>
+
+<!-- ============ 07 ============ -->
+<section id="s7">
+  <h2><span class="no">07</span>风险清单与应对</h2>
+  <p class="lead">风险、典型场景、缓解措施和责任方写在一张表里。后面八条治理手段附了可核对的证据。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:20%">风险</th><th style="width:30%">典型场景</th><th>缓解措施</th><th style="width:12%">责任方</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">数据泄露</td><td>客户数据 / 密钥贴给外部模型</td><td>统一网关 + 忽略清单 + 脱敏 + 审计</td><td>安全</td></tr>
+        <tr><td class="dim">凭据外泄</td><td>AI 把 .env 写进代码或日志</td><td>secret scanning + pre-commit hook</td><td>安全 / 平台</td></tr>
+        <tr><td class="dim">代码质量下降</td><td>冗余重复代码、复制粘贴</td><td>评审重点 + 重复度扫描 + 覆盖率门禁</td><td>研发</td></tr>
+        <tr><td class="dim">供应链风险</td><td>引入未审批依赖或"幽灵包"</td><td>依赖白名单 + SCA + 锁文件校验</td><td>平台</td></tr>
+        <tr><td class="dim">许可证污染</td><td>生成代码复现 GPL 片段</td><td>许可证扫描 + 引入审查</td><td>法务</td></tr>
+        <tr><td class="dim">生产事故</td><td>AI 执行高危命令、改生产配置</td><td>沙箱 + 危险命令拦截 + 人工确认</td><td>平台 / 运维</td></tr>
+        <tr><td class="dim">评审橡皮图章</td><td>审多了无脑放行；AI 审 AI</td><td>禁止自审 + 异质验证（换模型/换人）+ 抽查</td><td>研发管理</td></tr>
+        <tr><td class="dim">能力退化</td><td>只会问 AI，不再读代码</td><td>评审抽查解释能力 + 关键模块轮岗</td><td>研发管理</td></tr>
+        <tr><td class="dim">供应商锁定</td><td>关键流程绑死单一模型 / 厂商</td><td>双通道 + 季度切换演练 + 降级预案</td><td>架构</td></tr>
+        <tr><td class="dim">合规风险</td><td>个人信息出境、内幕信息</td><td>条款审查 + 项目敏感级分类</td><td>法务 / 合规</td></tr>
+        <tr><td class="dim">度量失真</td><td>刷 AI 代码行数、刷采纳率</td><td>考核绑定交付结果，质量一票否决</td><td>效能</td></tr>
+        <tr><td class="dim">成本失控</td><td>云端 Agent 长跑、旗舰滥用</td><td>断路器 + 分级选档 + 月度复盘</td><td>效能 / 财务</td></tr>
+        <tr><td class="dim">影子 AI</td><td>员工私传代码到个人账号工具</td><td>提供好用的合规工具 + 明令禁止 + 抽查</td><td>安全 / IT</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p>行为监视只能当辅助。有实验显示，在 5% 误报率下，隐藏推理的模型平均只有约一半被捕获；主防线仍是沙箱、出网白名单和危险命令拦截。组织侧也常见治理缺口：不少企业说不清 AI 投资的 ROI，Gartner 曾预计约 40% 的 Agentic AI 项目会失败，主因往往是权限、验收和责任没有落地，而不是模型不够强。</p>
+
+  <h3>已被证明有效的八条治理措施</h3>
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:44%">措施</th><th>量化证据</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">禁止模型自审，强制人工 / 异质验证</td><td>AI 自审会"接受率升、正确率降"</td></tr>
+        <tr><td class="dim">沙箱 + 最小联网 + 集中管控</td><td>Anthropic 称已报告的越界案例被自动拦截机制拦住</td></tr>
+        <tr><td class="dim">多模型仲裁后再应用改动</td><td>仲裁后有害改动面减少 83%~90%</td></tr>
+        <tr><td class="dim">提示层强制安全约束</td><td>安全缺陷减少 73%</td></tr>
+        <tr><td class="dim">沙箱替代"人肉确认"</td><td>批准率 93% 形同虚设 → 沙箱让弹窗减少 84%</td></tr>
+        <tr><td class="dim">明确的使用政策 + 工作时间内学习</td><td>采用度 +451% / +131%</td></tr>
+        <tr><td class="dim">用 AI 给 AI 的改动打风险分（Diff Risk Score 思路）</td><td>Meta 冻结期借此放行 10,000+ 改动</td></tr>
+        <tr><td class="dim">给"验证"环节也配 AI</td><td>Google Auto-Diagnose 覆盖 52,635 个失败测试、仅 5.8% 判无用</td></tr>
+      </tbody>
+    </table>
+  </div>
+</section>
+
+<!-- ============ 08 ============ -->
+<section id="s8">
+  <h2><span class="no">08</span>附录：模板与 FAQ</h2>
+  <p class="lead">A / B / C 可直接复制进仓库或 PR 模板。</p>
+
+  <h3>附录 A：仓库规则文件模板（AGENTS.md / CLAUDE.md）</h3>
+  <pre><code># 项目说明（给 AI 助手的规则文件）
+
+## 项目概况
+- 业务：一句话说明本仓库做什么
+- 技术栈：语言/版本、框架、数据库、构建工具
+- 目录结构：cmd/（入口）、pkg/（业务）、internal/（内部库）、scripts/（脚本）、docs/
+
+## 常用命令（必须使用这些命令验证改动）
+- 安装依赖：`make bootstrap`
+- 构建：`make build`
+- 单元测试（单个文件）：`go test ./pkg/foo/... -run TestName`
+- 全量测试：`make test`
+- 静态检查：`make lint`
+- 本地启动：`make run`
+
+## 代码约定
+- 错误必须显式处理，禁止忽略 error
+- 对外接口必须有注释与示例；内部函数保持短小（&lt; 50 行）
+- 禁止引入新依赖，除非在 PR 说明中获批
+- 日志禁止打印手机号、身份证、Token 等敏感字段
+- 时间统一 UTC 存储，展示层转换
+
+## 提交与 PR 要求
+- 提交信息：`type(scope): 简述`（feat/fix/refactor/test/docs/chore）
+- PR 描述写明：改动原因、影响范围、验证方式、回滚方式
+- 单 PR 有效改动 ≤ 400 行；大改必须拆分
+
+## 禁止事项（红线）
+- 禁止在代码、注释、日志、测试数据中出现真实密钥与客户数据
+- 禁止修改 deploy/ 与 migrations/ 目录，除非任务明确要求
+- 禁止执行 rm -rf、DROP、git push --force 等破坏性命令
+- 禁止自动提交：所有提交必须人工确认
+
+## 工作方式
+- 修改前：先读相关文件并给出计划，等我确认
+- 修改后：运行受影响范围的最小测试集并贴出结果
+- 不确定时：明确说出不确定，不要猜接口名</code></pre>
+
+  <h3>附录 B：AI 辅助 PR 检查清单（贴进 PR 模板）</h3>
+  <pre><code>## AI 参与情况
+- [ ] 本 PR 是否由 AI 辅助生成：是 / 否（若"是"，勾选以下全部项）
+- [ ] 我已逐行阅读全部改动（不是只看摘要）
+- [ ] 已确认无调试代码、临时注释、硬编码密钥/内网地址
+- [ ] 已确认未引入未审批的新依赖
+- [ ] 新增/修改逻辑已有对应测试，本地与 CI 全绿
+- [ ] 已检查边界：空值、并发、时区、超时、重试、幂等
+- [ ] 已检查安全：注入、越权、敏感信息日志
+- [ ] 大范围改动已拆分；回滚方案已写明</code></pre>
+
+  <h3>附录 C：代码评审 Checklist（人审 AI 产出通用）</h3>
+  <ol>
+    <li>需求对齐：改动真的解决了问题吗？有没有做多余的事？</li>
+    <li>正确性：边界、异常、并发、幂等、时区、精度。</li>
+    <li>安全性：输入校验、权限判断、注入、敏感数据、依赖风险。</li>
+    <li>可维护性：命名、抽象层级、重复代码、注释是否解释"为什么"。</li>
+    <li>测试：覆盖失败路径了吗？是不是只测 happy path？</li>
+    <li>可观测性：日志、指标、追踪够定位线上问题吗？</li>
+    <li>性能：N+1、全表扫描、循环内 IO、无上限缓存。</li>
+    <li>兼容与迁移：老数据、老客户端、灰度与回滚。</li>
+    <li>干净的 diff：混入格式化/重排噪声了吗？</li>
+    <li>责任确认：我愿意为这段代码的线上表现负责吗？</li>
+  </ol>
+
+  <h3>附录 D：常见问题 FAQ</h3>
+  <p><strong>AI 写的代码出事故，责任算谁的？</strong> 算提交与审批的人。AI 不是责任主体，也永远不会是。</p>
+  <p><strong>可以让 AI 提交代码吗？</strong> 可以生成本地提交，但推送、合并、发布必须由人触发，PR 必须有人类 Approver。</p>
+  <p><strong>用 AI 会不会让绩效被质疑"产出不是自己写的"？</strong> 考核看交付结果与质量，不看敲了多少字。"会用 AI 把事做成"就是当前的核心能力。</p>
+  <p><strong>为什么不干脆全禁外部模型？</strong> 私有化模型能力通常落后旗舰 6~12 个月且运维贵。合理做法是按敏感级分层：高敏走私有化，普通业务走企业版云端加零留存条款。</p>
+  <p><strong>AI 老不按规范写，怎么办？</strong> 九成是规则文件没写清或没进上下文。先写进仓库规则文件并验证生效，再考虑换工具。</p>
+  <p><strong>需要给每人都买最贵旗舰吗？</strong> 不需要。任务分级：日常补全小改用快档，疑难攻坚才上旗舰，配统一网关限额（见系列之三）。</p>
+  <p><strong>能用 AI 刷测试覆盖率吗？</strong> 能写测试，但不允许"为覆盖率的空测试"——断言要测真实行为，检查"断言恒真"的情况。</p>
+  <p><strong>外包 / 合作伙伴能用我们的 AI 工具吗？</strong> 默认不允许。确需使用时单独签数据条款、限仓库范围、开全量审计，由我方人员终审。</p>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>依据来源（核验于 2026-10-16）</h4>
+    <ul>
+      <li>法规：《生成式人工智能服务管理暂行办法》第二条（向境内公众提供服务才适用，<a href="https://www.gov.cn/zhengce/202311/content_6917778.htm">gov.cn</a>）、标识办法（<a href="https://www.cac.gov.cn/2025-03/14/c_1743654684782215.htm">cac.gov.cn</a>）、数据出境规定（<a href="https://www.cac.gov.cn/2024-03/22/c_1712776611775634.htm">cac.gov.cn</a>）、EU AI Act（<a href="https://digital-strategy.ec.europa.eu/en/policies/regulatory-framework-ai">europa.eu</a>）</li>
+      <li>治理与度量：Google DORA 指标与 AI 报告（<a href="https://dora.dev">dora.dev</a>，含清晰政策 +451%、专门学习时间 +131%）、Anthropic《How we contain Claude》（<a href="https://www.anthropic.com/engineering/how-we-contain-claude">anthropic.com</a>，93% 批准率、沙箱 −84%、25/24 凭据外发）、GitHub Copilot 治理文档（<a href="https://docs.github.com/en/copilot">docs.github.com/copilot</a>）</li>
+      <li>实证：审查疲劳（arxiv.org/abs/2609.06213）、AI 自审效应（arxiv.org/abs/2606.28438）、多模型仲裁（arxiv.org/abs/2510.10010）、安全约束 −73%（arxiv.org/abs/2602.02584）、OWASP Top 10:2025 与 LLM Top 10（owasp.org）</li>
+    </ul>
+    <p>条款请按公司实际裁剪，经安全与法务评审后再发布；供应商政策和模型能力变化很快，建议每季度复核一次。</p>
+    <p>系列阅读：<a href="AI编程现状速览.html">① 行业现状</a> · <a href="AI编程名词课.html">② 名词课</a> · <a href="AI编码模型选型.html">③ 编码模型选型</a> · <a href="AI编程客户端选型.html">④ 客户端（Harness）选型</a> </p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>
