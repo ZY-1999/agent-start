@@ -5,13 +5,13 @@
     "url": "https://github.com/ZY-1999/agent-start"
   },
   "metadata": {
-    "description": "Fork of mattpocock/skills reorganised into general/ dev/ sdd/ buckets, plus a third-party/ bucket of vendored skills (zentao) — installable as a Claude Code plugin."
+    "description": "Fork of mattpocock/skills reorganised into general/ dev/ sdd/ buckets, plus vendored third-party buckets (zentao, confluence) — installable as a Claude Code plugin."
   },
   "plugins": [
     {
       "name": "zy-skills",
       "source": "./",
-      "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills and vendored third-party zentao skills. Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus third-party/.",
+      "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills and vendored third-party skills (zentao, confluence). Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus third-party-zentao/ + third-party-confluence/.",
       "homepage": "https://github.com/ZY-1999/agent-start",
       "keywords": [
         "sdd",
@@ -20,7 +20,8 @@
         "grilling",
         "skills",
         "codemap",
-        "zentao"
+        "zentao",
+        "confluence"
       ]
     }
   ]

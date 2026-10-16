@@ -1,6 +1,6 @@
 {
   "name": "zy-skills",
-  "version": "1.1.0",
+  "version": "1.2.0",
   "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow).",
   "skills": [
     "./skills/dev/grill-with-docs",
@@ -23,7 +23,8 @@
     "./skills/sdd/to-spec",
     "./skills/sdd/tdd",
     "./skills/sdd/sdd-flow",
-    "./skills/third-party/zentao-cli",
-    "./skills/third-party/zentao-tour"
+    "./skills/third-party-zentao/zentao-cli",
+    "./skills/third-party-zentao/zentao-tour",
+    "./skills/third-party-confluence/confluence"
   ]
 }

@@ -15,7 +15,7 @@ Scaffold the per-repo configuration that the skills assume:
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
-One step is environmental rather than per-repo: the plugin also ships two third-party skills — `zentao-cli` and `zentao-tour`, vendored from [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli) — that drive the `zentao` binary. Step 5 verifies that binary and recommends configuring credentials as environment variables in the user's own `~/.bashrc`; it never handles secret values.
+One step is environmental rather than per-repo: the plugin also ships vendored third-party skills — `zentao-cli` and `zentao-tour` (from [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli)) driving the `zentao` binary, and `confluence` (from [pchuri/confluence-cli](https://github.com/pchuri/confluence-cli)) driving the `confluence` binary. Step 5 verifies those binaries and recommends how the user configures credentials themselves (environment variables in their own `~/.bashrc` for zentao, the local `confluence-cli` profile for Confluence); it never handles secret values.
 
 ## Existing spec / issue systems are reference only
 
@@ -106,9 +106,9 @@ Every time the agent receives a requirement, interview the user first with `/gri
 
 [one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; See `docs/agents/git-contract.md`.
 
-### Zentao skills (third-party)
+### Third-party skills (zentao / confluence)
 
-[one-line summary — optional section: the plugin's `zentao-cli` / `zentao-tour` skills operate Zentao (禅道) through the `zentao` command (`npm install -g zentao-cli`); credentials recommended as environment variables (`ZENTAO_URL` / `ZENTAO_ACCOUNT` / `ZENTAO_TOKEN`|`ZENTAO_PASSWORD`) exported in the user's own `~/.bashrc`, local-profile login as fallback. Drop this section if the repo has no Zentao connection.]
+[one-line summary — optional section: the plugin's vendored `zentao-cli` / `zentao-tour` skills operate Zentao (禅道) through the `zentao` command (`npm install -g zentao-cli`; credentials recommended as environment variables `ZENTAO_URL` / `ZENTAO_ACCOUNT` / `ZENTAO_TOKEN`|`ZENTAO_PASSWORD` exported in the user's own `~/.bashrc`, local-profile login as fallback), and the vendored `confluence` skill operates Confluence through the `confluence` command (`npm install -g confluence-cli`; profile in `~/.config/confluence-cli/config.json` or `confluence init`). Drop this section if the repo has neither a Zentao nor a Confluence connection.]
 ```
 
 Then write the four docs files using the seed templates in this skill folder as a starting point:
@@ -120,14 +120,15 @@ Then write the four docs files using the seed templates in this skill folder as 
 
 Then build the project-level CodeMap: run `/codemap` in **project** mode to generate `docs/codemap/project.md`. Feature maps are added later as work needs them — not during setup. (Skip if `/codemap` isn't installed.)
 
-### 5. Check the zentao CLI (third-party skills)
+### 5. Check the third-party CLIs (zentao / confluence)
 
-The two zentao skills operate Zentao (禅道) through the `zentao` command, from the [`zentao-cli`](https://www.npmjs.com/package/zentao-cli) npm package. It's a per-machine dependency — setup only verifies it and recommends the credential approach; it never installs, logs in, or handles secret values itself.
+The zentao skills operate Zentao (禅道) through the `zentao` command, from the [`zentao-cli`](https://www.npmjs.com/package/zentao-cli) npm package. These are per-machine dependencies — setup only verifies them and recommends the credential approach; it never installs, logs in, or handles secret values itself.
 
 - Run `zentao --version`. If the command is missing or errors, say the two zentao skills won't work yet and give the install command: `npm install -g zentao-cli` (or `bun` / `pnpm`; one-off use can go through `npx zentao-cli`). Don't treat it as a setup failure — everything else this skill deploys works without it.
 - Credentials: recommend the user configure environment variables themselves in bash — `ZENTAO_URL`, `ZENTAO_ACCOUNT`, `ZENTAO_TOKEN` (or `ZENTAO_PASSWORD`) exported in `~/.bashrc`, then `source ~/.bashrc`. Env credentials take priority over local profiles and password mode avoids token expiry. Setup never writes or fills these values.
 - Alternative for personal machines: `zentao login --web` where the installed version supports it (older versions: the user runs that version's own login in their terminal).
+- Confluence: the vendored `confluence` skill drives the `confluence` command from the [`confluence-cli`](https://www.npmjs.com/package/confluence-cli) npm package. Run `confluence --version`; if missing, give `npm install -g confluence-cli` and point the user to `confluence init` or the `~/.config/confluence-cli/config.json` profile for credentials (setup never writes or fills these). Same non-failure rule as above — everything else this skill deploys works without it.
 
 ### 6. Done
 
-Tell the user the setup is complete and which skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch. If step 5 found the `zentao` CLI missing, repeat the install reminder once in this summary.
+Tell the user the setup is complete and which skills will now read from these files. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch. If step 5 found a third-party CLI missing, repeat the install reminder once in this summary.

@@ -1,9 +1,13 @@
 {
   "name": "zy-skills",
-  "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills. Fork of mattpocock/skills in base/ + sdd/ buckets.",
-  "version": "1.0.2",
+  "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills and vendored third-party zentao skills. Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus third-party/.",
+  "version": "1.2.0",
   "license": "MIT",
   "skills": [
+    "./skills/dev/grill-with-docs",
+    "./skills/dev/prototype",
+    "./skills/dev/domain-modeling",
+    "./skills/dev/codebase-design",
     "./skills/dev/codemap",
     "./skills/dev/setup-skills",
     "./skills/dev/review",
@@ -13,8 +17,15 @@
     "./skills/dev/to-prd",
     "./skills/general/route",
     "./skills/general/handoff",
+    "./skills/general/grill-me",
+    "./skills/general/grilling",
+    "./skills/general/teach",
+    "./skills/general/writing-great-skills",
     "./skills/sdd/to-spec",
     "./skills/sdd/tdd",
-    "./skills/sdd/sdd-flow"
+    "./skills/sdd/sdd-flow",
+    "./skills/third-party-zentao/zentao-cli",
+    "./skills/third-party-zentao/zentao-tour",
+    "./skills/third-party-confluence/confluence"
   ]
 }

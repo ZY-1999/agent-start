@@ -23,7 +23,8 @@ agent-start/
 │   ├── general/          # 开发无关 skill（6 个）
 │   ├── dev/              # 开发相关 skill（11 个）
 │   ├── sdd/              # SDD 流水线 skill（3 个）
-│   └── third-party/      # 第三方 skill（2 个，vendored，现含禅道 zentao-cli / zentao-tour）
+│   ├── third-party-zentao/    # 第三方 skill：禅道（2 个，vendored 自 easysoft/zentao-cli）
+│   └── third-party-confluence/ # 第三方 skill：Confluence（1 个，vendored 自 pchuri/confluence-cli）
 ├── scripts/              # 多平台链接脚本（Claude CLI / OpenCode）
 ├── .claude-plugin/       # Claude Code plugin / marketplace 清单
 ├── .codebuddy-plugin/    # CodeBuddy 本地 marketplace
@@ -59,12 +60,13 @@ Demo 08 例外：它是独立的**SDD 仓库模板**（`AGENTS.md` 索引 `docs/
 
 ## Skills：配套 SDD skills（多平台适配）
 
-讲义第四章与 Demo 08 引用的 SDD skills 全量收录在 [`skills/`](./skills/)（fork 自 [mattpocock/skills](https://github.com/mattpocock/skills)，并做本地化扩展），按功能语义分为三个自研桶共 20 个；另有第三方桶收录外部 vendored skill（v1.1.0 新增）：
+讲义第四章与 Demo 08 引用的 SDD skills 全量收录在 [`skills/`](./skills/)（fork 自 [mattpocock/skills](https://github.com/mattpocock/skills)，并做本地化扩展），按功能语义分为三个自研桶共 20 个；另有第三方桶收录外部 vendored skill（v1.1.0 起引入，v1.2.0 拆分为禅道 / Confluence 两桶）：
 
 - **[`skills/general/`](./skills/general/README.md)**：6 个开发无关 skill——grill-me、grilling、teach、writing-great-skills（mattpocock）+ `/route`、`/handoff`（fork 扩展），对任何项目、任何话题都可用
 - **[`skills/dev/`](./skills/dev/README.md)**：11 个开发相关 skill——grill-with-docs、prototype、domain-modeling、codebase-design（mattpocock）+ `/codemap`、`/setup-skills`、`/review`、`/idea-to-prd`、`/improve-architecture`、`/diagnose-bug`、`/to-prd`（fork 扩展），含 SDD 前半段入口、父项产出与基础设施
 - **[`skills/sdd/`](./skills/sdd/README.md)**：3 个 SDD 执行核心 skill——`/to-spec`、`/tdd`、`/sdd-flow`，构成 spec → tdd → review → maintain 后半段闭环，详见 [skills/sdd/README.md](./skills/sdd/README.md)
-- **[`skills/third-party/`](./skills/third-party/README.md)**：2 个第三方 skill——`zentao-cli`、`zentao-tour`（[easysoft/zentao-cli](https://github.com/easysoft/zentao-cli) 官方出品，原样引入），通过 `zentao` 命令操作禅道；依赖全局安装 `npm install -g zentao-cli`，凭证推荐在 `~/.bashrc` 自行 export 环境变量（`ZENTAO_URL`/`ZENTAO_ACCOUNT`/`ZENTAO_TOKEN`|`ZENTAO_PASSWORD`），本机登录为备选
+- **[`skills/third-party-zentao/`](./skills/third-party-zentao/README.md)**：2 个第三方 skill——`zentao-cli`、`zentao-tour`（[easysoft/zentao-cli](https://github.com/easysoft/zentao-cli) 官方出品，原样引入），通过 `zentao` 命令操作禅道；依赖全局安装 `npm install -g zentao-cli`，凭证推荐在 `~/.bashrc` 自行 export 环境变量（`ZENTAO_URL`/`ZENTAO_ACCOUNT`/`ZENTAO_TOKEN`|`ZENTAO_PASSWORD`），本机登录为备选
+- **[`skills/third-party-confluence/`](./skills/third-party-confluence/README.md)**：1 个第三方 skill——`confluence`（[pchuri/confluence-cli](https://github.com/pchuri/confluence-cli)，原样引入），通过 `confluence` 命令读取、搜索、创建、更新、移动、删除 Confluence 页面与附件并做格式转换；依赖全局安装 `npm install -g confluence-cli`，凭证用本机配置 `~/.config/confluence-cli/config.json`（或 `confluence init`）
 
 ### 多平台安装
 

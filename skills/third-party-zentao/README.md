@@ -1,6 +1,6 @@
-# 第三方 skill（vendored）
+# 第三方 skill：禅道（vendored）
 
-从外部仓库原样引入的 skill，共 2 个，不属于本仓库 fork 自 mattpocock/skills 的自研血脉（general/ dev/ sdd/），**不参与**与 skills 源仓的同步映射。两 skill 保持上游目录结构互为兄弟，内部相对链接（`../zentao-cli/SKILL.md` 等）依赖这一点，勿拆散。
+禅道官方的 vendored skill，共 2 个，不属于本仓库 fork 自 mattpocock/skills 的自研血脉（general/ dev/ sdd/），**不参与**与 skills 源仓的同步映射。两 skill 保持上游目录结构互为兄弟，内部相对链接（`../zentao-cli/SKILL.md` 等）依赖这一点，勿拆散。Confluence 的 vendored skill 在兄弟桶 [`skills/third-party-confluence/`](../third-party-confluence/README.md)。
 
 ## 收录清单
 

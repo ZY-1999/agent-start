@@ -2,11 +2,12 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-10-14`
+- Last updated: `2026-10-16`
+- Updated: `2026-10-16` — `skills/third-party/` 重命名为 `skills/third-party-zentao/`；新增 `skills/third-party-confluence/`（confluence skill，vendored 自 pchuri/confluence-cli@`6c0d4af`，v2.30.0）；`/setup-skills` 步骤 5 扩为检查 `zentao` / `confluence` 两个 CLI，Agent Notice 模板与根 `AGENTS.md` 节改为 Third-party skills (zentao / confluence)；插件清单 1.1.0→1.2.0
 - Updated: `2026-10-14` — 08 由模板示例扩为完整订单管理应用（backend/frontend/单 jar 交付）；新增插件 hooks（commit review 门）；01–07 `DEMO.md` 精简；插件清单 1.0.1→1.0.2
 - Updated: `2026-10-14` — 新增 `skills/third-party/` 第三方桶（zentao-cli 0.3.1 / zentao-tour 0.3.0-beta.1，vendored 自 easysoft/zentao-cli@`ce36cf5`）；`/setup-skills` 新增步骤 5（检查 `zentao` CLI 安装，凭证推荐用户在 `~/.bashrc` 自行 export 环境变量），Agent Notice 模板与根 `AGENTS.md` 增加 Zentao skills 节；插件清单 1.0.2→1.1.0
 - Project: agent-start（内部 git 名 `ongoal-skills`）
-- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 22 个 skills（20 自研 + 2 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
+- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 23 个 skills（20 自研 + 3 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
 - Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash；Demo 08 另含 Java（Spring Boot 2.7 / MyBatis-Plus）与 TypeScript（React 18 + antd 5 + Vite）
 - Runtime / deployment shape: 无运行时。讲义浏览器直接打开；skills 经插件清单/链接脚本安装到各客户端
 - Primary entry types: 人类入口 `README.md` / `docs/index.html`；agent 入口 `AGENTS.md`；安装入口 `scripts/`
@@ -57,8 +58,8 @@ Node: agent-start
     - Entry: 01–07 各目录 `DEMO.md`（精简为 目标/对比/演示步骤/推荐 Prompt 四节）；08 是可运行应用，入口 `docs/demos/08-project-demo/AGENTS.md` + `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）
     - Feature CodeMap: pending（08 订单管理应用值得单建，见 Backlog）
     - Status: `confirmed`
-  - skills 集合（自研 20 + 第三方 vendored 2）:
-    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3) `skills/third-party/`(2)
+  - skills 集合（自研 20 + 第三方 vendored 3）:
+    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3) `skills/third-party-zentao/`(2) `skills/third-party-confluence/`(1)
     - Entry: 各 `skills/<桶>/<名>/SKILL.md`
     - Feature CodeMap: pending（见 Backlog）
     - Status: `confirmed`
@@ -91,9 +92,9 @@ Node: agent-start
   - `skills/<general|dev|sdd>/`:
     - Responsibility: 插件发布的自研 skills 源码（fork 血脉）；每桶一份 README
     - Risk notes: 改动会经三份平台清单分发，需同步检查（见 Risk Areas）
-  - `skills/third-party/`:
-    - Responsibility: 外部 vendored skills（现含 easysoft/zentao-cli 的 zentao-cli / zentao-tour）；原样引入，README 记录上游 commit 基线与版本
-    - Risk notes: **不参与** fork 上游同步映射；更新走上游整目录覆盖；两个 skill 互为兄弟目录（内部相对链接依赖此布局）；运行依赖全局 `zentao` CLI（npm `zentao-cli`）
+  - `skills/third-party-zentao/`、`skills/third-party-confluence/`:
+    - Responsibility: 外部 vendored skills 按上游分桶（zentao 桶：easysoft/zentao-cli 的 zentao-cli / zentao-tour；confluence 桶：pchuri/confluence-cli 的 confluence）；原样引入，各桶 README 记录上游 commit 基线与版本
+    - Risk notes: **不参与** fork 上游同步映射；更新走上游整目录覆盖并更新基线；zentao 桶两个 skill 互为兄弟目录（内部相对链接依赖此布局）；运行依赖全局 `zentao` / `confluence` CLI（npm `zentao-cli` / `confluence-cli`）
   - `docs/agents/`:
     - Responsibility: 本仓库契约（issue-tracker / triage-labels / domain / git-contract），`/setup-skills` 于 2026-10-13 部署
   - `scripts/`:
@@ -136,8 +137,8 @@ Node: agent-start
 - Status: `confirmed`
 - Children:
   - 上游 fork: [mattpocock/skills](https://github.com/mattpocock/skills)，fork 维护规则见 ZY-1999/skills（README 尾注）
-  - 第三方 vendored 源: [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli)（`skills/third-party/`，MIT；基线 commit `ce36cf5`）
-  - 运行时第三方依赖: 无（HTML 零外部资源）；zentao 两个 skill 例外——需全局安装 `zentao` CLI（npm 包 `zentao-cli`，`/setup-skills` 环境检查探测）
+  - 第三方 vendored 源: [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli)（`skills/third-party-zentao/`，MIT；基线 commit `ce36cf5`）、[pchuri/confluence-cli](https://github.com/pchuri/confluence-cli)（`skills/third-party-confluence/`，MIT；基线 commit `6c0d4af`）
+  - 运行时第三方依赖: 无（HTML 零外部资源）；第三方 skill 例外——zentao 需全局安装 `zentao` CLI（npm 包 `zentao-cli`），confluence 需全局安装 `confluence` CLI（npm 包 `confluence-cli`），`/setup-skills` 环境检查探测
   - 安装目标端: Claude Code / OpenCode / CodeBuddy / Cursor / ZCode
 - failure surfaces: 上游演进与本地 fork 的漂移（README 声明有维护规则，细节未核实）
 - Evidence: README、插件清单
@@ -206,7 +207,7 @@ Node: agent-start
 - Status: `confirmed`
 - Backlog:
   - skills 目录地形图:
-    - Why: 22 个 skill 分四桶（含 third-party vendored），改/增 skill 是本仓库最高频操作，且牵动分发链
+    - Why: 23 个 skill 分五桶（含 third-party vendored 两桶），改/增 skill 是本仓库最高频操作，且牵动分发链
     - Likely entry: `skills/*/README.md`
     - Likely files: 各 `SKILL.md` + 插件清单
     - Priority: 高（下次动 skills 前建）
@@ -226,7 +227,7 @@ Node: agent-start
 | 讲义 | `docs/index.html` | 浏览器打开 | pending | confirmed |
 | Demo（01–07 现场） | `docs/demos/01..07-*` | 各 `DEMO.md`（精简版） | pending | confirmed |
 | Demo 08 应用 | `docs/demos/08-project-demo/{backend,frontend}` | `AGENTS.md` + `.scratch/` PRD/specs | pending（Backlog） | confirmed |
-| skills 集合 | `skills/{general,dev,sdd,third-party}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
+| skills 集合 | `skills/{general,dev,sdd}` + `skills/third-party-{zentao,confluence}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
 | 安装分发 | `scripts/` + 三份插件清单 + `hooks/` | `link-*.sh` | pending | confirmed |
 
 ### Module Index Table
