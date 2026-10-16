@@ -61,6 +61,11 @@ Node: order-admin
     - Entry: `GET /api/orders/export?kw=&status=`
     - Feature CodeMap: pending
     - Status: `confirmed`（2026-10-14 新增，提交 72eedeb 系列）
+  - 订单导出 Excel:
+    - Main modules: `web/OrderController#exportXlsx`、`web/OrderExcel`、`service OrderService#export`、`dao OrderMapper#selectActiveAll`
+    - Entry: `GET /api/orders/export.xlsx?kw=&status=`
+    - Feature CodeMap: pending
+    - Status: `confirmed`（2026-10-14 新增，EasyExcel 3.3.4）
   - 汇总看板:
     - Main modules: `service/impl/OrderStatsServiceImpl`、`frontend/src/pages/DashboardPage.tsx`
     - Entry: `GET /api/orders/stats`、UI `/dashboard`
@@ -94,7 +99,7 @@ Node: order-admin
     - Risk notes: 查询 SQL 全在 `resources/mapper/OrderMapper.xml`，改字段需同步 XML 列清单
   - `backend …/service/`: 接口层 `OrderService`/`OrderStatsService` + `impl/`；命令与异常（`CreateOrderCommand`、`BadOrderRequestException`、`OrderConflictException`、`OrderNotFoundException`）；`Amounts`（金额舍入）；`DemoDataService`/`DemoSeedRunner`
     - Risk notes: `OrderServiceImpl` 创建用 `REQUIRES_NEW` 独立事务支持撞号换号重试
-  - `backend …/web/`: `OrderController`（7 个端点）、DTO（`CreateOrderRequest`/`OrderResponse`/`OrderPageResponse`/`ResetResponse`）、`GlobalExceptionHandler`（400/404/409 统一 Result）、`SpaResourceConfig`、`OrderCsv`（包级 CSV 组装）
+  - `backend …/web/`: `OrderController`（8 个端点）、DTO（`CreateOrderRequest`/`OrderResponse`/`OrderPageResponse`/`ResetResponse`）、`GlobalExceptionHandler`（400/404/409 统一 Result）、`SpaResourceConfig`、`OrderCsv`（包级 CSV 组装）、`OrderExcel`（包级 Excel 组装，EasyExcel 注解行模型 + 数值单元格）
     - Risk notes: 非法状态在 Controller 层拦截（分页返回空页、导出返回仅表头）
   - `frontend/src/`: `api/order.ts`（axios 封装 + 类型）、`pages/OrdersPage.tsx`、`pages/DashboardPage.tsx`、`layout/AppShell.tsx`（菜单 + 重置）、`status.ts`（状态中文映射）、`App.tsx`（路由）
     - Key dependencies: antd 5（zhCN locale）、echarts、axios、react-router-dom
@@ -114,6 +119,7 @@ Node: order-admin
     - `POST /api/orders` → `create`（`@Valid CreateOrderRequest`）
     - `GET /api/orders?kw=&status=&page=&size=` → `page`（size 仅 10/20/50）
     - `GET /api/orders/export?kw=&status=` → `export`（CSV 附件，UTF-8 BOM）
+    - `GET /api/orders/export.xlsx?kw=&status=` → `exportXlsx`（.xlsx 附件，数值单元格）
     - `PUT /api/orders/{id}` → `update`（订单号不变）
     - `DELETE /api/orders/{id}` → `delete`（逻辑删）
     - `GET /api/orders/stats` → `stats`（KPI + 状态分布 + 近 7 日趋势）
@@ -166,7 +172,8 @@ Node: order-admin
 - Purpose: 主要跨模块链路
 - Major Flows:
   - 创建订单: `OrdersPage 表单` → `api/order.ts#createOrder` → `OrderController#create` → `OrderServiceImpl#create`（`nextOrderNo`=ORD+yyyyMMddHHmmss+3位随机；`DuplicateKeyException` 最多重试 3 次，`REQUIRES_NEW` 独立事务）→ `OrderMapper.insert`
-  - 导出 CSV: `OrdersPage 导出按钮`（拼 kw/status 到 `<a>` 下载）→ `OrderController#export`（非法状态→空列表）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll`（`create_time DESC, id DESC`）→ `OrderCsv.csv`（BOM + 全字段引号转义 + 公式前缀加 `'`）→ 流式响应
+  - 导出 CSV: `OrdersPage 导出下拉·CSV 项`（拼 kw/status 到 `<a>` 下载）→ `OrderController#export`（非法状态→空列表）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll`（`create_time DESC, id DESC`）→ `OrderCsv.csv`（BOM + 全字段引号转义 + 公式前缀加 `'`）→ 流式响应
+  - 导出 Excel: `OrdersPage 导出下拉·Excel 项`（同一 `<a>` 下载辅助函数，仅路径为 `/export.xlsx`）→ `OrderController#exportXlsx`（与 CSV 同一套过滤/非法状态语义）→ `OrderServiceImpl#export` → `OrderMapper.selectActiveAll` → `OrderExcel.xlsx`（EasyExcel 注解行模型，金额/数量为数值单元格，写出直连响应流）
   - 打包: `mvn package` → prepare-package 先 npm build 再拷 `frontend/dist` → `classpath:/static` → `SpaResourceConfig` 兜底回退 index.html
   - 启动播种: `DemoSeedRunner` → `DemoDataService#seedIfEmpty`（无未删除订单时写 8 条，日期=今天-daysAgo 12:00）
 - Evidence: 各链路源码通读
@@ -187,9 +194,9 @@ Node: order-admin
   - Logs / metrics: 无（logback 控制台）
   - Known CI checks: 无
 - Edges / Children:
-  - proves: 全部 REST 端点行为（含导出 BOM/倒序/转义、逻辑删除、重置幂等、SPA 回退）
+  - proves: 全部 REST 端点行为（含导出 BOM/倒序/转义、Excel 导出类型化单元格/过滤/仅表头、逻辑删除、重置幂等、SPA 回退）
   - does not prove: 真实并发撞号概率、Excel 打开体验（人工验收）、前端交互回归（无前端自动化测试）
-- Evidence: 测试源码 + 本机 2026-10-14 全绿（14/14）
+- Evidence: 测试源码 + 本机 2026-10-14 全绿（19/19，ApiTest 14 + ControllerTest 5）
 - Unknowns: 无
 - Next Drill-Down: 改 SQL/接口时优先跑 `OrderControllerApiTest`
 
@@ -237,6 +244,7 @@ Node: order-admin
 | --- | --- | --- | --- | --- |
 | 订单 CRUD | OrderController / OrderServiceImpl / OrderMapper | `POST·GET·PUT·DELETE /api/orders` | pending | confirmed |
 | 导出 CSV | OrderController#export / OrderCsv / selectActiveAll | `GET /api/orders/export` | pending | confirmed |
+| 导出 Excel | OrderController#exportXlsx / OrderExcel / selectActiveAll | `GET /api/orders/export.xlsx` | pending | confirmed |
 | 汇总看板 | OrderStatsServiceImpl / DashboardPage | `GET /api/orders/stats`、`/dashboard` | pending | confirmed |
 | 示例数据/重置 | DemoDataService / DemoSeedRunner | `POST /api/orders/reset`、Runner | pending | confirmed |
 | SPA 托管 | SpaResourceConfig | 非 `/api` 未知路径 | pending | confirmed |
@@ -248,7 +256,7 @@ Node: order-admin
 | common | `backend …/common/` | 统一响应、状态枚举 | 无 | — |
 | dao | `backend …/dao/` | 表访问 + 实体 | MyBatis-Plus | SQL 在 XML，列清单手写 |
 | service | `backend …/service/` | 业务、金额、示例数据 | dao | 创建走 REQUIRES_NEW |
-| web | `backend …/web/` | 端点、DTO、CSV、异常、SPA | service | 非法状态在 Controller 拦 |
+| web | `backend …/web/` | 端点、DTO、CSV/Excel 组装、异常、SPA | service、EasyExcel | 非法状态在 Controller 拦 |
 | frontend | `frontend/src/` | 页面、API 封装、路由 | antd/echarts/axios | dev 代理 /api→8080 |
 
 ### Cross-Module Flow Table
@@ -257,6 +265,7 @@ Node: order-admin
 | --- | --- | --- | --- | --- |
 | 创建订单 | web→service→dao | `POST /api/orders` | 落库（撞号换号重试） | pending |
 | 导出 CSV | web→service→dao→OrderCsv | `GET /api/orders/export` | CSV 附件（倒序） | pending |
+| 导出 Excel | web→service→dao→OrderExcel | `GET /api/orders/export.xlsx` | .xlsx 附件（倒序、数值单元格） | pending |
 | 打包 | frontend→static | `mvn package` | 单 jar 含前端 | pending |
 | 启动播种 | Runner→DemoDataService | 启动 | 空表时 8 条示例 | pending |
 
@@ -266,8 +275,9 @@ Node: order-admin
 - `backend/src/main/resources/mapper/OrderMapper.xml`: 全部查询 SQL（排序/过滤语义）
 - `backend/…/web/OrderController.java`: 7 个端点
 - `backend/…/web/OrderCsv.java`: CSV 组装规则
+- `backend/…/web/OrderExcel.java`: Excel 组装规则（EasyExcel 行模型）
 - `backend/src/test/…/OrderControllerApiTest.java`: 端点行为锚点
-- `frontend/src/pages/OrdersPage.tsx`: 订单页（含导出按钮）
+- `frontend/src/pages/OrdersPage.tsx`: 订单页（含「导出」下拉：CSV / Excel 两项）
 - `frontend/src/api/order.ts`: 前后端契约
 - `docker-compose.yml`: 本地 MySQL
 - `PROJECT_KNOWLEDGE.md`: 本机构建/测试环境坑（未入库）
