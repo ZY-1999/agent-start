@@ -1,0 +1,41 @@
+{
+  "name": "zy-skills",
+  "version": "1.2.0",
+  "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills and vendored third-party skills (zentao, confluence). Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus third-party-zentao/ + third-party-confluence/.",
+  "description_i18n": {
+    "en": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills and vendored third-party skills (zentao, confluence).",
+    "zh-CN": "规格驱动开发（SDD）技能集：拷问式开局、PRD/spec 拆解、TDD、代码地图与端到端流程，含通用基础技能与第三方 vendored 技能（禅道、Confluence）。"
+  },
+  "author": {
+    "name": "ZY-1999",
+    "url": "https://github.com/ZY-1999/agent-start"
+  },
+  "homepage": "https://github.com/ZY-1999/agent-start",
+  "license": "MIT",
+  "skills": [
+    "./skills/dev/grill-with-docs",
+    "./skills/dev/prototype",
+    "./skills/dev/domain-modeling",
+    "./skills/dev/codebase-design",
+    "./skills/dev/codemap",
+    "./skills/dev/setup-skills",
+    "./skills/dev/review",
+    "./skills/dev/idea-to-prd",
+    "./skills/dev/improve-architecture",
+    "./skills/dev/diagnose-bug",
+    "./skills/dev/to-prd",
+    "./skills/general/route",
+    "./skills/general/handoff",
+    "./skills/general/grill-me",
+    "./skills/general/grilling",
+    "./skills/general/teach",
+    "./skills/general/writing-great-skills",
+    "./skills/sdd/to-spec",
+    "./skills/sdd/tdd",
+    "./skills/sdd/sdd-flow",
+    "./skills/third-party-zentao/zentao-cli",
+    "./skills/third-party-zentao/zentao-tour",
+    "./skills/third-party-confluence/confluence"
+  ],
+  "hooks": "hooks/hooks.json"
+}

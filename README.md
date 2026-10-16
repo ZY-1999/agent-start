@@ -28,7 +28,8 @@ agent-start/
 ├── scripts/              # 多平台链接脚本（Claude CLI / OpenCode）
 ├── .claude-plugin/       # Claude Code plugin / marketplace 清单
 ├── .codebuddy-plugin/    # CodeBuddy 本地 marketplace
-└── .cursor-plugin/       # Cursor 插件清单
+├── .cursor-plugin/       # Cursor 插件清单
+└── .zcode-plugin/        # ZCode 插件清单（ZCode 优先探测；市场复用 .claude-plugin/marketplace.json）
 ```
 
 ## 讲义对应的内容框架
@@ -76,7 +77,8 @@ Demo 08 例外：它是独立的**SDD 仓库模板**（`AGENTS.md` 索引 `docs/
 | Claude Code（本地链接） | `scripts/link-skills.sh` 把全部 skills 链接进 `~/.claude/skills`                                                                                                 |
 | OpenCode                | `scripts/link-opencode-skills.sh` 按 `plugin.json` 注册清单链接到 `~/.config/opencode/skills`（Windows 走 junction，幂等可重跑）                                 |
 | CodeBuddy               | 本地 marketplace：[.codebuddy-plugin/](./.codebuddy-plugin/marketplace.json)                                                                                     |
-| Cursor                  | 插件清单：[.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json)（四桶全部 22 个）                                                                            |
+| Cursor                  | 插件清单：[.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json)（五桶全部 23 个）                                                                            |
+| ZCode                   | 插件市场添加仓库根目录（市场源为 [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json)，ZCode 兼容），安装 `zy-skills`；组件清单读 [.zcode-plugin/plugin.json](./.zcode-plugin/plugin.json)（ZCode 探测顺序：`.zcode-plugin` > `.claude-plugin` > `.codex-plugin`） |
 
 ### Hook：提交前 review 门禁（v1.0.2 新增）
 
