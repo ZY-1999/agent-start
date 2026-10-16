@@ -1,0 +1,416 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI 编码模型选型指南：档位、价格与基准怎么读 · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout.reco {
+    border: 1px solid #d5d9f2;
+    border-left: 4px solid var(--accent);
+    background: #f7f8fd;
+  }
+  .callout.reco h4 { color: var(--accent-dark); }
+  .callout.warn {
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--warn);
+    background: #fdf7ee;
+  }
+  .callout.warn h4 { color: var(--warn); }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .feat { display: flex; gap: 18px; margin: 26px 0; }
+  .feat .n {
+    flex: none;
+    width: 40px; height: 40px;
+    border-radius: 12px;
+    background: var(--accent-light);
+    color: var(--accent-dark);
+    display: flex; align-items: center; justify-content: center;
+    font-weight: 800; font-size: 17px;
+    font-family: ui-monospace, Consolas, monospace;
+  }
+  .feat h3 { margin: 4px 0 6px; font-size: 18px; }
+  .feat p { margin: 0; font-size: 15.5px; color: var(--text-soft); }
+  @media (max-width: 640px) { .feat { gap: 12px; } .feat .n { width: 34px; height: 34px; font-size: 15px; } }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+  .p { color: var(--warn); font-weight: 600; }
+  .hl td { background: #eef3fe !important; }
+
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 之三 · 面向技术负责人与管理者</span>
+    <h1>AI 编码模型选型指南<br>档位、价格与基准怎么读</h1>
+    <p class="sub">选模型时，真正容易踩坑的往往不是"买哪家"，而是三个想当然：最贵的一定最好、跑分可以直接横比、选完就能用很久。</p>
+    <p class="meta">数据核验截至 2026-10-16 · 价格以各官网实时页面为准 · 通读约 15 分钟 · 配套：<a href="AI编程现状速览.html">行业现状</a> · <a href="AI编程名词课.html">名词课</a> · <a href="AI编程客户端选型.html">客户端选型</a> · <a href="AI编程落地指南.html">落地指南</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">厂商都在按档位卖能力</a></li>
+    <li><a href="#s2">价格与能力全景（2026-10）</a></li>
+    <li><a href="#s3">基准分数怎么读：五个陷阱</a></li>
+    <li><a href="#s4">任务分级选档矩阵</a></li>
+    <li><a href="#s5">私有化：数据不出内网时怎么选</a></li>
+    <li><a href="#s6">订阅还是按量</a></li>
+    <li><a href="#s7">结论：国产 + 海外双轨</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>厂商都在按档位卖能力</h2>
+  <p class="lead">很少有"永远最好"的模型，更常见的是把任务派给合适的档位。</p>
+
+  <p>所有厂商的产品线都遵循同一套商业逻辑：把能力切成几档，按能力收费。以 Anthropic 现役产品线为例，从高到低是：</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:18%">档位</th><th style="width:44%">定位</th><th>典型用途</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">Mythos</td><td>受限顶级档，需资质审核，有出口管制风险</td><td>受管制的高能力场景</td></tr>
+        <tr><td class="dim">Fable / Opus</td><td>通用旗舰，攻坚主力</td><td>复杂重构、疑难排查、架构级任务</td></tr>
+        <tr><td class="dim">Sonnet</td><td>均衡档，性价比最优</td><td>日常 Agent 任务、多数开发工作</td></tr>
+        <tr><td class="dim">Haiku</td><td>小快档</td><td>补全、批量小改、分类摘要</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>Gemini、GPT 和国产各家也是类似切法，只是名字不同。从这套分层里，至少能抽出两条纪律：</p>
+  <ol>
+    <li>别让所有人和所有任务都跑最高档。补全、单测、小改用中档或快档通常就够，旗舰留给真正难的任务，账单差会非常明显。</li>
+    <li>关键流程不要绑死一家模型。顶级档可能因监管、出口管制或安全事件被限权或临时下架，2026 年已经出现过，要留一条替补通道。</li>
+  </ol>
+
+  <p>还有一个隐藏旋钮：<strong>思考强度</strong>。同一模型在 low / medium / high 档下，能力和账单差异巨大。宣传页引用的往往是最高档的分数，你日常跑的却是默认档。拿"最高档的分数"评估"默认档的成本"，是采购里最常见的一笔糊涂账。</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>价格与能力全景（2026-10）</h2>
+  <p class="lead">先看价差，再决定日常用哪档。价格按每百万 token 的输入 / 输出，币种跟厂商页面走。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:22%">模型</th><th style="width:12%">上下文</th><th style="width:20%">价格（输入/输出）</th><th>点评（基准为 Terminal-Bench 4.0 官方榜）</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">Claude Opus 5.5</td><td>1M</td><td>$4 / $20</td><td>Vals AI TB 4.0：65.15%，同 harness 下目前最高</td></tr>
+        <tr class="hl"><td class="dim">Claude Sonnet 5.5</td><td>1M</td><td>$2 / $10</td><td>64.14%，与 Opus 接近、价格一半，日常主力更合适</td></tr>
+        <tr><td class="dim">Claude Fable 5.1</td><td>1M</td><td>$10 / $50</td><td>58.08%；同源限权版 Mythos 需资质审核</td></tr>
+        <tr><td class="dim">Claude Haiku 5.5</td><td>1M（≤100K 优惠价）</td><td>$0.1 / $0.5</td><td>36.36%；补全和小任务档</td></tr>
+        <tr><td class="dim">Gemini 4 Argon</td><td>1M</td><td>$2 / $10（12 月起 $4 / $20）</td><td>57.58%；预算按涨价后口径算</td></tr>
+        <tr><td class="dim">Grok 4.7</td><td>256K</td><td>$2 / $6</td><td>28.79%；窗口够用、单价不高</td></tr>
+        <tr><td class="dim">GPT-6 Astra / 6.1 Sol</td><td>未核实</td><td>Astra $10 / $50；Sol $2 / $10</td><td>Astra 59.60%，Sol 55.05%；Sol 大约是 Astra 的 1/5 价</td></tr>
+        <tr><td class="dim">GLM-5.3（智谱）</td><td>1M</td><td>$1.4 / $4.4</td><td>38.89%；Flash 档 $0.15 / $0.5，开源里较能打</td></tr>
+        <tr><td class="dim">DeepSeek V4.1-Flash</td><td>1M</td><td>$0.15 / $0.60（谷）<br>$0.30 / $1.20（峰）</td><td>19.70%；MIT 开源，单位成本很低。DeepSWE 等其他榜另计</td></tr>
+        <tr><td class="dim">Qwen3.8-Max（阿里）</td><td>1M</td><td>$2 / $6</td><td>34.34%；Flash 档更便宜，国内页价格可能不同</td></tr>
+        <tr><td class="dim">Kimi K3（月之暗面）</td><td>1M</td><td>$3 / $15</td><td>17.17%；规模大，私有化部署门槛高</td></tr>
+        <tr><td class="dim">MiniMax M3</td><td>1M</td><td>$0.3 / $1.2</td><td>同 harness 下 TB 4.0 仅 1.01%，不宜只看 SWE-bench Pro 旧分</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p class="footnote">注：Terminal-Bench 4.0 分数取自 Vals AI 独立复测（Mini-SWE-agent，更新于 2026-10-13），与厂商自报不可直接混比。百度文心、字节 Seed、腾讯混元部分字段仍未核实。输出单价从 Haiku $0.5 到 Fable $50，大约差 100 倍，分级选档就是在这条价差带上做匹配。</p>
+
+  <div class="grid2">
+    <div class="mini">
+      <h5>一组直观对照</h5>
+      <p>同一套 harness 下，Opus 5.5（65.15%）明显强于 GLM-5.3（38.89%）。后者开源、输入价大约是 1/3、输出价大约是 1/5。攻坚用旗舰，日常任务开源档经常已经够用。</p>
+    </div>
+    <div class="mini">
+      <h5>涨价要提前入预算</h5>
+      <p>Gemini 4 Argon 将于 2026-12-01 翻倍（$2/$10 → $4/$20），Gemini 3.8 Flash 在 2027-01 同样翻倍。合同按涨价后口径算。</p>
+    </div>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>基准分数怎么读：五个陷阱</h2>
+  <p class="lead">看到"XX 榜单第一"，先核对这五件事。</p>
+
+  <ol>
+    <li>版本不同不可比。Terminal-Bench 2.1 和 4.0 难度差一个量级，同一模型 2.1 拿 90 分、4.0 只有 31 分。看到"TB 90 分"先问版本号；版本号没有的宣传，默认存疑。</li>
+    <li>思考档位不同不可比。同一模型 high 档和默认档分数差异巨大，高档的 token 消耗是低档的数倍。分数背后是账单。</li>
+    <li>厂商自测有偏差。评测框架、工具链、提示词各家都不同；以第三方官方榜为准，与厂商自报值交叉验证。</li>
+    <li>老基准会过时。SWE-bench Verified 已冻结，新一代模型在上面没有条目，榜首 79.2% 是老时代成绩；LiveCodeBench 和 Aider 已停更，引用这两个分数的基本是旧材料。</li>
+    <li>模拟环境不等于你的仓库。基准是"标准题"，你们的遗留系统、私有框架、内部工具链都不在题里。基准只用来筛掉明显不行的；最终要用自己仓库的 20~30 个真实任务做双盲 A/B，记录人工修正工时。</li>
+  </ol>
+
+  <div class="callout warn">
+    <h4>当前主流基准的品牌识别</h4>
+    <p>2026 年还在维护、可以引用的：Terminal-Bench 4.0、SWE-bench Pro、DeepSWE、NL2Repo、CursorBench。看到 SWE-bench Verified、LiveCodeBench、Aider Polyglot 的分数，先确认基准状态再引用。</p>
+  </div>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>任务分级选档矩阵</h2>
+  <p class="lead">比"换成更便宜的模型"更有效的，通常是给每类任务匹配档位。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:34%">任务类型</th><th style="width:26%">建议档位</th><th>理由</th></tr></thead>
+      <tbody>
+        <tr><td>补全、改注释、重命名</td><td>快档 / 小模型</td><td>量大要求低，用旗舰是浪费</td></tr>
+        <tr><td>写单测、文档、解释代码</td><td>中档</td><td>性价比最优</td></tr>
+        <tr><td>日常功能开发、跨文件小重构</td><td>中档（高档备选）</td><td>需要推理，但吃不到极限能力</td></tr>
+        <tr><td>疑难 bug、大型重构、性能优化</td><td>旗舰 / 高档</td><td>失败一次的代价远超 token 成本</td></tr>
+        <tr><td>长任务编排（多子代理、云端 Agent）</td><td>旗舰 + 严格限额</td><td>长链路错误会累积放大</td></tr>
+        <tr><td>涉密 / 核心系统</td><td>私有化部署模型</td><td>数据不出内网优先于能力</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>再配三件小事：打开<strong>提示缓存</strong>，把规则文件放在固定前缀位置；控制上下文长度，别整仓塞进对话；每月按团队复盘账单。分级选档加上这三件，很多团队能把账单砍掉一半左右，具体幅度要看自己的任务画像。</p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>私有化：数据不出内网时怎么选</h2>
+  <p class="lead">上下文里可能有客户数据或个人信息时，常见选择是开源权重模型加内网部署，而不是把整仓送到公网 SaaS。</p>
+
+  <p>可私有化的现实候选：DeepSeek-V4.1-Flash（MIT，单位成本最低）、Qwen3.8-27B（Apache-2.0，小尺寸适合少量卡起步）、GLM-5.3-Flash（开源 TB 4.0 最高分 GLM-5.3 的轻量同系档）、Kimi-K3 与 MiniMax-M3（规模更大，部署门槛高）。落地前四件事想清楚：</p>
+
+  <div class="feat"><div class="n">1</div><div>
+    <h3>资源需求自己压测</h3>
+    <p>没有任何厂商公布"最低显存/卡数"，官方只给部署配方。按宣传页采购是不可靠的，先拿真实负载压测。</p>
+  </div></div>
+  <div class="feat"><div class="n">2</div><div>
+    <h3>"开源权重"不等于"完全开源"</h3>
+    <p>许可差异大（MIT / Apache-2.0 / 自定义），商用与再分发条款要法务确认过再上生产。</p>
+  </div></div>
+  <div class="feat"><div class="n">3</div><div>
+    <h3>MoE 的"激活参数小"不代表部署便宜</h3>
+    <p>推理时激活的参数少，但整个权重都要装进显存。采购算的是全量权重的账，不是激活量的账。</p>
+  </div></div>
+  <div class="feat"><div class="n">4</div><div>
+    <h3>私有化不等于只买模型</h3>
+    <p>还得配 harness（客户端）、网关、审计日志、凭据管理。模型之外这套配套的成本，常常被初预算漏掉。</p>
+  </div></div>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="no">06</span>订阅还是按量</h2>
+  <p class="lead">判断标准很实际：你们一个真实任务大概烧掉多少 token。</p>
+
+  <p>Agent 跑一个真实任务，读文件、跑测试、看报错、反复修正，很容易烧掉数十万 token。偶尔问一句报错，按量计费就够；高频开发通常订阅更划算，"Coding Plan"就是为这种用量设计的。国内入门价可参考 GLM Coding Plan Lite：月付 ¥118，连续包季折合 ¥94.4/月。海外个人订阅多从 $20/月起。</p>
+
+  <div class="callout reco">
+    <h4>建议姿势</h4>
+    <p>先用按量计费跑两三周，量出团队的真实用量画像（人均日/月消耗、任务分布），再据此谈订阅或企业协议，避免一上来就买大套餐，也避免按错误档位做预算。</p>
+  </div>
+</section>
+
+<!-- ============ 7 ============ -->
+<section id="s7">
+  <h2><span class="no">07</span>结论：国产 + 海外双轨</h2>
+  <p class="lead">下面三条可以直接写进内部选型备忘。</p>
+
+  <ol>
+    <li>双轨并行，别赌一家。日常和涉敏项目可以优先国产模型（价格、私有化、合规路径更清楚），少数攻坚任务再上海外旗舰。用统一网关把差异挡住，团队就不必维护两套完全不同的工具链。顶级模型被限权或下架已经发生过，替补通道建议每季度演练一次。</li>
+    <li>按档位判断能力，不要只记品牌。开源档（GLM、DeepSeek）对不少日常任务已经够用；真正拉开差距的，仍是旗舰档处理疑难重构和长任务时的表现，额度应留给这些场景。</li>
+    <li>跑分只用来筛掉明显不行的。同一基准、同一版本、同一思考强度，三个条件缺一个，比较就不成立。最终拍板还是用自己仓库的 20~30 个真实任务做 A/B。</li>
+  </ol>
+
+  <blockquote>
+    <p>这个市场输出单价可以差约 100 倍。更省钱的决定通常不是"换成某家便宜模型"，而是给每类任务配对档。</p>
+  </blockquote>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>数据来源（核验于 2026-10-16）</h4>
+    <ul>
+      <li>各厂商定价与模型页：Anthropic（<a href="https://platform.claude.com/docs/en/about-claude/pricing">platform.claude.com/pricing</a>）、智谱（<a href="https://docs.z.ai/guides/overview/pricing">docs.z.ai</a>）、DeepSeek（<a href="https://api-docs.deepseek.com/quick_start/pricing">api-docs.deepseek.com</a>）、阿里 Qwen、月之暗面 Kimi、MiniMax、腾讯混元</li>
+      <li>基准榜单：Terminal-Bench 官方站（tbench.ai）；Vals AI Terminal-Bench 4.0 独立复测（<a href="https://www.vals.ai/benchmarks/terminal-bench-4">vals.ai</a>，2026-10-13）；SWE-Bench（swebench.com）；SWE-bench Pro 论文（arxiv.org/abs/2509.16941）</li>
+      <li>订阅套餐：GLM Coding Plan（docs.z.ai）、国产各家官网订阅页</li>
+    </ul>
+    <p><strong>未核实项</strong>：GPT-6 系列官方上下文窗口；百度文心、字节 Seed、腾讯混元的部分基准分；国内站与国际站价差（如 Qwen）。引用前请以官网实时页面复核，这个市场几个月就可能变样。</p>
+    <p>系列阅读：<a href="AI编程现状速览.html">① 行业现状：用得多广，提效多少</a> · <a href="AI编程名词课.html">② 名词课：15 分钟看懂行话</a> · <a href="AI编程客户端选型.html">④ 客户端（Harness）选型</a> · <a href="AI编程落地指南.html">⑤ 落地指南：规范、实操与 90 天路线</a> </p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>

@@ -1,0 +1,362 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>15 分钟看懂 AI 编程：从大模型说到 Harness · 2026-10</title>
+<style>
+  :root {
+    --accent: #8ab4f8;
+    --accent-light: #eef3fe;
+    --accent-border: #d3e0fa;
+    --accent-dark: #3b6fd4;
+    --bg: #ffffff;
+    --bg-soft: #f7f8fc;
+    --text: #1f2430;
+    --text-soft: #4a5264;
+    --text-mute: #7b8394;
+    --border: #e3e6ec;
+    --card: #ffffff;
+    --good: #1e8e3e;
+    --warn: #b45309;
+    --bad: #d93025;
+    --code-bg: #1b2030;
+    --code-ink: #d7dce8;
+    --shadow: none;
+  }
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    font-family: "Segoe UI", "PingFang SC", "Microsoft YaHei", "Noto Sans SC", sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    line-height: 1.8;
+    font-size: 16px;
+  }
+  .wrap { max-width: 880px; margin: 0 auto; padding: 0 24px; }
+
+  header.hero {
+    background: var(--bg);
+    color: var(--text);
+    border-bottom: 1px solid var(--border);
+    padding: 52px 0 34px;
+    margin-bottom: 40px;
+  }
+  header.hero .kicker {
+    display: block;
+    font-size: 13px;
+    letter-spacing: .14em;
+    color: var(--text-mute);
+    margin: 0 0 14px;
+  }
+  header.hero h1 {
+    font-size: 31px;
+    line-height: 1.4;
+    letter-spacing: .3px;
+    margin: 0 0 14px;
+    font-weight: 700;
+  }
+  header.hero p.sub {
+    font-size: 16.5px;
+    color: var(--text-soft);
+    margin: 0 0 20px;
+    max-width: 740px;
+  }
+  header.hero .meta { font-size: 13px; color: var(--text-mute); }
+
+  nav.toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    padding: 22px 26px;
+    margin: 0 0 56px;
+    box-shadow: var(--shadow);
+  }
+  nav.toc strong { display: block; margin-bottom: 10px; font-size: 15px; }
+  nav.toc ol { margin: 0; padding-left: 22px; columns: 2; column-gap: 40px; }
+  nav.toc li { margin: 4px 0; font-size: 15px; break-inside: avoid; }
+  nav.toc a {
+    color: var(--text-soft); text-decoration: none;
+    display: inline-block; padding: 2px 8px; border-radius: 7px; margin-left: -8px;
+  }
+  nav.toc a:hover { background: #f2f3f7; color: var(--text); }
+  @media (max-width: 640px) { nav.toc ol { columns: 1; } }
+
+  section { margin: 0 0 64px; scroll-margin-top: 24px; }
+  h2 {
+    font-size: 25px;
+    line-height: 1.4;
+    margin: 0 0 16px;
+    padding-top: 8px;
+    font-weight: 700;
+  }
+  h2 .no { color: var(--accent-dark); font-family: ui-monospace, Consolas, monospace; margin-right: 10px; font-size: 20px; }
+  h2 + p.lead { color: var(--text-soft); font-size: 16.5px; margin-top: 0; margin-bottom: 22px; }
+  h3 { font-size: 19px; margin: 40px 0 12px; }
+  p { margin: 14px 0; }
+  a { color: var(--accent); }
+  section + section { border-top: 1px solid var(--border); }
+
+  code {
+    font-family: ui-monospace, "Cascadia Code", Consolas, monospace;
+    background: #f1f2f6;
+    border-radius: 5px;
+    padding: 1px 6px;
+    font-size: .85em;
+    color: #374151;
+  }
+
+  blockquote {
+    margin: 16px 0;
+    padding: 2px 0 2px 16px;
+    border-left: 3px solid var(--border);
+    color: var(--text-soft);
+    font-size: 15.5px;
+  }
+  blockquote p { margin: 4px 0; }
+  blockquote strong { color: var(--text); }
+
+  .callout {
+    border-radius: 10px;
+    padding: 16px 20px;
+    margin: 24px 0;
+    border: 1px solid var(--border);
+    background: var(--bg-soft);
+    box-shadow: var(--shadow);
+  }
+  .callout h4 { margin: 0 0 8px; font-size: 16px; }
+  .callout p { margin: 6px 0; }
+  .callout.reco {
+    border: 1px solid #d5d9f2;
+    border-left: 4px solid var(--accent);
+    background: #f7f8fd;
+  }
+  .callout.reco h4 { color: var(--accent-dark); }
+
+  .term {
+    background: var(--bg-soft);
+    border-left: 3px solid var(--accent);
+    border-radius: 0 10px 10px 0;
+    padding: 12px 16px;
+    margin: 16px 0;
+    font-size: 14.5px;
+  }
+  .term .t { font-weight: 600; color: var(--text); display: block; margin-bottom: 2px; }
+
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 16px; margin: 22px 0; }
+  .mini {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    padding: 14px 18px;
+  }
+  .mini h5 { margin: 0 0 8px; font-size: 15px; color: var(--accent-dark); }
+  .mini p { margin: 0; font-size: 14px; color: var(--text-soft); line-height: 1.7; }
+  @media (max-width: 720px) { .grid2 { grid-template-columns: 1fr; } }
+
+  .tablewrap { overflow-x: auto; margin: 26px 0; border: 1px solid var(--border); border-radius: 8px; box-shadow: var(--shadow); }
+  table { border-collapse: collapse; width: 100%; min-width: 720px; background: var(--card); font-size: 14px; }
+  th, td { padding: 11px 13px; text-align: left; border-bottom: 1px solid var(--border); vertical-align: top; line-height: 1.65; }
+  thead th {
+    background: #f5f6f9;
+    font-size: 13px;
+    letter-spacing: .03em;
+    color: var(--text);
+    font-weight: 700;
+    position: sticky; top: 0;
+  }
+  tbody tr:last-child td { border-bottom: none; }
+  tbody tr:nth-child(even) { background: #fafbfd; }
+  td.dim { color: var(--text-soft); white-space: nowrap; font-weight: 600; }
+
+  .footnote { font-size: 13.5px; color: var(--text-soft); }
+
+  footer {
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+    padding: 36px 0 60px;
+    font-size: 13.5px;
+    color: var(--text-soft);
+  }
+  footer h4 { color: var(--text); font-size: 15px; margin: 18px 0 8px; }
+  footer ul { padding-left: 20px; margin: 6px 0; }
+  footer li { margin: 3px 0; word-break: break-all; }
+
+  #top {
+    position: fixed; right: 22px; bottom: 26px;
+    width: 42px; height: 42px; border-radius: 50%;
+    background: var(--card); color: var(--text-soft);
+    border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    text-decoration: none; font-size: 19px;
+    box-shadow: 0 1px 3px rgba(20, 24, 38, .10);
+  }
+  #top:hover { color: var(--text); border-color: #c9cedb; }
+</style>
+</head>
+<body>
+
+<header class="hero">
+  <div class="wrap">
+    <span class="kicker">AI 编程系列 · 之二 · 面向所有岗位</span>
+    <h1>15 分钟看懂 AI 编程<br>从大模型说到 Harness</h1>
+    <p class="sub">这篇不要求你懂代码。我们只拆几个常见问题：大模型怎么生成答案，为什么会一本正经地说错话，Agent 和聊天机器人差在哪，MCP、规则文件、沙箱又各自管什么。</p>
+    <p class="meta">通读约 15 分钟 · 配套文章：<a href="AI编程现状速览.html">行业现状</a> · <a href="AI编码模型选型.html">模型选型</a> · <a href="AI编程客户端选型.html">客户端选型</a> · <a href="AI编程落地指南.html">落地指南</a> </p>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc">
+  <strong>目录</strong>
+  <ol>
+    <li><a href="#s1">大模型：一台会预测下文的发动机</a></li>
+    <li><a href="#s2">Token 与上下文：它为什么会忘事</a></li>
+    <li><a href="#s3">三代形态：从副驾驶到司机</a></li>
+    <li><a href="#s4">Agent 与 Harness：体验差在模型外面</a></li>
+    <li><a href="#s5">生态概念速查表</a></li>
+    <li><a href="#s6">AI 会不会取代程序员</a></li>
+  </ol>
+</nav>
+
+<!-- ============ 1 ============ -->
+<section id="s1">
+  <h2><span class="no">01</span>大模型：一台会预测下文的发动机</h2>
+  <p class="lead">理解 AI 编程，得从模型会做什么、不会做什么说起。</p>
+
+  <p>大模型（LLM）是在海量文本上训练出来的概率模型，核心工作是根据已有内容预测后续 token。网页聊天框里的模型本身只负责生成内容：它看不见你的文件系统，改不了代码，也跑不了命令。所谓"编码模型"，通常是指在代码数据和编程任务上做过针对性训练或强化的模型。</p>
+
+  <p>模型也不是数据库。没有搜索、RAG 或其他工具时，它不能临时查证资料，只能根据训练中学到的模式和当前上下文生成答案。于是，一个不存在的函数名、一个根本没有的参数，也可能被它用很肯定的语气写出来，这就是常说的"幻觉"。生成和核实是两件事，所以 AI 产出必须经过测试、文档或人工复核。</p>
+
+  <h3>快模型、慢模型和"思考档位"</h3>
+  <div class="grid2">
+    <div class="mini">
+      <h5>快模型（非思考）</h5>
+      <p>读完直接给答案。便宜、延迟低，适合代码补全、写单测、改小函数、解释代码这类一次到位的活。</p>
+    </div>
+    <div class="mini">
+      <h5>慢模型（思考/推理）</h5>
+      <p>先在内部"想"一段再回答，可以调思考强度（low / medium / high）。适合复杂重构、跨文件排查、架构问题——更准，但更贵更慢。</p>
+    </div>
+  </div>
+  <p>不少模型允许切换推理强度。小改动用低档，复杂排查再开高档，通常比所有任务都拉满更省钱。高档并不保证每次都更准，却几乎一定更慢、消耗更多 token。任务分级的方法见<a href="AI编码模型选型.html">模型选型篇</a>。</p>
+</section>
+
+<!-- ============ 2 ============ -->
+<section id="s2">
+  <h2><span class="no">02</span>Token 与上下文：它为什么会忘事</h2>
+  <p class="lead">AI 干着干着开始跑偏，往往跟 token 和上下文有关。</p>
+
+  <p><strong>Token</strong>是模型处理文本的最小单位，一段中文、一行代码、一个文件都会折算成若干 token。计费按它算，容量也按它算：同样的内容，代码比自然语言更"碎"，通常更费 token。</p>
+
+  <p><strong>上下文窗口（context window）</strong>是模型单次处理内容的容量上限。你的提问、它读过的文件、命令输出和历史对话，都要占用这块空间。接近上限后，客户端会截断旧内容或压缩成摘要；细节一丢，表现出来就像"忘了前面说过什么"。窗口大小只是上限，不等于模型能同等准确地利用其中每一段信息，因此把整个仓库一次性塞进去通常不是好办法。</p>
+
+  <div class="callout reco">
+    <h4>一个实用认知</h4>
+    <p>AI 表现差，不一定是模型能力不够。相关文件没给、无关日志塞得太多，都会让答案跑偏。把任务目标、必要文件和真实命令结果交代清楚，通常比反复雕琢一句"神奇提示词"更有效，这就是上下文工程要解决的问题。</p>
+  </div>
+</section>
+
+<!-- ============ 3 ============ -->
+<section id="s3">
+  <h2><span class="no">03</span>三代形态：从副驾驶到司机</h2>
+  <p class="lead">从补全到 Agent，变化不只是功能变多，人和 AI 的分工也变了。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:16%">代际</th><th style="width:26%">形态</th><th>人机分工</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">一代</td><td>代码补全（2021～）</td><td>你写主体，它在光标处猜下一行，按 Tab 接受。主语始终是你。</td></tr>
+        <tr><td class="dim">二代</td><td>对话式助手（2022～）</td><td>把报错和代码贴进聊天框问它。它看不见你的仓库，也跑不了你的测试，复制粘贴的搬运工还是你。</td></tr>
+        <tr><td class="dim">三代</td><td>Agent 智能体（现在）</td><td>你只说目标："给订单模块加退款功能，测试跑绿再叫我"，它自己读文件、改代码、跑测试、看报错、接着修，循环到完成。</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>补全和聊天助手主要给建议，执行动作仍由人完成；Agent 则能直接读写仓库、运行命令。权限一旦变大，关注点自然会从"怎么问"转到"能让它做什么，以及怎么验收"。</p>
+</section>
+
+<!-- ============ 4 ============ -->
+<section id="s4">
+  <h2><span class="no">04</span>Agent 与 Harness：体验差在模型外面</h2>
+  <p class="lead">同一个模型放进不同客户端，体验可能差很多，差别主要在模型外面的那套系统。</p>
+
+  <p>光有模型还干不了活，它只有一张嘴。要让它替你动手，得给它配一整车：</p>
+
+  <div class="grid2">
+    <div class="mini"><h5>眼睛</h5><p>读文件、搜代码、看仓库结构的工具，让它"看得见"你的工程。</p></div>
+    <div class="mini"><h5>双手</h5><p>改文件、执行 shell 命令、跑测试、操作 git 的工具调用。</p></div>
+    <div class="mini"><h5>记性与工作方法</h5><p>上下文管理：任务长了会压缩摘要、维护项目记忆，不至于第三小时忘了第三分钟的目标。</p></div>
+    <div class="mini"><h5>刹车与规矩</h5><p>权限控制：删文件、推送、改配置这类危险动作要先过你确认，敏感目录直接禁入。</p></div>
+  </div>
+
+  <div class="term">
+    <p><span class="t">术语卡：Agent 与 Harness</span></p>
+    <p><strong>Agent = 大模型 + 工具 + 循环</strong>：模型不光会说，还能调工具，执行完看结果、再决定下一步，如此循环直到任务完成——读 → 改 → 跑 → 看报错 → 再改。跑这个循环的整套框架，行话叫 <strong>harness</strong>（字面是"马具"：马是模型，缰绳、马鞍就是 harness）。Claude Code、Cursor、Copilot 这些产品，本质都是 harness + 各家模型的组合。</p>
+  </div>
+
+  <blockquote>
+    <p>许多客户端可以调用同一批模型，实际体验仍会不同。上下文怎么组织、工具怎么设计、权限怎么管、失败后怎么重试，都会影响任务能不能完成。选客户端时，模型只是其中一项，harness 的工程质量同样关键。</p>
+  </blockquote>
+
+  <p>聊天机器人通常只给出参考代码，运行和纠错要靠人；Agent 可以在工具允许的范围内改代码、跑测试，再根据真实报错继续修。这个验证闭环能省掉来回复制粘贴的时间，也带来了新的风险：它真的会执行动作，因此权限和沙箱不能省。</p>
+</section>
+
+<!-- ============ 5 ============ -->
+<section id="s5">
+  <h2><span class="no">05</span>生态概念速查表</h2>
+  <p class="lead">技术讨论里最常见的七个词，一张表就能跟上话题。</p>
+
+  <div class="tablewrap">
+    <table>
+      <thead><tr><th style="width:20%">概念</th><th style="width:38%">一句话解释</th><th>为什么要懂</th></tr></thead>
+      <tbody>
+        <tr><td class="dim">MCP</td><td>AI 客户端接入外部系统的开放协议，可以理解为"USB-C 接口"</td><td>决定 AI 能不能连你们的 Jira、CMDB、数据库、日志平台——接上之后它干的就不是"写通用代码"而是"干你们的活"</td></tr>
+        <tr><td class="dim">规则文件</td><td>放仓库里的"给 AI 看的团队规范"（<code>AGENTS.md</code> 等）</td><td>把构建命令、目录约定和禁改项写进仓库，减少团队成员反复口头交代</td></tr>
+        <tr><td class="dim">Skills / 插件</td><td>把可复用的流程（如发版前检查）封装成 AI 随取随用的技能包</td><td>把老员工的经验变成全团队可复用的资产</td></tr>
+        <tr><td class="dim">子代理（sub-agent）</td><td>主 Agent 派出的专职小助手，干探索、写测试、做审查这类细分活</td><td>复杂任务并行化，也防止主上下文被搜索结果塞爆</td></tr>
+        <tr><td class="dim">沙箱 / 权限模式</td><td>限制 AI 只能读、还是能改文件、能不能执行命令、能不能联网</td><td>企业安全的第一道闸门，选型必看</td></tr>
+        <tr><td class="dim">Hooks</td><td>AI 动作前后自动触发的脚本：改完文件自动跑 lint，提交前自动跑测试</td><td>把质量门禁挂在 AI 动作上，不靠人盯</td></tr>
+        <tr><td class="dim">提示缓存</td><td>重复发送的固定前缀（如规则文件）可被缓存</td><td>大规模使用时显著降账单、提速度</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <p>再加两个偶尔出现的词：<strong>RAG</strong> 是"把公司资料检索出来喂给模型"，适合让 AI 查内部知识；<strong>微调</strong> 是"用公司数据再训练模型"，贵且更新慢，多数团队用不上，遇到再展开。</p>
+</section>
+
+<!-- ============ 6 ============ -->
+<section id="s6">
+  <h2><span class="no">06</span>AI 会不会取代程序员</h2>
+  <p class="lead">与其争论会不会取代，不如看任务能否说清、能否验收、由谁担责。</p>
+
+  <ul>
+    <li>能被清晰描述、有验收标准的活，AI 已经能大量接管：样板代码、单测、脚本、日志埋点、接口对接、数据清洗、UI 还原、文档。</li>
+    <li>依赖隐性知识、跨系统权衡、出事要担责的活，仍以人为主：架构决策、性能极限优化、线上事故定位、模糊需求澄清、资金与安全相关逻辑。</li>
+    <li>责任不会转移：AI 可以写代码，但点合并按钮的是人。出了事故，责任属于提交并审查代码的人，这是行业共识，也已写进主流平台的产品规则（AI 代理署名的 PR 需要额外一次人工批准）。</li>
+  </ul>
+
+  <blockquote>
+    <p>AI 更像放大器，不是签字负责的人。代码库混乱、测试缺失时，它会更快地产生难审的改动；规范清楚、反馈及时，它才更容易稳定提效。上线工具前补齐基本流程，往往比买完席位再补治理省事。</p>
+  </blockquote>
+</section>
+
+<footer>
+  <div class="wrap">
+    <h4>延伸阅读</h4>
+    <ul>
+      <li>大数据下的实例与证据，见 <a href="AI编程现状速览.html">《AI 编程行业现状：用得多广，提效多少》</a></li>
+      <li>各家模型的价格与档位怎么选，见 <a href="AI编码模型选型.html">《AI 编码模型选型指南》</a></li>
+      <li>Agent / 客户端怎么选，见 <a href="AI编程客户端选型.html">《AI 编程客户端（Harness）选型指南》</a>；在公司怎么落地（规范、实操与 90 天路线），见 <a href="AI编程落地指南.html">《公司 AI 编程落地指南》</a></li>
+    </ul>
+    <p>本文概念基于各主流产品的公开文档与厂商工程博客整理（2026-10-16 口径）。</p>
+  </div>
+</footer>
+
+</div>
+
+<a id="top" href="#" title="回到顶部" aria-label="回到顶部">↑</a>
+
+</body>
+</html>
