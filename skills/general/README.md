@@ -14,7 +14,7 @@
 
 fork 扩展：
 
-- **[route](./route/SKILL.md)** — 意图 → skill 路由器：说出你想做什么，拿到处理它的那一个 skill（或一条短链）。覆盖本仓库 general/ + dev/ + sdd/ 全部 skills，并承接各 skill 之间的接力决策（批准的 PRD → `/sdd-flow`；诊断结果 → `/to-prd` → `/sdd-flow`）。
+- **[route](./route/SKILL.md)** — 意图 → skill 路由器：说出你想做什么，拿到处理它的那一个 skill（或一条短链）。覆盖本仓库 general/ + dev/ + sdd/ 全部 skills，并承接各 skill 之间的接力决策（批准的 PRD → `/sdd-flow`；诊断结果 → `/to-prd` → `/sdd-flow`；简单且完整的需求 → `/to-spec` → `/tdd`）。
 
 ## 模型调用（Model-invoked）
 

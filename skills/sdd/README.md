@@ -13,12 +13,12 @@ SDD 执行核心 skill，共 3 个（`/to-spec`、`/tdd`、`/sdd-flow`），构�
                 （后半段，从已批准 PRD 到交付）
 ```
 
-旁路入口（均见 dev/）：`/improve-architecture`（架构扫描 → PRD 草稿）、`/diagnose-bug`（根因诊断，诊断即交付；转修复走 `/to-prd` → `/sdd-flow`）、`/to-prd`（已 grilled 对话 → 父项）、`/to-spec` + `/tdd`（手动驱动单个环节）。
+旁路入口（均见 dev/）：`/improve-architecture`（架构扫描 → PRD 草稿）、`/diagnose-bug`（根因诊断，诊断即交付；转修复走 `/to-prd` → `/sdd-flow`）、`/to-prd`（已 grilled 对话 → 父项）、`/to-spec` + `/tdd`（手动驱动单个环节；简单且完整的需求可跳过 grill/PRD 直入 `/to-spec`，见下）。
 
 ## 模型调用（Model-invoked）
 
 - **[sdd-flow](./sdd-flow/SKILL.md)** — 后半段：从已批准 PRD 到交付（spec → build → review → maintain）。入口把 PRD 翻转为 `ready-for-agent`；然后 `/to-spec` 拆解 → Gate A → `/tdd` 逐 spec 实现 → `/review` 复核 → 维护文档，收尾调 `/handoff`。
-- **[to-spec](./to-spec/SKILL.md)** — 把 PRD、bug 或已 grilled 对话拆成 `spec`——原子的、规划完备的单元，agent 在一次 `/tdd` 会话里实现。拆分走 best-of-N + judge；复杂设计用 `/codebase-design` 的 DESIGN-IT-TWICE。
+- **[to-spec](./to-spec/SKILL.md)** — 把 PRD、bug、已 grilled 对话或简单且完整的需求拆成 `spec`——原子的、规划完备的单元，agent 在一次 `/tdd` 会话里实现。简单完整需求经入口完整性门（completeness-bar）校验，不过门退回 `/grill-me` / `/to-prd`。拆分走 best-of-N + judge；复杂设计用 `/codebase-design` 的 DESIGN-IT-TWICE。
 - **[tdd](./tdd/SKILL.md)** — 用测试先行（red-green-refactor）实现一个规划完备的 spec。纯实现：spec 已带接口与按优先级排列的行为，直接从 tracer bullet 开始。
 
 ## Issue 类型

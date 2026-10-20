@@ -2,7 +2,8 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-10-16`
+- Last updated: `2026-10-20`
+- Updated: `2026-10-20` — `/to-spec` 新增第三入口：简单且完整的需求经入口完整性门（completeness-bar）直接拆 spec，不过门退回 `/grill-me` / `/to-prd`；`/route`（Build something）新增对应直连链 `/to-spec` → `/tdd`；两桶 README 与 issue 模板 Parent 注释同步；插件清单 1.2.0→1.3.0
 - Updated: `2026-10-16` — 新增 `.zcode-plugin/plugin.json`（ZCode 插件清单，探测顺序 `.zcode-plugin` > `.claude-plugin` > `.codex-plugin`；skills 数组 23 条 + hooks 声明，版本 1.2.0；市场源复用 ZCode 兼容的 `.claude-plugin/marketplace.json`）
 - Updated: `2026-10-16` — `skills/third-party/` 重命名为 `skills/third-party-zentao/`；新增 `skills/third-party-confluence/`（confluence skill，vendored 自 pchuri/confluence-cli@`6c0d4af`，v2.30.0）；`/setup-skills` 步骤 5 扩为检查 `zentao` / `confluence` 两个 CLI，Agent Notice 模板与根 `AGENTS.md` 节改为 Third-party skills (zentao / confluence)；插件清单 1.1.0→1.2.0
 - Updated: `2026-10-14` — 08 由模板示例扩为完整订单管理应用（backend/frontend/单 jar 交付）；新增插件 hooks（commit review 门）；01–07 `DEMO.md` 精简；插件清单 1.0.1→1.0.2
@@ -111,7 +112,7 @@ Node: agent-start
   - UI / 文档: `docs/index.html`（浏览器直接打开）
   - CLI / commands: `scripts/link-skills.sh`、`scripts/link-opencode-skills.sh`（安装）、`scripts/list-skills.sh`（枚举）
   - Agent 配置入口: `AGENTS.md`（根目录，`## Agent Notice`）
-  - 插件清单: `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/`、`.zcode-plugin/plugin.json`（均 v1.2.0，逐个列出 skills 路径）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
+  - 插件清单: `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/`、`.zcode-plugin/plugin.json`（均 v1.3.0，逐个列出 skills 路径）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
   - Demo 08 运行入口: `docker-compose.yml`（MySQL@3307，root/order_demo）→ `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar`（8080，Flyway 自动建表 + 种子数据）
 - Evidence: 各文件已读
 - Next Drill-Down: 无
