@@ -23,6 +23,7 @@ agent-start/
 │   ├── general/          # 开发无关 skill（6 个）
 │   ├── dev/              # 开发相关 skill（11 个）
 │   ├── sdd/              # SDD 流水线 skill（3 个）
+│   ├── qa/               # 测试侧 skill（5 个）
 │   ├── third-party-zentao/    # 第三方 skill：禅道（2 个，vendored 自 easysoft/zentao-cli）
 │   └── third-party-confluence/ # 第三方 skill：Confluence（1 个，vendored 自 pchuri/confluence-cli）
 ├── scripts/              # 多平台链接脚本（Claude CLI / OpenCode）
@@ -61,11 +62,12 @@ Demo 08 例外：它是独立的**SDD 仓库模板**（`AGENTS.md` 索引 `docs/
 
 ## Skills：配套 SDD skills（多平台适配）
 
-讲义第四章与 Demo 08 引用的 SDD skills 全量收录在 [`skills/`](./skills/)（fork 自 [mattpocock/skills](https://github.com/mattpocock/skills)，并做本地化扩展），按功能语义分为三个自研桶共 20 个；另有第三方桶收录外部 vendored skill（v1.1.0 起引入，v1.2.0 拆分为禅道 / Confluence 两桶）：
+讲义第四章与 Demo 08 引用的 SDD skills 全量收录在 [`skills/`](./skills/)（fork 自 [mattpocock/skills](https://github.com/mattpocock/skills)，并做本地化扩展），按功能语义分为四个自研桶共 25 个；另有第三方桶收录外部 vendored skill（v1.1.0 起引入，v1.2.0 拆分为禅道 / Confluence 两桶）：
 
 - **[`skills/general/`](./skills/general/README.md)**：6 个开发无关 skill——grill-me、grilling、teach、writing-great-skills（mattpocock）+ `/route`、`/handoff`（fork 扩展），对任何项目、任何话题都可用
 - **[`skills/dev/`](./skills/dev/README.md)**：11 个开发相关 skill——grill-with-docs、prototype、domain-modeling、codebase-design（mattpocock）+ `/codemap`、`/setup-skills`、`/review`、`/idea-to-prd`、`/improve-architecture`、`/diagnose-bug`、`/to-prd`（fork 扩展），含 SDD 前半段入口、父项产出与基础设施
 - **[`skills/sdd/`](./skills/sdd/README.md)**：3 个 SDD 执行核心 skill——`/to-spec`、`/tdd`、`/sdd-flow`，构成 spec → tdd → review → maintain 后半段闭环，详见 [skills/sdd/README.md](./skills/sdd/README.md)
+- **[`skills/qa/`](./skills/qa/README.md)**：5 个测试侧 skill——`/qa-flow`（阶段编排）、`/qa-clarify`（需求澄清与疑问清单）、`/qa-cases`（四层用例：冒烟门槛 / 业务场景 / 功能点，含测试数据与校验 SQL 与执行清单；专项默认不出）、`/qa-regress`（修复验证与影响面回归）、`/qa-review`（验收结论 / 演示保障 / 质量复盘）（fork 扩展，v1.3.0 新增），补上 SDD 之外"需求 → 用例 → 回归 → 验收"这条测试链，按**纯手工测试团队**（无自动化、无 CI）设计。被测对象为**内部业务系统**（仅员工使用、无外部用户、当前无专项测试要求），因此性能/安全/兼容/联调不做默认交付，内部系统真正会出事的七类风险（跨组织可见性、按钮级权限、导出脱敏、万级列表、重复提交、并发审批、导出文件格式）归入 L2/L3 权限与列表场景。与 `dev/`、`sdd/` 打通而非并列：`/grill-me` 当场拷问需求、`/to-spec` 承接澄清后的断言、`/review` 提供改动清单供影响面推演、`/diagnose-bug` 接住根因不明的回归，并与 `zentao-cli`（拉 Bug、提 Bug）和 `confluence`（拉需求、发疑问清单）协作；`/tdd` 仅在将来上自动化时启用。跨桶地图与五对易混边界见 [pipeline-map.md](./skills/qa/qa-flow/references/pipeline-map.md)。
 - **[`skills/third-party-zentao/`](./skills/third-party-zentao/README.md)**：2 个第三方 skill——`zentao-cli`、`zentao-tour`（[easysoft/zentao-cli](https://github.com/easysoft/zentao-cli) 官方出品，原样引入），通过 `zentao` 命令操作禅道；依赖全局安装 `npm install -g zentao-cli`，凭证推荐在 `~/.bashrc` 自行 export 环境变量（`ZENTAO_URL`/`ZENTAO_ACCOUNT`/`ZENTAO_TOKEN`|`ZENTAO_PASSWORD`），本机登录为备选
 - **[`skills/third-party-confluence/`](./skills/third-party-confluence/README.md)**：1 个第三方 skill——`confluence`（[pchuri/confluence-cli](https://github.com/pchuri/confluence-cli)，原样引入），通过 `confluence` 命令读取、搜索、创建、更新、移动、删除 Confluence 页面与附件并做格式转换；依赖全局安装 `npm install -g confluence-cli`，凭证用本机配置 `~/.config/confluence-cli/config.json`（或 `confluence init`）
 
@@ -77,7 +79,7 @@ Demo 08 例外：它是独立的**SDD 仓库模板**（`AGENTS.md` 索引 `docs/
 | Claude Code（本地链接） | `scripts/link-skills.sh` 把全部 skills 链接进 `~/.claude/skills`                                                                                                 |
 | OpenCode                | `scripts/link-opencode-skills.sh` 按 `plugin.json` 注册清单链接到 `~/.config/opencode/skills`（Windows 走 junction，幂等可重跑）                                 |
 | CodeBuddy               | 本地 marketplace：[.codebuddy-plugin/](./.codebuddy-plugin/marketplace.json)                                                                                     |
-| Cursor                  | 插件清单：[.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json)（五桶全部 23 个）                                                                            |
+| Cursor                  | 插件清单：[.cursor-plugin/plugin.json](./.cursor-plugin/plugin.json)（六桶全部 28 个）                                                                            |
 | ZCode                   | 插件市场添加仓库根目录（市场源为 [.claude-plugin/marketplace.json](./.claude-plugin/marketplace.json)，ZCode 兼容），安装 `zy-skills`；组件清单读 [.zcode-plugin/plugin.json](./.zcode-plugin/plugin.json)（ZCode 探测顺序：`.zcode-plugin` > `.claude-plugin` > `.codex-plugin`） |
 
 ### Hook：提交前 review 门禁（v1.0.2 新增）
