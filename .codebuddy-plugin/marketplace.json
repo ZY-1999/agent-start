@@ -9,7 +9,7 @@
     {
       "name": "zy-skills",
       "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills, a QA pipeline (requirement clarification, smoke/full business-flow cases, regression, release verdict) and vendored third-party skills (zentao, confluence). Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus qa/ + third-party-zentao/ + third-party-confluence/.",
-      "version": "1.3.3",
+      "version": "1.4.0",
       "source": "./",
       "homepage": "https://github.com/ZY-1999/agent-start",
       "license": "MIT"

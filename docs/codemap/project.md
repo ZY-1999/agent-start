@@ -89,7 +89,7 @@ Node: agent-start
     - Responsibility: SDD 全流程产出的**完整订单管理应用**——Spring Boot 后端（`backend/`，30 个 Java 文件，MyBatis-Plus + Flyway + MockMvc 测试）+ React 前端（`frontend/`，antd/echarts）+ `docker-compose.yml`（mysql:8@3307）+ `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）；单 jar 交付（`mvn package` 自动 npm build 并把 `frontend/dist` 嵌入 static，`java -jar` 8080 即全系统）
     - Risk notes: 与仓库根部的 `AGENTS.md`/`docs/agents/` 内容相似但用途不同——改一处不代表改另一处；`pom.xml` 的 `maven.compiler.release=8` 需 JDK 9+ 编译（JDK 8 会报"无效的标记: --release"），产物仍是 Java 8 字节码
   - `hooks/`:
-    - Responsibility: 插件 hooks（`hooks.json` PreToolUse matcher Bash → `pre-commit-review.sh`）；在跑过 `/setup-skills` 的仓库拦截 agent 的 `git commit`，直到 `/review` 批准当前 diff（标记 `$GIT_DIR/zy-skills-review-approved`，hash 一次性精确匹配）
+    - Responsibility: 插件 hooks（`hooks.json` PreToolUse matcher Bash → PowerShell 执行 `pre-commit-review.ps1`；原 bash 版在 Windows 经 cmd.exe 调用会落 WSL 必败，1.4.0 移植）；在跑过 `/setup-skills` 的仓库拦截 agent 的 `git commit`，直到 `/review` 批准当前 diff（标记 `$GIT_DIR/zy-skills-review-approved`，hash 一次性精确匹配）
     - Risk notes: 审批后 diff 再变即失效需重跑 review；用户自己终端 commit 不受门限
   - `skills/<general|dev|sdd>/`:
     - Responsibility: 插件发布的自研 skills 源码（fork 血脉）；每桶一份 README
@@ -155,7 +155,7 @@ Node: agent-start
   - skills 发布流: `skills/<桶>/<名>/SKILL.md` → 四份平台清单（`.claude-plugin/` `.codebuddy-plugin/` `.cursor-plugin/` `.zcode-plugin/`）+ `scripts/link-*.sh` → 各客户端生效
     - Modules: skills/, 插件清单, scripts/
     - Effect: 新增/改名 skill 若不同步清单，Cursor 等按清单安装的平台会缺
-  - commit review 门（插件 hooks 分发后）: agent `git commit` → PreToolUse `hooks/pre-commit-review.sh` → 无有效审批则拒绝 → `/review` 通过后写 hash 标记 → 同一 diff 重试 commit 放行
+  - commit review 门（插件 hooks 分发后）: agent `git commit` → PreToolUse `hooks/pre-commit-review.ps1` → 无有效审批则拒绝 → `/review` 通过后写 hash 标记 → 同一 diff 重试 commit 放行
     - Modules: hooks/, skills/dev/review/, 各 SDD 仓库的 `docs/agents/issue-tracker.md`（opt-in 开关）
     - Effect: 装了新版插件的客户端里，SDD 仓库的 agent 提交必须先过 review
   - Demo 08 构建交付流: `mvn -f backend/pom.xml package` → exec 调 `npm run build`（frontend/，首次需 `npm ci`）→ dist 拷入 jar static → `java -jar` 单进程提供前端 + `/api`
@@ -261,7 +261,7 @@ Node: agent-start
 - `docs/index.html`: 主讲义
 - `docs/demos/README.md`: Demo 总览 + 排练指南
 - `docs/agents/git-contract.md`: 分支与提交契约
-- `hooks/hooks.json` + `hooks/pre-commit-review.sh`: commit review 门
+- `hooks/hooks.json` + `hooks/pre-commit-review.ps1`: commit review 门
 - `scripts/list-skills.sh`: skills 对账命令
 
 ## 4. Maintenance Notes
