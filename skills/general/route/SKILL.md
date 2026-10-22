@@ -28,6 +28,20 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **Diagnosis in hand — turn it into a tracked fix and ship it** → `/to-prd` → `/sdd-flow`
 - **The fix is clear, just implement it** → `/tdd`
 
+## Test & QA
+
+- **Not sure which test step comes first** → `/qa-flow`
+- **Fuzzy requirement — what do we actually verify?** → `/qa-clarify`
+- **Fuzzy requirement and the owner is right here to answer** → `/grill-me` → `/qa-clarify`
+- **Assertions are settled — turn them into implementable specs** → `/to-spec`
+- **A rule-level case that belongs in CI as a unit test** → `/tdd`
+- **Need a transfer gate (smoke) or full business-flow cases with data & SQL** → `/qa-cases`
+- **Bug fixed — verify it and size the regression blast radius** → `/qa-regress`
+- **Bug won't reproduce / root cause unknown** → `/diagnose-bug` → `/qa-regress`
+- **Release endgame: ship or not / demo readiness / retro** → `/qa-review`
+
+Which test step borrows which `dev/` `sdd/` skill, and the five confusable pairs (`grill-me` vs `qa-clarify`, `to-spec` vs `qa-cases`, `tdd` vs `qa-cases`, `review` vs `qa-review`, `diagnose-bug` vs `qa-regress`): `skills/qa/qa-flow/references/pipeline-map.md`.
+
 ## Design & modeling
 
 - **Refine domain language / build the glossary (`CONTEXT.md`)** → `/domain-modeling`
@@ -50,6 +64,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 ## Review, setup & meta
 
 - **Review current changes (Standards + Spec)** → `/review` (or `/code-review`)
+- **Ship-or-not for a version / demo readiness / retro** → `/qa-review` — business gate, not the code diff
 - **First-time repo setup (tracker / labels / domain docs / codemap)** → `/setup-skills`
 - **Write or edit a skill (in this repo)** → `/writing-great-skills`
 - **I don't know which skill fits** → you're in the right place — that's what `/route` is for.

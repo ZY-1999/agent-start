@@ -1,5 +1,5 @@
 {
-  "version": "1.3.0",
+  "version": "1.3.3",
   "name": "zy-skills",
   "skills": [
     "./skills/dev/grill-with-docs",
@@ -22,6 +22,11 @@
     "./skills/sdd/to-spec",
     "./skills/sdd/tdd",
     "./skills/sdd/sdd-flow",
+    "./skills/qa/qa-flow",
+    "./skills/qa/qa-clarify",
+    "./skills/qa/qa-cases",
+    "./skills/qa/qa-regress",
+    "./skills/qa/qa-review",
     "./skills/third-party-zentao/zentao-cli",
     "./skills/third-party-zentao/zentao-tour",
     "./skills/third-party-confluence/confluence"
