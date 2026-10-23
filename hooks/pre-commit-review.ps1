@@ -19,14 +19,24 @@ $ErrorActionPreference = 'Continue'
 
 $payload = [Console]::In.ReadToEnd()
 
-# Only gate real `git commit` invocations — the command string inside tool_input.
-# .NET regex is case-sensitive by default, matching the original grep -E behaviour.
-if (-not [regex]::IsMatch($payload, '"command"\s*:\s*"[^"]*\bgit\b[^"]*\bcommit\b')) { exit 0 }
+# Only gate real `git commit` invocations. Parse the payload instead of regex-matching raw JSON:
+# any escaped double quote before `git` (e.g. `cd "D:/repo" && git commit`) ended the old
+# `"[^"]*"` match early, so the gate silently allowed the commit.
+try { $hookInput = $payload | ConvertFrom-Json -ErrorAction Stop } catch { exit 0 }
+$command = $hookInput.tool_input.command
+if (-not $command) { exit 0 }
+if ($command -notmatch '(?m)\bgit\b[^\r\n]*\bcommit\b') { exit 0 }
 
 $projectDir = $env:ZCODE_PROJECT_DIR
 if (-not $projectDir) { $projectDir = $env:CLAUDE_PROJECT_DIR }
 if ($projectDir) {
-    try { Set-Location -LiteralPath $projectDir -ErrorAction Stop } catch { exit 0 }
+    # Git Bash hosts export POSIX paths (/d/projects/x); PowerShell cannot resolve those, and
+    # the old code exited 0 on that failure — silently allowing the commit. Translate first,
+    # and on any remaining failure fall through to the current directory instead of allowing.
+    if ($projectDir -match '^/([a-zA-Z])/(.*)$') {
+        $projectDir = $matches[1].ToUpper() + ':\' + ($matches[2] -replace '/', '\')
+    }
+    try { Set-Location -LiteralPath $projectDir -ErrorAction Stop } catch { }
 }
 
 # Repo not opted in (no /setup-skills issue tracker), or not a git repo at all: allow.

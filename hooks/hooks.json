@@ -6,7 +6,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "powershell -NoProfile -ExecutionPolicy Bypass -File ${CLAUDE_PLUGIN_ROOT}/hooks/pre-commit-review.ps1",
+            "command": "powershell -NoProfile -ExecutionPolicy Bypass -Command \"$p = ($env:CLAUDE_PLUGIN_ROOT -replace '^/([A-Za-z])/', '$1:/'); & ($p + '/hooks/pre-commit-review.ps1'); exit $LASTEXITCODE\"",
             "timeout": 15,
             "statusMessage": "zy-skills review gate: checking commit approval"
           }
