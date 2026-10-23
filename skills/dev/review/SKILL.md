@@ -35,7 +35,13 @@ Look for the originating spec, in this order:
 
 ### 3. Identify the standards sources
 
-Anything in the repo that documents how code should be written, such as `CODING_STANDARDS.md` or `CONTRIBUTING.md`.
+Anything in the repo that documents how code should be written. Check these first, in order, then fall back to other convention docs:
+
+1. `docs/agents/developer.md` — coding and doc conventions.
+2. `docs/agents/checklist.md` — the review checklist; treat its items as the review's coverage map.
+3. Other sources such as `CODING_STANDARDS.md`, `CONTRIBUTING.md`, or language-specific convention docs.
+
+If none exist, the Standards sub-agent reviews against general engineering judgement and says so.
 
 ### 4. Spawn both sub-agents in parallel
 

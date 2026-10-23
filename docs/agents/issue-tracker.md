@@ -1,42 +1,42 @@
-# Issue tracker: Local Markdown
+# Issue tracker：本地 Markdown
 
-Issues for this repo live as markdown files in `.scratch/`. An **issue is the carrier** for one of three kinds of work — `spec`, `prd`, or `bug`.
+本仓库的 issue 以 markdown 文件形式存放在仓库根的 `.scratch/` 下。**issue 是载体**，承载三类工作之一——`spec`、`prd` 或 `bug`。
 
-## Conventions
+## 约定
 
-- One feature per directory: `.scratch/<YYYY-MM-DD>-<feature-slug>/`
-- Only `spec` issues go in `specs/`; `prd` and `bug` (the parents) sit at the feature root, beside `specs/`:
+- 一个特性一个目录：`.scratch/<YYYY-MM-DD>-<feature-slug>/`
+- 只有 `spec` 进 `specs/`；`prd` 与 `bug`（父项）放在特性根目录，与 `specs/` 平级：
 
   ```
   .scratch/2026-06-18-login-redirect/
-  ├── 01-fix-login-redirect-loop.md   # prd or bug — the parent
+  ├── 01-fix-login-redirect-loop.md   # prd 或 bug —— 父项
   └── specs/
       ├── 01-validate-token.md         # spec
       └── 02-refresh-flow.md           # spec
   ```
 
-- Files are numbered `<NN>` from `01` within their folder. Number `specs/` in dependency order so `Blocked by: #<n>` resolves to a sibling spec; `Parent: #<n>` points at the feature-root parent.
-- Each issue opens with a `Type:` line (`spec` / `prd` / `bug`), a `Status:` line (see `triage-labels.md`), and a `## Comments` section appended at the bottom.
+- 文件在其所在目录内从 `01` 起按 `<NN>` 编号。`specs/` 按依赖顺序编号，使 `Blocked by: #<n>` 指向同级的 spec；`Parent: #<n>` 指向特性根目录的父项。
+- 每个 issue 开头是 `Type:` 行（`spec` / `prd` / `bug`）与 `Status:` 行（取值见 `triage-labels.md`），末尾追加 `## Comments` 段。
 
-Example minimal issue file:
+最小 issue 示例：
 
 ```markdown
-# Fix login redirect loop
+# 修复登录重定向死循环
 
 Type: bug
 Status: needs-triage
 
-<the bug report / spec / PRD body>
+<bug 报告 / spec / PRD 正文>
 
 ## Comments
 
-- 2026-06-18 — reproduced on staging with…
+- 2026-06-18 — 已在预发环境复现，…
 ```
 
-## When a skill says "publish to the issue tracker"
+## 当某个 skill 说"发布到 issue tracker"
 
-Create `.scratch/<YYYY-MM-DD>-<feature-slug>/specs/<NN>-<slug>.md` for a `spec`, or `.scratch/<YYYY-MM-DD>-<feature-slug>/<NN>-<slug>.md` (feature root) for a `prd`/`bug`. Create the directory if needed.
+`spec` 写到 `.scratch/<YYYY-MM-DD>-<feature-slug>/specs/<NN>-<slug>.md`；`prd` / `bug` 写到特性根目录的 `.scratch/<YYYY-MM-DD>-<feature-slug>/<NN>-<slug>.md`。目录不存在就创建。
 
-## When a skill says "fetch the relevant ticket"
+## 当某个 skill 说"取相关工单"
 
-Read the file at the referenced path. The user will normally pass the path or the issue number directly.
+读取引用路径上的文件。用户通常会直接给出路径或 issue 编号。

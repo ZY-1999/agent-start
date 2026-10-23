@@ -1,29 +1,28 @@
-# Git Contract
+# Git 契约（Git Contract）
 
-This repo's git workflow contract — branch strategy, commit-message convention, and what does/doesn't enter the repo. The SDD skills that write docs or code to the repo follow this, and **declare the git semantics of every write**.
+本仓库的 git 工作流契约——分支策略、提交信息约定、什么进/不进仓库。向仓库写入文档或代码的 SDD skills 都遵循它，并且**为每次写入声明 git 语义**。
 
-## Branch strategy
+## 分支策略
 
-- **Solo** — develop directly on the current branch; no feature branch is created.
+- **Solo** —— 直接在当前分支开发，不建特性分支。
 
-## Commit messages
+## 提交信息
 
-- Reference the issue slug (e.g. `feat(login-redirect): refresh-token rotation`).
-- Follow this repo's existing commit-message and pre-commit conventions if any — recorded below.
-- Repo-specific conventions: conventional-commits prefix (`docs:` / `feat:` / `fix:` / `chore:` …); subject line may be in Chinese.
+- 引用 issue slug（例如 `feat(login-redirect): 刷新令牌轮换`）。
+- 仓库特定约定：conventional-commits 前缀（`docs:` / `feat:` / `fix:` / `chore:` …），标题可用中文。
 
-## What enters the repo
+## 什么进仓库
 
-- `.scratch/` — the issue tracker; issues are the carrier for `spec`/`prd`/`bug`.
-- `CONTEXT.md`, `docs/adr/`, `docs/codemap/` — domain docs and code terrain.
-- `docs/agents/` — this configuration. Committed when `/setup-skills` runs or when edited.
+- `.scratch/` —— issue tracker；issue 是 `spec` / `prd` / `bug` 的载体。
+- `CONTEXT.md`、`docs/adr/`、`docs/codemap/` —— 领域文档与代码地形。
+- `docs/agents/` —— 本套配置。`/setup-skills` 运行时或内容被编辑时提交。
 
-## What does NOT enter the repo
+## 什么不进仓库
 
-- `/handoff` output — written to the OS temp dir, never the repo.
-- Local credentials, `.env`, API keys, tokens.
-- Agent runtime data (`.agent-memory/`, local SQLite/Milvus Lite DBs, traces/episodes/candidates/assets).
+- `/handoff` 输出——写到操作系统临时目录，绝不进仓库。
+- 本地凭据、`.env`、API key、token。
+- Agent 运行数据（`.agent-memory/`、本地 SQLite/Milvus Lite 数据库、trace/episode/candidate/asset）。
 
-## Declare git semantics on every write
+## 每次写入都要声明 git 语义
 
-When a skill writes a doc or code file into the repo, it states that write's git semantics in one line — which commit it lands in, or that it stays uncommitted (and why).
+当某个 skill 向仓库写入文档或代码文件时，用一行说明该次写入的 git 语义——落在哪个提交里，或者保持未提交（及原因）。

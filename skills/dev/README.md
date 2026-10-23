@@ -13,7 +13,7 @@
 
 fork 扩展：
 
-- **[setup-skills](./setup-skills/SKILL.md)** — 为 SDD skills 配置仓库：本地 markdown issue 追踪器、triage 标签词汇、domain 文档布局、初始项目级 CodeMap。在其他 SDD skills 之前运行一次。
+- **[setup-skills](./setup-skills/SKILL.md)** — 为 SDD skills 配置仓库：AGENTS.md 入口骨架（工程概述 / 语言 / 构建与验证 / 默认边界 / 最小记忆能力）、本地 markdown issue 追踪器、triage 标签词汇、domain 文档布局、开发规范（`developer.md`）、评审清单（`checklist.md`）、初始项目级 CodeMap，产物一律中文。在其他 SDD skills 之前运行一次。
 - **[improve-architecture](./improve-architecture/SKILL.md)** — 架构发现入口：扫描代码库寻找深化机会，发布可视化 HTML 报告，并把每个候选（含 Top recommendation）摘录为 `needs-info` 的轻量 `prd` 草稿。只做发现不做设计，草稿留给后续 grill 完善。
 
 ## 模型调用（Model-invoked）
