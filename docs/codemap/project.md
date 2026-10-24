@@ -2,7 +2,8 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-10-23`
+- Last updated: `2026-10-24`
+- Updated: `2026-10-24` — 新增 `skills/dev/reverse-prd/`（逆向 PRD：从代码反推按模块拆分的 PRD 体系，全局层 common/ 只写一次 + 模块层 modules/ 9 节 + 总览层 00-overview 只索引文档；代码地形全交 `/codemap`，每模块一份 feature 图且写前校验；不设 changelog；step 6 为两遍对抗式复核——逐条准确性、业务规则完整性）；README、`skills/dev/README.md` 与本文计数同步 12 / 26 / 29；四份 plugin.json 与 `.codebuddy-plugin/marketplace.json` 1.5.1→1.6.0
 - Updated: `2026-10-23` — 修复 commit review 门禁从未生效：宿主把 `${CLAUDE_PLUGIN_ROOT}` 替换为 Git Bash 风格路径 `/c/...`，`-File` 无法解析导致脚本从未执行；`hooks.json` 改为 `-Command` 内先转盘符再调用并透传 `$LASTEXITCODE`（`&` 调用下脚本内 `exit 2` 不会成为进程退出码），`pre-commit-review.ps1` 改用 `ConvertFrom-Json` 取 command、路径转换失败不再直接放行；插件清单 1.4.0→1.4.1
 - Updated: `2026-10-22` — `/setup-skills` 由四件套扩为 aiCoding 六件套：新增 `docs/agents/developer.md`（通用规范 + skill 资产规范）与 `checklist.md`；部署模板由「仅 Agent Notice block」升级为完整 AGENTS.md 骨架（工程概述 / 语言 / 构建与验证 / Agent Notice 含 Developer rules + Checklist / 默认边界 / 最小记忆能力），四件套 references 全部中文化（`Type:`/`Status:` 行名与五个 triage 标签字符串保留）；`/review` 的 Standards 轴改为优先读 `developer.md` + `checklist.md`；根 `AGENTS.md` 与 `docs/agents/` 同步改造；插件清单 1.4.0→1.5.0（2026-10-23 追加：`references/git-contract.md` 改以 `ongoal-generator/gittemplate` 的 Git Contract 为骨架——七类分支映射表 + 关联 ID 提交模板，部署时按仓库实际裁剪；本仓库自身契约仍为 solo + conventional-commits；Agent Notice 首节由 `Grill first` 改为 `Clarify, plan, then execute` 三步块，内嵌 `/grill-me` 与 `/grill-with-docs`；AGENTS.md 骨架从 SKILL.md 内联抽出为 `references/agents-md.md`，SKILL.md 只留引用，195→113 行）
 - Updated: `2026-10-20` — `/to-spec` 新增第三入口：简单且完整的需求经入口完整性门（completeness-bar）直接拆 spec，不过门退回 `/grill-me` / `/to-prd`；`/route`（Build something）新增对应直连链 `/to-spec` → `/tdd`；两桶 README 与 issue 模板 Parent 注释同步；插件清单 1.2.0→1.3.0
@@ -11,7 +12,7 @@
 - Updated: `2026-10-14` — 08 由模板示例扩为完整订单管理应用（backend/frontend/单 jar 交付）；新增插件 hooks（commit review 门）；01–07 `DEMO.md` 精简；插件清单 1.0.1→1.0.2
 - Updated: `2026-10-14` — 新增 `skills/third-party/` 第三方桶（zentao-cli 0.3.1 / zentao-tour 0.3.0-beta.1，vendored 自 easysoft/zentao-cli@`ce36cf5`）；`/setup-skills` 新增步骤 5（检查 `zentao` CLI 安装，凭证推荐用户在 `~/.bashrc` 自行 export 环境变量），Agent Notice 模板与根 `AGENTS.md` 增加 Zentao skills 节；插件清单 1.0.2→1.1.0
 - Project: agent-start（内部 git 名 `ongoal-skills`）
-- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 28 个 skills（25 自研 + 3 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
+- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 29 个 skills（26 自研 + 3 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
 - Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash；Demo 08 另含 Java（Spring Boot 2.7 / MyBatis-Plus）与 TypeScript（React 18 + antd 5 + Vite）
 - Runtime / deployment shape: 无运行时。讲义浏览器直接打开；skills 经插件清单/链接脚本安装到各客户端
 - Primary entry types: 人类入口 `README.md` / `docs/index.html`；agent 入口 `AGENTS.md`；安装入口 `scripts/`
@@ -62,8 +63,8 @@ Node: agent-start
     - Entry: 01–07 各目录 `DEMO.md`（精简为 目标/对比/演示步骤/推荐 Prompt 四节）；08 是可运行应用，入口 `docs/demos/08-project-demo/AGENTS.md` + `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）
     - Feature CodeMap: pending（08 订单管理应用值得单建，见 Backlog）
     - Status: `confirmed`
-  - skills 集合（自研 25 + 第三方 vendored 3）:
-    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3) `skills/qa/`(5) `skills/third-party-zentao/`(2) `skills/third-party-confluence/`(1)
+  - skills 集合（自研 26 + 第三方 vendored 3）:
+    - Main modules: `skills/general/`(6) `skills/dev/`(12) `skills/sdd/`(3) `skills/qa/`(5) `skills/third-party-zentao/`(2) `skills/third-party-confluence/`(1)
     - Entry: 各 `skills/<桶>/<名>/SKILL.md`
     - Feature CodeMap: pending（见 Backlog）
     - Status: `confirmed`
@@ -95,7 +96,7 @@ Node: agent-start
     - Risk notes: 审批后 diff 再变即失效需重跑 review；用户自己终端 commit 不受门限
   - `skills/<general|dev|sdd|qa>/`:
     - Responsibility: 插件发布的自研 skills 源码（fork 血脉）；每桶一份 README
-    - Risk notes: 改动会经三份平台清单分发，需同步检查（见 Risk Areas）
+    - Risk notes: 改动会经四份平台清单分发，需同步检查（见 Risk Areas）
   - `skills/third-party-zentao/`、`skills/third-party-confluence/`:
     - Responsibility: 外部 vendored skills 按上游分桶（zentao 桶：easysoft/zentao-cli 的 zentao-cli / zentao-tour；confluence 桶：pchuri/confluence-cli 的 confluence）；原样引入，各桶 README 记录上游 commit 基线与版本
     - Risk notes: **不参与** fork 上游同步映射；更新走上游整目录覆盖并更新基线；zentao 桶两个 skill 互为兄弟目录（内部相对链接依赖此布局）；运行依赖全局 `zentao` / `confluence` CLI（npm `zentao-cli` / `confluence-cli`）
@@ -115,7 +116,7 @@ Node: agent-start
   - UI / 文档: `docs/index.html`（浏览器直接打开）
   - CLI / commands: `scripts/link-skills.sh`、`scripts/link-opencode-skills.sh`（安装）、`scripts/list-skills.sh`（枚举）
   - Agent 配置入口: `AGENTS.md`（根目录，`## Agent Notice`）
-  - 插件清单: `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/`、`.zcode-plugin/plugin.json`（均 v1.4.1，逐个列出 skills 路径）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
+  - 插件清单: `.claude-plugin/plugin.json` 与 `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/plugin.json` 与 `.codebuddy-plugin/marketplace.json`、`.zcode-plugin/plugin.json`（四份 plugin.json 均 v1.6.0，逐个列出 skills 路径；`.codebuddy-plugin/marketplace.json` 同为 v1.6.0，`.claude-plugin/marketplace.json` 本身无 version 字段）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
   - Demo 08 运行入口: `docker-compose.yml`（MySQL@3307，root/order_demo）→ `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar`（8080，Flyway 自动建表 + 种子数据）
 - Evidence: 各文件已读
 - Next Drill-Down: 无
@@ -175,7 +176,7 @@ Node: agent-start
 - Status: `confirmed`
 - Validation Entry:
   - Test commands: Demo 08 后端 `mvn -f docs/demos/08-project-demo/backend/pom.xml test`（MockMvc：订单 CRUD 口径 + SPA 回退）
-  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 22 个 SKILL.md；Demo 08——compose/容器起 MySQL@3307 → `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar` → `curl http://127.0.0.1:8080/`（入口 HTML）与 `/api/orders?pageNum=1&pageSize=5`（8 条种子）
+  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 29 个 SKILL.md；Demo 08——compose/容器起 MySQL@3307 → `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar` → `curl http://127.0.0.1:8080/`（入口 HTML）与 `/api/orders?pageNum=1&pageSize=5`（8 条种子）
   - Local run: 链接脚本幂等可重跑（README 声明，OpenCode 版 Windows 走 junction）
   - Logs / metrics: 无
 - proves: 页面可打开、skills 清单完整
@@ -188,7 +189,7 @@ Node: agent-start
 - Status: `confirmed`
 - Risks:
   - 插件分发不同步:
-    - Source: 新增/改名/删除 skill 时三份平台清单 + 链接脚本需同步
+    - Source: 新增/改名/删除 skill 时四份平台清单 + 链接脚本需同步
     - Affected capabilities: skills 集合、安装分发
     - Suggested Feature CodeMap: pending（skills 目录地图）
   - 08 模板与根配置混淆:
@@ -212,7 +213,7 @@ Node: agent-start
 - Status: `confirmed`
 - Backlog:
   - skills 目录地形图:
-    - Why: 23 个 skill 分五桶（含 third-party vendored 两桶），改/增 skill 是本仓库最高频操作，且牵动分发链
+    - Why: 29 个 skill 分六桶（含 third-party vendored 两桶），改/增 skill 是本仓库最高频操作，且牵动分发链
     - Likely entry: `skills/*/README.md`
     - Likely files: 各 `SKILL.md` + 插件清单
     - Priority: 高（下次动 skills 前建）
@@ -232,8 +233,8 @@ Node: agent-start
 | 讲义 | `docs/index.html` | 浏览器打开 | pending | confirmed |
 | Demo（01–07 现场） | `docs/demos/01..07-*` | 各 `DEMO.md`（精简版） | pending | confirmed |
 | Demo 08 应用 | `docs/demos/08-project-demo/{backend,frontend}` | `AGENTS.md` + `.scratch/` PRD/specs | pending（Backlog） | confirmed |
-| skills 集合 | `skills/{general,dev,sdd}` + `skills/third-party-{zentao,confluence}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
-| 安装分发 | `scripts/` + 三份插件清单 + `hooks/` | `link-*.sh` | pending | confirmed |
+| skills 集合 | `skills/{general,dev,sdd,qa}` + `skills/third-party-{zentao,confluence}` | 各 `SKILL.md` | pending（Backlog 优先） | confirmed |
+| 安装分发 | `scripts/` + 四份插件清单 + `hooks/` | `link-*.sh` | pending | confirmed |
 
 ### Module Index Table
 

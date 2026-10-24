@@ -1,5 +1,5 @@
 {
-  "version": "1.5.1",
+  "version": "1.6.0",
   "name": "zy-skills",
   "skills": [
     "./skills/dev/grill-with-docs",
@@ -13,6 +13,7 @@
     "./skills/dev/improve-architecture",
     "./skills/dev/diagnose-bug",
     "./skills/dev/to-prd",
+    "./skills/dev/reverse-prd",
     "./skills/general/route",
     "./skills/general/handoff",
     "./skills/general/grill-me",
