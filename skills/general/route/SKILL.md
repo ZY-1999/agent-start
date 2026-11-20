@@ -15,7 +15,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **Start from an architecture scan** → `/improve-architecture`
 - **Idea → approved PRD (grill + Gate 0)** → `/idea-to-prd`
 - **I have an incomplete PRD draft(status = 'needs-info')** → `/idea-to-prd`
-- **Existing codebase with no docs — reverse-engineer a module-split PRD** → `/reverse-prd`
+- **Existing codebase with no docs — reverse-engineer a module-split, product-readable PRD** → `/reverse-prd`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/sdd-flow`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/sdd-flow`
 - **Requirement is simple and already complete (goal, scope, done-behaviors stated) — skip grilling and the PRD** → `/to-spec` → `/tdd`

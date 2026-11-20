@@ -1,27 +1,27 @@
 # Issue tracker：本地 Markdown
 
-本仓库的 issue 以 markdown 文件形式存放在 `.scratch/`。**Issue 是三类工作的载体**：`spec`、`prd`、`bug`。
+本仓库的 issue 以 markdown 文件形式存放在仓库根的 `.scratch/` 下。**issue 是载体**，承载三类工作之一——`spec`、`prd` 或 `bug`。
 
 ## 约定
 
-- 一个 feature 一个目录：`.scratch/<YYYY-MM-DD>-<feature-slug>/`
-- 只有 `spec` 放进 `specs/`；`prd` 与 `bug`（父级）位于 feature 根目录、与 `specs/` 平级：
+- 一个特性一个目录：`.scratch/<YYYY-MM-DD>-<feature-slug>/`
+- 只有 `spec` 进 `specs/`；`prd` 与 `bug`（父项）放在特性根目录，与 `specs/` 平级：
 
   ```
   .scratch/2026-06-18-login-redirect/
-  ├── 01-fix-login-redirect-loop.md   # prd 或 bug —— 父级
+  ├── 01-fix-login-redirect-loop.md   # prd 或 bug —— 父项
   └── specs/
       ├── 01-validate-token.md         # spec
       └── 02-refresh-flow.md           # spec
   ```
 
-- 文件在各自目录内从 `01` 起以 `<NN>` 编号。`specs/` 按依赖顺序编号，使 `Blocked by: #<n>` 解析到同级 spec；`Parent: #<n>` 指向 feature 根目录的父级。
-- 每个 issue 以 `Type:` 行（`spec` / `prd` / `bug`）、`Status:` 行（见 `triage-labels.md`）开头，末尾附 `## Comments` 小节。
+- 文件在其所在目录内从 `01` 起按 `<NN>` 编号。`specs/` 按依赖顺序编号，使 `Blocked by: #<n>` 指向同级的 spec；`Parent: #<n>` 指向特性根目录的父项。
+- 每个 issue 开头是 `Type:` 行（`spec` / `prd` / `bug`）与 `Status:` 行（取值见 `triage-labels.md`），末尾追加 `## Comments` 段。
 
-最小 issue 文件示例：
+最小 issue 示例：
 
 ```markdown
-# Fix login redirect loop
+# 修复登录重定向死循环
 
 Type: bug
 Status: needs-triage
@@ -30,13 +30,13 @@ Status: needs-triage
 
 ## Comments
 
-- 2026-06-18 — reproduced on staging with…
+- 2026-06-18 — 已在预发环境复现，…
 ```
 
-## 当 skill 说 "publish to the issue tracker"
+## 当某个 skill 说"发布到 issue tracker"
 
-`spec` 写入 `.scratch/<YYYY-MM-DD>-<feature-slug>/specs/<NN>-<slug>.md`；`prd` / `bug` 写入 `.scratch/<YYYY-MM-DD>-<feature-slug>/<NN>-<slug>.md`（feature 根目录）。目录不存在则创建。
+`spec` 写到 `.scratch/<YYYY-MM-DD>-<feature-slug>/specs/<NN>-<slug>.md`；`prd` / `bug` 写到特性根目录的 `.scratch/<YYYY-MM-DD>-<feature-slug>/<NN>-<slug>.md`。目录不存在就创建。
 
-## 当 skill 说 "fetch the relevant ticket"
+## 当某个 skill 说"取相关工单"
 
-读取所引用路径上的文件。用户通常会直接给出路径或 issue 编号。
+读取引用路径上的文件。用户通常会直接给出路径或 issue 编号。
