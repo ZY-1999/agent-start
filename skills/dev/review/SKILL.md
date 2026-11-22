@@ -1,6 +1,6 @@
 ---
 name: review
-description: "Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to \"review since X\", or when a git commit was blocked by the zy-skills review gate"
+description: Review the changes since a fixed point (commit, branch, tag, or merge-base) along two axes — Standards (does the code follow this repo's documented coding standards?) and Spec (does the code match what the originating issue/PRD asked for?). Runs both reviews in parallel fresh-context sub-agents and reports them side by side. Use when the user wants to review a branch, a PR, work-in-progress changes, asks to "review since X", or when a git commit was blocked by the zy-skills review gate.
 ---
 
 # Review — two axes, since a fixed point
@@ -22,6 +22,8 @@ Resolve the fixed point — a commit SHA, branch name, tag, `main`, `HEAD~5`, et
 
 Capture the diff command once: `git diff <fixed-point>...HEAD` (three-dot, so the comparison is against the merge-base). Also note the list of commits via `git log <fixed-point>..HEAD --oneline`.
 
+Exception — when the fixed point is `HEAD` itself (reviewing the uncommitted working state, which is what the commit gate sends here), the diff command is `git diff HEAD` and there is no commit list. Stage untracked files first (`git add`) so they appear in that diff.
+
 Before going further, confirm the fixed point resolves (`git rev-parse <fixed-point>`) and the diff is non-empty. A bad ref or empty diff should fail here — not inside two parallel sub-agents.
 
 ### 2. Identify the spec source
@@ -32,6 +34,8 @@ Look for the originating spec, in this order:
 2. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
 3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
 4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
+
+Alongside the spec, pick up the feature folder's **`contracts.md`** and **`trace.md`** when they exist — they are the Spec axis's ground truth for interfaces and coverage.
 
 ### 3. Identify the standards sources
 
@@ -50,8 +54,8 @@ Send a single message with two `Agent` tool calls. Use the `general-purpose` sub
 **Spec sub-agent prompt** — include:
 
 - The diff command and commit list.
-- The path or fetched contents of the spec.
-- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong. Quote the spec line for each finding. Under 400 words."
+- The path or fetched contents of the spec, plus `contracts.md` and `trace.md` when they exist.
+- The brief: "Report: (a) requirements the spec asked for that are missing or partial; (b) behaviour in the diff that wasn't asked for (scope creep); (c) requirements that look implemented but where the implementation looks wrong — checking interfaces against the contract points (`C-NN`) they cite, error codes and numbers included; (d) where `trace.md` exists, P0 rows whose Test/Commit columns the diff should have filled but didn't. Quote the spec line for each finding. Under 400 words."
 
 If the spec is missing, skip the Spec sub-agent and note this in the final report.
 
