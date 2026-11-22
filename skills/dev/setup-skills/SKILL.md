@@ -82,7 +82,7 @@ The block:
 
 ### Grill first
 
-Every time the agent receives a requirement, interview the user first with `/grill-me` — or `/grill-with-docs` when the decisions should be captured as ADRs/glossary — and keep asking until the full context is clear. Only then start the work.
+Every time the agent receives a requirement, interview the user first with the model-invoked `/grilling` skill — paired with `/domain-modeling` when the decisions should be captured as ADRs/glossary — and keep asking until the full context is clear. Only then start the work.
 
 ### Issue tracker
 

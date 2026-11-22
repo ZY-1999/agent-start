@@ -1,11 +1,11 @@
 ---
 name: to-spec
-description: Decompose a PRD, a bug, or the current (already-grilled) conversation into specs — atomic, planning-complete units an agent implements. First translates the parent's acceptance criteria into a technical contracts file (double-anchor cross-check) and a scenario trace matrix, then decomposes best-of-N with a fresh-context judge; complex-spec design uses /codebase-design (DESIGN-IT-TWICE for genuine complexity); spec skeletons land on disk before per-spec design.
+description: Decompose a PRD, a bug, the current (already-grilled) conversation, or a simple complete requirement into specs — atomic, planning-complete units an agent implements. Simple requirements pass a completeness gate at entry — anything under-specified is routed to /grill-me or /to-prd, never guessed into specs. First translates the parent's acceptance criteria into a technical contracts file (double-anchor cross-check) and a scenario trace matrix, then decomposes best-of-N with a fresh-context judge; complex-spec design uses /codebase-design (DESIGN-IT-TWICE for genuine complexity); spec skeletons land on disk before per-spec design.
 ---
 
 # To Spec
 
-A **spec** is the atomic unit of agent coding: the minimal thing an agent implements in one session, **planning-complete** — all planning settled here (simple specs let internals emerge in `/tdd`), so implementation starts straight at red-green. This skill turns a **PRD**, a **bug**, or a grilled conversation into specs; `prd`/`bug` are the parents, `spec` is the leaf.
+A **spec** is the atomic unit of agent coding: the minimal thing an agent implements in one session, **planning-complete** — all planning settled here (simple specs let internals emerge in `/tdd`), so implementation starts straight at red-green. This skill turns a **PRD**, a **bug**, a grilled conversation, or a simple complete requirement (admitted only through the completeness gate) into specs; `prd`/`bug` are the parents, `spec` is the leaf.
 
 The PRD is requirements-only, so this skill owns the **translation into technical terms**, landing two feature-level artifacts before any decomposition:
 
@@ -16,6 +16,20 @@ The PRD is requirements-only, so this skill owns the **translation into technica
 
 - **A PRD or bug issue** (pass its number, URL, or path) → fetch and decompose. Every spec references it as `Parent`.
 - **A grilled conversation** (no PRD yet) → synthesise the agreed design, then decompose. Do **not** re-interview — the grilling already happened (typically via `/grill-with-docs`).
+- **A simple, complete requirement** (neither grilled nor distilled — it already answers everything a grill would ask) → vet it against the completeness bar below, then decompose directly, no `Parent`. Fails the bar → hand it back as the bar says — never guess.
+
+<completeness-bar>
+
+Admit a requirement through the no-PRD door only if **both** hold:
+
+- **Simple** — one feature surface; the outcome fits in a sentence or two; nothing here would earn a long grill or DESIGN-IT-TWICE.
+- **Complete** — goal, scope (in and out), and the done-defining behaviors are stated or directly implied; no open question a grill would have to settle (users, edge cases, data shapes, error handling); the goal isn't still moving.
+
+Either check failing means the requirement isn't to-spec-ready — decomposing it anyway bakes the guesses into every spec. Hand it back instead: `/grill-me` when the gaps are still open (raw idea), `/to-prd` when the design was discussed but never distilled into a parent.
+
+A requirement that passes the bar plays the grilled-design role for the rest of the process: its done-defining behaviors are numbered as `AC-1-NN` (all P0) and enter the same double-anchor translation as any PRD's acceptance criteria.
+
+</completeness-bar>
 
 > Precondition: the issue tracker layout is configured — run `/setup-skills` if not.
 
@@ -23,7 +37,7 @@ The PRD is requirements-only, so this skill owns the **translation into technica
 
 ### 1. Gather context
 
-Work from the conversation. If a PRD/bug reference was passed, fetch it and read body + comments; note its issue number for `Parent`.
+Work from the conversation. If a PRD/bug reference was passed, fetch it and read body + comments; note its issue number for `Parent`. If there is **no parent and no grilling happened**, the requirement itself is the source — run the completeness bar first: on pass it plays the grilled-design role for the rest of the process (still no `Parent`); on fail, stop at the hand-back and do not decompose a guessed requirement.
 
 ### 2. Read the terrain before splitting
 
@@ -33,7 +47,7 @@ Work from the conversation. If a PRD/bug reference was passed, fetch it and read
 
 ### 3. Align — translate ACs into contracts (double-anchor)
 
-Write the feature's `contracts.md` ([references/contracts-template.md](./references/contracts-template.md)) at the feature folder root: for every acceptance criterion in the parent, design the contract point(s) that make it observable — endpoint + error code, field + constraint, or assertable behavior. This is where requirement language becomes technical language; it happens **before** decomposition so every cut is anchored to a testable surface.
+Write the feature's `contracts.md` ([references/contracts-template.md](./references/contracts-template.md)) at the feature folder root: for every acceptance criterion in the parent (or in the vetted requirement's numbered behaviors), design the contract point(s) that make it observable — endpoint + error code, field + constraint, or assertable behavior. This is where requirement language becomes technical language; it happens **before** decomposition so every cut is anchored to a testable surface.
 
 Then **cross-check both anchors against each other**:
 
@@ -47,7 +61,7 @@ For every P0 AC, write one scenario (`S-NN`): a one-line behavior sequence with 
 
 ### 5. Decompose — best-of-N on the breakdown
 
-The decomposition is the highest-leverage decision; a wrong cut propagates into every spec. If there's no PRD/bug parent, synthesise the agreed design first, then decompose that. **Acceptance lives here, not at design time** — each spec's AC projection (which parent ACs + contract points it covers) is what makes it independently verifiable, so the projection is part of the cut, not deferred.
+The decomposition is the highest-leverage decision; a wrong cut propagates into every spec. If there's no PRD/bug parent, synthesise the agreed design first (a vetted simple requirement already *is* that design), then decompose that. **Acceptance lives here, not at design time** — each spec's AC projection (which parent ACs + contract points it covers) is what makes it independently verifiable, so the projection is part of the cut, not deferred.
 
 > **Best-of-N, file-grounded.** Candidates are drafted to disk, not prompt-fed into chat — the judge reviews grounded files, and losing candidates never enter your context. Drafts live under the feature folder's `.drafts/decompose/` (create the feature folder now if no parent is on disk yet; step 6 reuses it).
 >
@@ -111,7 +125,7 @@ Use the project glossary vocabulary in titles and bodies. Do NOT close or modify
 
 The agent that just designed the specs can't grade its own work. Fan out **two independent fresh-context sub-agents** (`general-purpose`, spawned in one message so they run in parallel) — each gets the landed specs plus **one** input and never the design chat, and returns PASS or specific defects (the spec + the failing line). Splitting along two axes keeps each sub-agent's context focused, because the inputs differ:
 
-- **Sub-agent A — coverage vs. the source.** Input: the landed specs + `contracts.md` + `trace.md` + the parent PRD/bug (or the grilled-design summary if no parent). **Does not read code.** Checks the four coverage axes:
+- **Sub-agent A — coverage vs. the source.** Input: the landed specs + `contracts.md` + `trace.md` + the parent PRD/bug (or the grilled-design summary / vetted requirement if no parent). **Does not read code.** Checks the four coverage axes:
   - **Goal coverage** — every goal / user story in the source maps to at least one spec's `Goal` + AC projection. No goal orphaned; no spec that serves nothing in the source.
   - **Double-anchor** — re-run the step-3 cross-check against the final artifacts: every P0 AC's scenario row exists in `trace.md`, walks real `C-NN` points, and lands in exactly one spec; AC numbers equal contract numbers. Any row that fails is untestable — a defect.
   - **Test coverage** — every P0 scenario has a spec accountable for it (the `Spec` column is filled); the parent's testing intent is reflected in the projections and seam choices.
