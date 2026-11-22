@@ -2,9 +2,9 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-10-13`
+- Last updated: `2026-11-22`
 - Project: agent-start（内部 git 名 `ongoal-skills`）
-- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 20 个 skills；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
+- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 23 个 skills；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
 - Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash
 - Runtime / deployment shape: 无运行时。讲义浏览器直接打开；skills 经插件清单/链接脚本安装到各客户端
 - Primary entry types: 人类入口 `README.md` / `docs/index.html`；agent 入口 `AGENTS.md`；安装入口 `scripts/`
@@ -55,8 +55,8 @@ Node: agent-start
     - Entry: 各目录 `DEMO.md`（08 例外，入口是 `AGENTS.md`）
     - Feature CodeMap: pending
     - Status: `confirmed`
-  - SDD skills 集合（20 个）:
-    - Main modules: `skills/general/`(6) `skills/dev/`(11) `skills/sdd/`(3)
+  - SDD skills 集合（23 个）:
+    - Main modules: `skills/general/`(6) `skills/dev/`(12) `skills/sdd/`(5)
     - Entry: 各 `skills/<桶>/<名>/SKILL.md`
     - Feature CodeMap: pending（见 Backlog）
     - Status: `confirmed`
@@ -87,7 +87,9 @@ Node: agent-start
     - Responsibility: 插件发布的 skills 源码；每桶一份 README
     - Risk notes: 改动会经三份平台清单分发，需同步检查（见 Risk Areas）
   - `docs/agents/`:
-    - Responsibility: 本仓库契约（issue-tracker / triage-labels / domain / git-contract），`/setup-skills` 于 2026-10-13 部署
+    - Responsibility: 本仓库契约（issue-tracker / triage-labels / domain / git-contract / knowledge），`/setup-skills` 于 2026-10-13 部署、2026-11-22 增补 knowledge
+  - `docs/knowledge/`:
+    - Responsibility: 项目知识库（`KNOWLEDGE.md` 一行索引 + 每条一文件），`/knowledge` 按 docs/agents/knowledge.md 门禁写入
   - `scripts/`:
     - Responsibility: 多平台链接与枚举（`link-skills.sh`、`link-opencode-skills.sh`、`list-skills.sh`）
 - Evidence: `ls` + 各文件头核对
@@ -152,7 +154,7 @@ Node: agent-start
 - Status: `confirmed`
 - Validation Entry:
   - Test commands: 无测试套件
-  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 20 个 SKILL.md
+  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 23 个 SKILL.md
   - Local run: 链接脚本幂等可重跑（README 声明，OpenCode 版 Windows 走 junction）
   - Logs / metrics: 无
 - proves: 页面可打开、skills 清单完整
@@ -186,7 +188,7 @@ Node: agent-start
 - Status: `confirmed`
 - Backlog:
   - skills 目录地形图:
-    - Why: 20 个 skill 分三桶，改/增 skill 是本仓库最高频操作，且牵动分发链
+    - Why: 23 个 skill 分三桶，改/增 skill 是本仓库最高频操作，且牵动分发链
     - Likely entry: `skills/*/README.md`
     - Likely files: 各 `SKILL.md` + 插件清单
     - Priority: 高（下次动 skills 前建）

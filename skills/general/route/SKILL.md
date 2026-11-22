@@ -42,6 +42,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **Thread is full — fresh session, keep this conversation** → `/handoff`
 - **Phase break — summarize in place** → `/compact` (built-in)
 - **Throwaway prototype to answer a runnable question** → `/prototype`
+- **Durable lesson/pitfall worth keeping — capture into the project knowledge base** → `/knowledge`
 
 ## Learn
 

@@ -79,6 +79,7 @@ Before declaring done:
 
 - [ ] Sweep `CONTEXT.md` for terms introduced during the build; add any still missing.
 - [ ] Offer ADRs for any hard-to-reverse, surprising, real-trade-off decisions made along the way (the `/grill-with-docs` bar — sparingly).
+- [ ] Capture durable lessons this feature surfaced (pitfalls, corrections, conventions) into the knowledge base per `docs/agents/knowledge.md` — via `/knowledge` when installed; skip silently when nothing passes the gate.
 - [ ] Flip every spec `implemented` → `closed`, and the parent PRD/bug to `closed` — the human accepted the outcome at this stage's gates; no further per-spec confirmation is owed.
 - [ ] Write a one-paragraph summary of what shipped, with pointers to the PRD / contracts / specs / trace — not a re-narration. Mention `/spec-sync` as the way to ripple any later requirement change.
 

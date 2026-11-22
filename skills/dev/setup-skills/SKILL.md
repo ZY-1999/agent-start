@@ -12,6 +12,7 @@ Scaffold the per-repo configuration that the skills assume:
 - **Triage labels** — the strings used for the five canonical triage roles.
 - **Domain docs** — where `CONTEXT.md` and ADRs live, and the consumer rules for reading them.
 - **CodeMap** — an agent-facing code-terrain index under `docs/codemap/`. A project-level map is built once during setup; `/codemap` adds feature maps or refreshes it later.
+- **Knowledge base** — where durable lessons live: an index + one file per entry under `docs/knowledge/`, behind a strict capture gate. Read the index before entering unfamiliar areas; capture at wrap-up or on pitfalls.
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
@@ -36,12 +37,13 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `docs/adr/` and any `src/*/docs/adr/` directories
 - `docs/agents/` — does this skill's prior output already exist?
 - `docs/codemap/` — does a project-level CodeMap already exist?
+- `docs/knowledge/` — does a knowledge base already exist (index + entries)?
 - `.scratch/` — sign that the local-markdown issue tracker convention is already in use
 - Any pre-existing spec / PRD / issue system the repo already has (its own `docs/specs/`, a tracking doc, an exported knowledge base, …) — read it for context. **Reference only**; see the rule above.
 
 ### 2. Present the plan (defaults applied)
 
-Summarise what's present and what's missing, then present the **defaults for all five items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
+Summarise what's present and what's missing, then present the **defaults for all six items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
 
 The defaults:
 
@@ -49,6 +51,7 @@ The defaults:
 - **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [triage-labels.md](./references/triage-labels.md).
 - **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root.
 - **CodeMap** — build the project-level map across the whole repo via `/codemap`.
+- **Knowledge base** — `docs/knowledge/` (`KNOWLEDGE.md` index + one file per entry), rules in [knowledge.md](./references/knowledge.md). `/knowledge` is the guided write path when installed; the contract alone also suffices.
 - **Git contract** — deploy [git-contract.md](./references/git-contract.md) to `docs/agents/git-contract.md`. Branch strategy defaults to **solo** (develop on the current branch); pick **feature-branch** (`feature/<slug>`/`bugfix/<slug>`) when the work needs isolation. The contract also carries commit-message conventions;
 
 Raise a section as a question **only if** the repo's actual state contradicts the default — e.g. a monorepo needs multi-context (`CONTEXT-MAP.md` + per-context `CONTEXT.md` files), issues already live somewhere other than `.scratch/`, or the repo is too large/trivial for a CodeMap (or `/codemap` isn't installed). Otherwise proceed with the defaults.
@@ -58,7 +61,7 @@ Raise a section as a question **only if** the repo's actual state contradicts th
 Show the user a draft of:
 
 - The `## Agent Notice` block to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules)
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`, `docs/agents/knowledge.md`
 - **Two decisions for the git contract** — (1) branch strategy: solo or feature-branch; (2) this repo's commit-message conventions (conventional-commits prefix, sign-off, issue key, …), or "none". The `git-contract.md` draft reflects both — keep only the chosen branch-strategy mode and fill the conventions line.
 
 Let them edit before writing.
@@ -100,16 +103,21 @@ Every time the agent receives a requirement, interview the user first with the m
 
 [one-line summary — start here when exploring the codebase: a project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map].
 
+### Knowledge base
+
+[one-line summary — durable lessons/pitfalls/conventions under `docs/knowledge/`, index `KNOWLEDGE.md`; read the index before entering unfamiliar areas; capture via `/knowledge` at wrap-up or on pitfalls — gate: non-derivable, cross-session, sourced, bounded. See `docs/agents/knowledge.md`.]
+
 ### Git contract
 
 [one-line summary — active branch strategy (solo or feature-branch) + commit-message conventions; See `docs/agents/git-contract.md`.
 ```
 
-Then write the four docs files using the seed templates in this skill folder as a starting point:
+Then write the five docs files using the seed templates in this skill folder as a starting point:
 
 - [issue-tracker-local.md](./references/issue-tracker-local.md) — local-markdown issue tracker
 - [triage-labels.md](./references/triage-labels.md) — label mapping
 - [domain.md](./references/domain.md) — domain doc consumer rules + layout
+- [knowledge.md](./references/knowledge.md) — knowledge-base layout, read/write rules, capture gate
 - [git-contract.md](./references/git-contract.md) — git workflow contract. **Finalise on deploy**: keep only the chosen branch-strategy mode (delete the other, drop the `<Pick one…>` placeholder) and fill the Commit-messages repo-conventions line. `/sdd-flow` and `/tdd` read the deployed `docs/agents/git-contract.md`.
 
 Then build the project-level CodeMap: run `/codemap` in **project** mode to generate `docs/codemap/project.md`. Feature maps are added later as work needs them — not during setup. (Skip if `/codemap` isn't installed.)

@@ -1,6 +1,6 @@
 # Dev：开发相关 skill
 
-面向代码库与开发流程的 skill：设计/领域建模、代码地形、SDD 前半段入口与父项产出、双轴复核、仓库配置。共 11 个：4 个来自 [mattpocock/skills](https://github.com/mattpocock/skills)，7 个为 fork 扩展。可独立使用，也可被 `sdd/` 流水线引用（如 `/to-spec` 用 `/codebase-design` 词汇、`/sdd-flow` 调 `/review` 复核）。
+面向代码库与开发流程的 skill：设计/领域建模、代码地形、SDD 前半段入口与父项产出、双轴复核、经验沉淀、仓库配置。共 12 个：4 个来自 [mattpocock/skills](https://github.com/mattpocock/skills)，8 个为 fork 扩展。可独立使用，也可被 `sdd/` 流水线引用（如 `/to-spec` 用 `/codebase-design` 词汇、`/sdd-flow` 调 `/review` 复核，`/handoff` 交接前调 `/knowledge` 沉淀）。
 
 ## 用户调用（User-invoked）
 
@@ -32,3 +32,4 @@ fork 扩展：
 - **[idea-to-prd](./idea-to-prd/SKILL.md)** — SDD 前半段：grill 对齐设计（`/grilling` + `/domain-modeling` 核心）→ `/to-prd` 综合 PRD → 人审 Gate 0，**停在批准的 PRD 落盘**。只拥有 grill + PRD + Gate 0，不碰 git，也不自动接力——是否继续进入 SDD 由用户经 `/route` 决策。也可补全已有 `needs-info` PRD 草稿的缺口。
 - **[to-prd](./to-prd/SKILL.md)** — 把当前对话综合成父项 issue（feature `prd` / bug `bug` / 架构深化 `prd`）并发布到 issue 追踪器。不做访谈，只做综合；发布前由 fresh-context sub-agent 对抗式审查（先真实性、后可行性）。产出供 `/to-spec` 拆解的父项。
 - **[diagnose-bug](./diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：反馈循环 → 复现最小化 → 假设 → 插桩锁定根因。**诊断本身即交付物**（根因 + 证据 + 最小复现 + 修复方向），不修复、不自动交接；要把诊断转成被追踪的修复，经 `/route` 走 `/to-prd` → `/sdd-flow`。
+- **[knowledge](./knowledge/SKILL.md)** — 严格门禁的项目经验沉淀：把踩坑、被纠正、稳定下来的约定写入 `docs/knowledge/`（一行索引 + 每条一文件），对既有条目去重合并、修剪过期。收尾、`/handoff` 之前、被纠正或踩坑时触发。

@@ -24,6 +24,10 @@ Single-context: `CONTEXT.md` + `docs/adr/` at the repo root. See `docs/agents/do
 
 Start here when exploring the codebase: a project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map.
 
+### Knowledge base
+
+Durable lessons/pitfalls/conventions under `docs/knowledge/`, index `KNOWLEDGE.md`; read the index before entering unfamiliar areas; capture via `/knowledge` at wrap-up or on pitfalls — gate: non-derivable, cross-session, sourced, bounded. See `docs/agents/knowledge.md`.
+
 ### Git contract
 
 Solo on the current branch; commit messages use conventional-commits prefixes (`docs:` / `feat:` / `fix:` …) with Chinese subjects allowed. See `docs/agents/git-contract.md`.
