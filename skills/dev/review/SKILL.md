@@ -12,7 +12,7 @@ Two-axis review of the diff between `HEAD` and a fixed point:
 
 Both axes run as **parallel fresh-context sub-agents** so they don't pollute each other's context (and neither sees whatever chat produced the diff), then this skill aggregates their findings.
 
-Requires `/setup-skills` to have run in this repo (issue tracker, triage labels). If `docs/agents/issue-tracker.md` is missing, stop and run `/setup-skills` first.
+Requires `/setup-skills` to have run in this repo (issue tracker, triage labels). If `docs/agents/issue-tracker.md` is missing, stop and ask the user to run `/setup-skills` first.
 
 ## Process
 
@@ -31,8 +31,8 @@ Before going further, confirm the fixed point resolves (`git rev-parse <fixed-po
 Look for the originating spec, in this order:
 
 1. A path the caller supplied.
-2. Issue references in the commit messages (`#123`, `Closes #45`, GitLab `!67`, etc.) — fetch via the workflow in `docs/agents/issue-tracker.md`.
-3. A PRD/spec file under `docs/`, `specs/`, or `.scratch/` matching the branch name or feature.
+2. Association IDs in the commit messages (a ZenTao task/bug/story, or an issue slug) — map each to its `.scratch/<YYYY-MM-DD>-<feature-slug>/` file per `docs/agents/git-contract.md`.
+3. A PRD/spec file under `.scratch/<feature>/` (the parent) or `.scratch/<feature>/specs/` matching the branch name or feature.
 4. If nothing is found, ask the user where the spec is. If they say there isn't one, the **Spec** sub-agent will skip and report "no spec available".
 
 Alongside the spec, pick up the feature folder's **`contracts.md`** and **`trace.md`** when they exist — they are the Spec axis's ground truth for interfaces and coverage.

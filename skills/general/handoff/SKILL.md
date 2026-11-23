@@ -8,7 +8,7 @@ Write a handoff document summarising the current conversation so a fresh agent c
 
 ## 0. Capture durable lessons first
 
-Before compacting, run the knowledge gate on this session: anything durable (pitfall, correction, stabilized convention) goes into the knowledge base per `docs/agents/knowledge.md` — via `/knowledge` when installed. The handoff file carries only what's transient; a lesson recorded in both places will drift apart. If nothing passes the gate, proceed — don't force an entry.
+Before compacting, run the knowledge gate on this session: anything durable (pitfall, correction, stabilized convention) goes into the knowledge base per `docs/agents/knowledge.md` — via `/knowledge` when installed. The handoff file carries only what's transient; a lesson recorded in both places will drift apart. If nothing passes the gate, say so explicitly in the handoff ("无可同步长期知识") and proceed — don't force an entry.
 
 ## 1. Write the handoff file
 

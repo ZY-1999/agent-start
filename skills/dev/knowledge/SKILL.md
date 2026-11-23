@@ -9,7 +9,7 @@ Sessions keep re-learning the same things: the Windows path quirk, the hook that
 
 This skill is the **write path**. The read path is cheaper and needs no skill: any session entering an unfamiliar area reads `docs/knowledge/KNOWLEDGE.md` (the index) per the contract.
 
-> Precondition: `docs/agents/knowledge.md` exists (deployed by `/setup-skills`). If it doesn't, this repo has no knowledge base — run `/setup-skills` first, or ask the user whether to create one.
+> Precondition: `docs/agents/knowledge.md` exists (deployed by `/setup-skills`). If it doesn't, this repo has no knowledge base — ask the user to run `/setup-skills` first, or whether to create one.
 
 ## The gate — run it on every candidate
 
@@ -47,7 +47,7 @@ Read `KNOWLEDGE.md`. For each passing candidate:
 
 ### 5. Update the index
 
-`KNOWLEDGE.md` — **one line per entry**: number + one-line hook, nothing more. The index is the only part every session reads; keep it lean enough that it never needs trimming on its own.
+`KNOWLEDGE.md` — **one line per entry**: number + one-line hook, nothing more. The index is the only part every session reads; keep it scannable — the contract consolidates entries once the index passes ~40 lines.
 
 ### 6. Report
 

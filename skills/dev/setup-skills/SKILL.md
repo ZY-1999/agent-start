@@ -16,12 +16,13 @@ Scaffold the per-repo configuration that the skills assume:
 - **Checklist** — the review checklist used by `/review` and by self-checks before finishing.
 - **CodeMap** — an agent-facing code-terrain index under `docs/codemap/`. A project-level map is built once during setup; `/codemap` adds feature maps or refreshes it later.
 - **Knowledge base** — where durable lessons live: an index + one file per entry under `docs/knowledge/`, behind a strict capture gate. Read the index before entering unfamiliar areas; capture at wrap-up or on pitfalls.
+- **Git contract** — the branch model (a ZenTao-driven table, trimmed to the repo's actual branches on deploy) and the commit-message association-ID convention, deployed to `docs/agents/git-contract.md`.
 
 All deployed artifacts are written in **Chinese** (this fork's docs convention). Keep machine-readable tokens untranslated — `Type:` / `Status:` line names, the triage label strings, and every path.
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
-One step is environmental rather than per-repo: the plugin also ships vendored third-party skills — `zentao-cli` and `zentao-tour` (from [easysoft/zentao-cli](https://github.com/easysoft/zentao-cli)) driving the `zentao` binary, and `confluence` (from [pchuri/confluence-cli](https://github.com/pchuri/confluence-cli)) driving the `confluence` binary. Step 5 verifies those binaries and recommends how the user configures credentials themselves (environment variables in their own `~/.bashrc` for zentao, the local `confluence-cli` profile for Confluence); it never handles secret values.
+One step is environmental rather than per-repo: the plugin also ships vendored third-party skills (`zentao-cli`, `zentao-tour`, `confluence`). Step 5 verifies their CLIs and recommends how the user configures credentials themselves — it never handles secret values.
 
 ## Existing spec / issue systems are reference only
 
@@ -57,7 +58,7 @@ The defaults:
 
 - **AGENTS.md entry** — add the six-section skeleton (overview / language / build & verify / `## Agent Notice` / boundaries / minimal memory) to whichever entry file exists, filled from what Explore found.
 - **Issue tracker** — local markdown under `.scratch/` at the repo root.
-- **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-agent`, `ready-for-human`, `wontfix`). See [triage-labels.md](./references/triage-labels.md).
+- **Triage labels** — each canonical role's string equals its name (`needs-triage`, `needs-info`, `ready-for-human`, `ready-for-agent`, `implemented`, `closed`, `wontfix`; a spec also carries `needs-design` before its design is filled). See [triage-labels.md](./references/triage-labels.md).
 - **Domain docs** — single-context: one `CONTEXT.md` + `docs/adr/` at the repo root.
 - **Developer rules** — deploy [developer.md](./references/developer.md) to `docs/agents/developer.md`. Drop section two (skill / rule-asset conventions) when the repo carries no such assets.
 - **Checklist** — deploy [checklist.md](./references/checklist.md) to `docs/agents/checklist.md`. Drop the rule-asset line when it doesn't apply.
@@ -114,4 +115,4 @@ The zentao skills operate Zentao (禅道) through the `zentao` command, from the
 
 ### 6. Done
 
-Tell the user the setup is complete and which files now drive what: `AGENTS.md` is the entry every agent reads first; `/idea-to-prd`, `/review`, `/sdd-flow` and `/tdd` read the issue tracker and git contract; `/review`'s Standards axis reads `docs/agents/developer.md` and uses `checklist.md` as its coverage map. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch. If step 5 found a third-party CLI missing, repeat the install reminder once in this summary.
+Tell the user the setup is complete and which files now drive what: `AGENTS.md` is the entry every agent reads first; `/idea-to-prd` and `/review` read the issue tracker; `/sdd-flow` and `/tdd` follow the git contract; `/review`'s Standards axis reads `docs/agents/developer.md` and uses `checklist.md` as its coverage map; `/knowledge` writes `docs/knowledge/` — read `KNOWLEDGE.md` before entering unfamiliar areas. Mention they can edit `docs/agents/*.md` directly later, and refresh or extend the CodeMap via `/codemap` — re-running this skill is only necessary to restart from scratch. If step 5 found a third-party CLI missing, repeat the install reminder once in this summary.

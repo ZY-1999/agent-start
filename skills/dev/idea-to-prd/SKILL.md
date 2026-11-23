@@ -7,7 +7,7 @@ description: "SDD's front half: grill a raw idea/requirement → synthesise the 
 
 The front half of the Spec-Driven Development pipeline: turn a raw idea or requirement into an **approved PRD on disk** — and stop there. Owns only grilling, PRD synthesis, and the human Gate 0 — **no git operations**, and no hand-off: whether the approved PRD continues into SDD is the user's next, separately-routed decision (`/route`).
 
-Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and run `/setup-skills` first.
+Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and ask the user to run `/setup-skills` first.
 
 ```
 idea → grill → prd → [Gate 0] → done (approved PRD on disk)
@@ -18,9 +18,9 @@ idea → grill → prd → [Gate 0] → done (approved PRD on disk)
 
 ## Human gate — a one-screen card, with the file as ground truth
 
-Gate 0 fires **after** Stage 2 has already published the PRD to the issue tracker — the PRD is a real file on disk before the gate runs. The human reviews a **Gate 0 card** (one screen), not the full document:
+Gate 0 fires **after** Stage 2 has already published the PRD to the issue tracker — the PRD is a real file on disk before the gate runs. The human reviews a **Gate 0 card** (one screen; its contents are listed under Gate 0 below), not the full document:
 
-- **Present the card in chat** — P0 acceptance criteria (id + one line each), Out of Scope, and the few key trade-offs the grill settled. The card is the review surface; deep-reading the PRD is optional.
+- **Present the card in chat** — the card is the review surface; deep-reading the PRD is optional.
 - **Point the user at the PRD file** — give the exact path; it remains the ground truth and the place to edit.
 - **In-file edits count as approved feedback** — fold them in.
 - Then ask the gate question and wait.
@@ -52,7 +52,7 @@ If the user arrives already-grilled (the conversation carries a resolved design)
 
 Synthesize the PRD from the grilled context (no interview — `/to-prd` forbids it).
 
-**Mode 2 alt — update in place, don't re-synthesise.** The PRD already exists on disk — don't re-run `/to-prd`'s synthesis (steps 1-3) for a fresh draft; it would overwrite. Instead, fold the grill's output straight into the existing PRD file: **fill the empty sections** and **cut what the grill overturned** (claims, directions, or over-confident assertions the gap-fill just falsified). Then run `/to-prd`'s adversarial review (step 4 — fresh-context sub-agent, veracity first) on the updated draft; on PASS, flip its status `needs-info` → `ready-for-human` (now complete, awaiting Gate 0).
+**Mode 2 alt — update in place, don't re-synthesise.** The PRD already exists on disk — don't re-run `/to-prd`'s synthesis (step 2) for a fresh draft; it would overwrite. Instead, fold the grill's output straight into the existing PRD file: **fill the empty sections** and **cut what the grill overturned** (claims, directions, or over-confident assertions the gap-fill just falsified). Then run `/to-prd`'s adversarial review (step 3 — fresh-context sub-agent, veracity first) on the updated draft; on PASS, flip its status `needs-info` → `ready-for-human` (now complete, awaiting Gate 0).
 
 ### Gate 0 — human reviews the PRD
 
@@ -74,5 +74,5 @@ Do not treat the PRD as approved before the human approves.
 
 - You already have an approved PRD on disk → `/sdd-flow` directly (it owns everything after Gate 0).
 - The PRD comes from an architecture scan → start with `/improve-architecture` (it scans, publishes every candidate as a `needs-info` draft — Top included — and stops). To pursue one of those drafts, bring it back here — `/idea-to-prd` completes it (mode 2) → Gate 0.
-- One-off fix or trivial change → just `/tdd` or `/diagnose-bug` directly.
-- The repo hasn't run `/setup-skills` → run that first.
+- One-off fix or trivial change → `/to-spec` → `/tdd` (no spec, no `/tdd`); root cause unknown → `/diagnose-bug`.
+- The repo hasn't run `/setup-skills` → ask the user to run that first.

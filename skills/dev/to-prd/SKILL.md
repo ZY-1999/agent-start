@@ -5,7 +5,7 @@ description: Turn the current conversation into a parent issue — a feature PRD
 
 This skill takes the current conversation context and codebase understanding and produces a **parent issue** — a feature PRD, a bug, or an architecture-deepening PRD. Do NOT interview the user — just synthesize what you already know.
 
-The issue tracker and triage label vocabulary should already be configured — run `/setup-skills` if not.
+The issue tracker and triage label vocabulary should already be configured — ask the user to run `/setup-skills` if not.
 
 ## Process
 
@@ -25,7 +25,7 @@ Three templates, picked by the nature of the input:
 - **Bug** (something broken — wrong behavior, crash, wrong output) → `Type: bug` → [bug-template.md](references/bug-template.md)
 - **Architecture / code-structure deepening** (deepening shallow modules, consolidating seams — typically fed by `/improve-architecture`'s report, or a design discussion using `/codebase-design` vocabulary) → `Type: prd` → [architecture-template.md](references/architecture-template.md)
 
-When an orchestrator invokes this skill with an explicit type (`/improve-architecture` declares an architecture source), honor it. Otherwise infer from the conversation.
+When a caller passes an explicit type (e.g. a design discussion already using `/codebase-design` vocabulary), honor it. Otherwise infer from the conversation.
 
 ### 3. Adversarial review — one fresh-context sub-agent
 
@@ -48,4 +48,4 @@ If the sub-agent returns defects, loop back — re-explore the code and fix the 
 
 ### 4. Publish
 
-With the review passing, publish the PRD to the project issue tracker and apply the `ready-for-human` triage label (complete PRD, awaiting Gate 0 review) — no need for additional triage.
+With the review passing, publish the PRD to the project issue tracker and set its `Status: ready-for-human` line (complete PRD, awaiting Gate 0 review) — no further triage needed.

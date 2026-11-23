@@ -32,7 +32,7 @@ A requirement that passes the bar plays the grilled-design role for the rest of 
 
 </completeness-bar>
 
-> Precondition: the issue tracker layout is configured — run `/setup-skills` if not.
+> Precondition: the issue tracker layout is configured — ask the user to run `/setup-skills` if not.
 
 ## Process
 

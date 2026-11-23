@@ -7,7 +7,7 @@ description: Scan a codebase for architectural deepening opportunities, publish 
 
 Surface architectural friction and propose **deepening opportunities** — refactors that turn shallow modules into deep ones — as a visual HTML report, then publish PRD drafts and stop. **Discovery only — no interfaces proposed, no PRD synthesis.** It discovers candidates, publishes the report as the first artifact in a new feature folder, and lifts every `Strong` / `Worth exploring` candidate (Top recommendation included) straight from its report card into a thin `needs-info` `prd` draft — Implementation / Testing Decisions left empty, to be grilled in later.
 
-> Precondition: the issue tracker is configured — run `/setup-skills` first if `.scratch/` isn't set up.
+> Precondition: the issue tracker is configured — ask the user to run `/setup-skills` first if `.scratch/` isn't set up.
 
 Informed by the project's domain model and built on a shared design vocabulary:
 

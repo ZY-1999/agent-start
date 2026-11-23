@@ -18,9 +18,11 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **Existing codebase with no docs — reverse-engineer a module-split, product-readable PRD** → `/reverse-prd`
 - **Drive it myself, I have a codebase** → `/grill-with-docs` → `/to-prd` → `/sdd-flow`
 - **Drive it myself, no codebase** → `/grill-me` → `/to-prd` → `/sdd-flow`
-- **Requirement is simple and already complete (goal, scope, done-behaviors stated) — skip grilling and the PRD** → `/to-spec` → `/tdd`
+- **Requirement is simple and already complete (goal, scope, done-behaviors stated) — skip grilling and the PRD, still plan and confirm first** → `/to-spec` → `/tdd`
 - **Approved PRD → continue into SDD (spec → build → review)** → `/sdd-flow`
 - **Just decompose a PRD into specs** → `/to-spec`
+- **A requirement or contract changed after decomposition** → `/spec-sync`
+- **Audit a feature's spec artifacts, or see what's in flight** → `/spec-check`
 - **I already have a spec** → `/tdd`
 
 ## A bug
@@ -35,7 +37,7 @@ Scan the **intent** below; run the skill on the right. One question → one skil
 - **Fuzzy requirement — what do we actually verify?** → `/qa-clarify`
 - **Fuzzy requirement and the owner is right here to answer** → `/grill-me` → `/qa-clarify`
 - **Assertions are settled — turn them into implementable specs** → `/to-spec`
-- **A rule-level case that belongs in CI as a unit test** → `/tdd`
+- **A rule-level case worth automating later** → keep it in `/qa-cases`, tagged `[规则型]` (no automation or CI this round)
 - **Need a transfer gate (smoke) or full business-flow cases with data & SQL** → `/qa-cases`
 - **Bug fixed — verify it and size the regression blast radius** → `/qa-regress`
 - **Bug won't reproduce / root cause unknown** → `/diagnose-bug` → `/qa-regress`
@@ -65,7 +67,7 @@ Which test step borrows which `dev/` `sdd/` skill, and the five confusable pairs
 
 ## Review, setup & meta
 
-- **Review current changes (Standards + Spec)** → `/review` (or `/code-review`)
+- **Review current changes (Standards + Spec)** → `/review` (never inline `/code-review` in the main context — the two axes need fresh-context sub-agents)
 - **Ship-or-not for a version / demo readiness / retro** → `/qa-review` — business gate, not the code diff
 - **First-time repo setup (tracker / labels / domain docs / codemap)** → `/setup-skills`
 - **Write or edit a skill (in this repo)** → `/writing-great-skills`

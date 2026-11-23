@@ -155,9 +155,9 @@ Grab the menu tree and pages, map them to `M01`–`M0N` **using business domain 
 
 With both repos in hand, the split is decided by a three-way alignment — frontend menu entry ↔ backend controllers ↔ data tables — written down as a mapping table before any module doc. Where the three disagree (a menu with no endpoint, an endpoint with no page), that gap is a finding, not something to smooth over: it usually means a dead feature or a capability reachable only from somewhere you have not found yet.
 
-Then, for each domain, list the scenarios you expect to find: name, role, trigger condition, business goal, priority. Write the domain list **and the scenario inventory** into `00-总览.md` with status `占位` — this is what makes coverage gaps visible while you work, at scenario granularity rather than module granularity.
+Then, for each domain, list the scenarios you expect to find: name, role, trigger condition, business goal, priority. Write the **domain list plus each domain's expected scenario count** into `00-总览.md` with status `占位` — coverage stays visible at domain granularity; the per-scenario inventory lives in each module's §2 scenario map, so the overview never duplicates it (a second copy is a second truth).
 
-Completion condition: every user-reachable capability carries an `M` id (or is parked for `appendix/02`), every expected scenario carries an `S` id in the overview, and all are marked `占位`.
+Completion condition: every user-reachable capability carries an `M` id (or is parked for `appendix/02`), every expected scenario carries an `S` id in its module's §2 map, and every domain is marked `占位` in the overview.
 
 ### 4. Close each module — scenario by scenario
 
@@ -184,13 +184,13 @@ Completion condition per module: its CodeMap was used for verification; every sc
 
 ### 5. Aggregate open questions, coverage, and the ledger
 
-Collect every module's §7 and every common doc's `待确认` into `appendix/01-全局待确认问题.md`, ranked by blast radius, **tagged with the scenario it belongs to**, and assigned to whoever can actually answer (product for intent and business rules, dev for implementation, platform admin for messages and permissions). A question with no scenario is a question that never landed on a business line — send it back.
+Collect every module's §7 and every common doc's `待确认` into `appendix/01-全局待确认问题.md`, ranked by blast radius, **tagged with the scenario it belongs to**, and assigned to whoever can actually answer (product for intent and business rules, dev for implementation, platform admin for messages and permissions). A question with no scenario is a question that never landed on a business line — send it back, except platform-level C04/C06 questions (global messages, shared constraints), which are tagged `全局`.
 
 Account for coverage twice: every user-reachable capability resolves to an `M` id, and every scenario in the overview's inventory resolves to a written section. Whatever does not goes to `appendix/02-未覆盖模块.md` with the reason and a risk level.
 
 Then finish `appendix/03-溯源台账.md`: every assertion has a row, every row has a real position, every `未找到依据` item has been demoted to `低` and given a Q entry. The physical mapping table (§3) and the code-value mapping (§4) are what let implementation-side readers connect business names to storage without polluting C02.
 
-Completion condition: A01 ranks every open question, tags its scenario, and links back to its module; A02 gives a reason and risk level for every uncovered capability or scenario; A03 covers every assertion with no empty position; `00-总览.md` flips finished domains and scenarios from `占位` to `已完成` and recomputes coverage — a tree left at `占位` is an unfinished run.
+Completion condition: A01 ranks every open question, tags its scenario, and links back to its module; A02 gives a reason and risk level for every uncovered capability or scenario; A03 covers every assertion with no empty position; `00-总览.md` flips finished domains from `占位` to `已完成` and recomputes the scenario counts — a tree left at `占位` is an unfinished run.
 
 ### 6. Adversarial review — accuracy, then readability, then completeness
 
@@ -210,9 +210,9 @@ Completion condition: the reviewer reports PASS on all three passes.
 
 ### 7. Self-check before declaring done
 
-Run the Quality Gate below. If a check fails, fix it rather than noting it.
+Run the Quality Gate below. Fix what you can; what genuinely can't be fixed here (e.g. a repo the user declared unavailable) is surfaced, never silently noted.
 
-Before handing to the reviewer, run the mechanical sweep in [review-brief Pass 2](./references/review-brief.md) yourself — it saves a round.
+After the reviewer returns, re-run the mechanical sweep in [review-brief Pass 2](./references/review-brief.md) to confirm every fix landed — it saves a round.
 
 Completion condition: every Quality Gate item is green; anything still red is reported to the user as a known gap, not silently shipped.
 
@@ -223,7 +223,7 @@ Completion condition: every Quality Gate item is green; anything still red is re
 | One top-level menu / one business domain | One module doc — the default |
 | A domain carrying more than ~12 scenarios, or a doc > 1500 lines | Split by sub-capability with fresh sequential ids (`M06-订单-下单.md`, `M07-订单-退款.md`) — never reuse the old id (see conventions) |
 | A capability with no independent business line | Do not give it a scenario: make it a function point inside the nearest scenario, or a `G` rule |
-| Whole-tree document count | ~10–30 including the fixed docs (00-总览 + common + appendix) and ≈ ≤ 20 module docs is a **signal, not a cap** — see the precedence rule below |
+| Whole-tree document count | ~11 fixed docs (00-总览 + 6 common + DDL + 3 appendix) plus up to ~20 module docs — a **signal, not a cap**, see the precedence rule below |
 
 The split trigger and the whole-tree count collide on a large system: applying the 12-scenario / 1500-line split honestly can push past 20 module docs. When they do, decide in this order:
 
@@ -247,7 +247,7 @@ Every document opens with a version block directly under its H1. The bump rules 
 
 ## Quality Gate
 
-- [ ] Every document has its id and version block, and the version names a real commit for **every repo in scope** (frontend and backend when both were available).
+- [ ] Every **product** document (00 / C01–C06 / M* / A01–A02) has its PRD id and version block; implementation-side files (`interfaces/`, `common/07-表结构DDL.sql`, `appendix/03`) carry a version block but no PRD id. The version names a real commit for **every repo in scope** (frontend and backend when both were available).
 - [ ] The missing half is accounted for: either the other repo was explored, or the user declared it unavailable and every entry / menu / label / message claim is demoted to `低` with a Q, and the overview's coverage row says so.
 - [ ] File names match the content's language (Chinese content → Chinese names, ordering prefix kept, directory names English).
 - [ ] **No implementation detail in any business prose** — the ban list is [business-voice §2](./references/business-voice.md); code positions and physical names appear only in the `interfaces/` structure files, `common/07-表结构DDL.sql`, and `appendix/03`.
@@ -263,7 +263,7 @@ Every document opens with a version block directly under its H1. The bump rules 
 - [ ] Every assertion has a row in `appendix/03` with a real position; every `未找到依据` item is demoted to `低` and has a Q entry.
 - [ ] Confidence is marked at module level; every rule that is less certain carries an inline `（推断）` / `（未确认）` marker and a Q entry; no guess is written as a fact.
 - [ ] Every open question is aggregated into `appendix/01` with its scenario tag and phrased so a product owner can answer it; every user-reachable capability maps to an `M` id and every inventoried scenario to a written section, or both are listed in `appendix/02` with a reason and risk level.
-- [ ] No global table is duplicated inside a module doc, and no CodeMap link or code terrain appears in module bodies — the overview carries exactly one engineering pointer.
+- [ ] No global table is duplicated inside a module doc, and no CodeMap link or code terrain appears in module bodies — the overview carries a single 工程侧资料 section (codemap / interfaces / DDL / A03).
 - [ ] Every branch in the traced call chain (validation, permission, state guard, exception, boundary, side effect) resolves to a rule, a scenario step, an `AC`, an open question, or an explicit out-of-scope note.
 - [ ] Relative links resolve, and the fresh-context reviewer reports PASS on accuracy, readability, and completeness.
 

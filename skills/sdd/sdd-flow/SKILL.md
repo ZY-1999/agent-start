@@ -7,7 +7,7 @@ description: "Drive a feature from an approved PRD to shipped — the back half 
 
 The back half of the Spec-Driven Development pipeline: everything **after Gate 0** — the PRD is approved and on disk; this skill turns it into shipped code. Never run against chat-only content — if the approved PRD is not on disk yet, guide users to use `/route`.
 
-Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and run `/setup-skills` first.
+Requires `/setup-skills` to have run in this repo (issue tracker, triage labels, domain docs). If `docs/agents/issue-tracker.md` is missing, stop and ask the user to run `/setup-skills` first.
 
 The process is as follows:
 
@@ -88,4 +88,4 @@ Before declaring done:
 - You have a raw idea, not a PRD yet → `/idea-to-prd` first (grill → PRD → Gate 0; routing here afterwards is a separate user decision — see `/route`).
 - One-off fix or trivial change → just `/tdd` or `/diagnose-bug` directly.
 - You already have specs → start at Stage 2 (build).
-- The repo hasn't run `/setup-skills` → run that first.
+- The repo hasn't run `/setup-skills` → ask the user to run that first.

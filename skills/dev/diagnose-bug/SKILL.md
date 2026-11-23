@@ -1,6 +1,6 @@
 ---
 name: diagnose-bug
-description: Disciplined diagnosis loop for hard bugs and performance regressions — build a feedback loop, reproduce + minimise, hypothesise, instrument to pin the root cause. The confirmed diagnosis is the deliverable; it does not fix, and hands off to nothing.
+description: Disciplined diagnosis loop for hard bugs and performance regressions — build a feedback loop, reproduce + minimise, hypothesise, instrument to pin the root cause. The confirmed diagnosis is the deliverable; it does not fix, and the next move is user-routed (no automatic hand-off).
 ---
 
 # Diagnose Bug

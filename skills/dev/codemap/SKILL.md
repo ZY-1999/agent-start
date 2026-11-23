@@ -36,7 +36,7 @@ Use a CodeMap as:
    - mark each important relationship as `confirmed`, `inferred`, or `unknown`.
 8. Write the map under `docs/codemap/` when the user requests a durable artifact or the work feeds `/to-spec`:
    - feature: `docs/codemap/<feature>.md`
-   - project: `docs/codemap/<project>.md`
+   - project: `docs/codemap/project.md` (single-repo fixed name; in a monorepo, one per repo as `<repo>.md`)
    - Set the map's `Last updated` field (see templates) to today's date, and refresh it on every update so the map self-documents its currency without a date in the filename.
 9. Keep the CodeMap narrow enough to guide the next agent action. Do not paste large source blocks or turn it into a narrative system document.
 
@@ -44,8 +44,6 @@ Use a CodeMap as:
 
 - Feature/capability maps → [references/feature-template.md](./references/feature-template.md).
 - Project/system maps → [references/project-template.md](./references/project-template.md).
-- Drift checks → [references/drift-check.md](./references/drift-check.md).
-- Existing map updates → [references/update-existing.md](./references/update-existing.md).
 - If a task spans multiple repos, create one Project CodeMap per relevant project, then add a separate interface or cross-service flow summary.
 
 ## Output Rules
