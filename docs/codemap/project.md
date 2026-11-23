@@ -2,7 +2,8 @@
 
 ## 1. Orientation
 
-- Last updated: `2026-11-16`
+- Last updated: `2026-11-23`
+- Updated: `2026-11-23` — 合并 `github/master`：吸收 zy-skills 1.1.0 的 **SDD 分层重构**（PRD 纯需求 → `contracts.md` 契约真源 C-NN → specs（AC 投影）→ `trace.md` 追溯矩阵；`/to-spec` 双锚对齐 + 场景播种、`/tdd` 场景驱动、新增 `/spec-sync` 变更联动与 `/spec-check` 四维质检）、`/knowledge` 项目经验沉淀契约与 skill（第七件部署文档 `docs/agents/knowledge.md` + `docs/knowledge/` 索引与条目）、triage 标签扩为七类（增 `implemented` / `closed`，spec 专属 `needs-design`）、issue-tracker 增 `contracts.md` / `trace.md` 特性级产物约定。以本分支主线为基底保留六件套中文化、ZenTao git 契约、qa 桶与第三方桶；插件清单四份同步至 32 个 skill（原 29 + knowledge / spec-sync / spec-check），版本维持 1.16.0
 - Updated: `2026-11-16`（第二次）— `reverse-prd` 增加**前后端代码基线探测**：step 0 由「锁定代码版本」改为「锁定代码基线（两侧）」——先探测工作区是只有后端（有 controller/entity/mapper、无 page/router/i18n）还是只有前端，**只有一侧时停下来问用户要另一侧的路径或 git 地址**，并给出四分支决策表（两边都有 → 三方对齐划分模块；用户说前端拿不到 → 只用现有代码生成，入口/菜单/标签/文案类结论降 `低` 并开 Q，总览覆盖度写明「仅后端」；只有前端 → 先说明规则与数据结构会大面积缺失，确认后才生成，缺失面进 A02；都不可读 → 停）。理由是后端给规则/状态/数据/接口，前端给入口/菜单/字段标签/前端校验/用户看到的文案——单侧生成的典型症状是从接口路径反推「何地（入口）」、把能从前端 i18n 抄到的文案写成「平台统一维护」。配套：step 1 双仓库各建一份项目图（前端图只需页面/路由树与页面调用的接口）；step 3 模块划分改为「前端菜单 ↔ 后端 controller ↔ 数据表」三方对齐并记录不一致处；step 4 场景描述「何地」取前端菜单路径不取接口路径；incremental 模式补「后到的仓库（通常是前端）单独走一次增量，回填入口与文案」；conventions 版本块支持双基线（`后端 dev@x / 前端 dev@y`，单边写明「前端未提供，入口与文案未核实」）、溯源路径加 `前端:`/`后端:` 前缀；overview 文档信息加「代码基线」行；module-template 增「入口与提示文案取自前端」规则；business-voice 文案来源改为先取前端；review-brief Pass 1 增前端仓库核查行（入口层级、i18n 文案、前端校验、页面↔接口对应）、Pass 2 把「何地写成接口路径」列为失败；A02 增「整侧代码缺失也登记在此」；插件清单 1.9.0→1.10.0
 - Updated: `2026-11-16`（第三次）— `reverse-prd` 补两类**实现侧交付物**（用户确认需给接手/联调/外包读者承载技术口径，但仍与业务正文隔离）：模块 §6 对外接口改为「业务要素表 + 结构代码块」双层——§6.1 提供的接口与 §6.2 依赖的外部接口各附 `jsonc` 请求/响应结构（字段名照抄代码、业务含义写注释、存疑标 `// 待确认`），删掉原「方法名参数类型不进正文」的冲突表述；common/ 新增 `07-表结构DDL.sql`（从代码反推的全系统 DDL，按业务对象分段 `CREATE TABLE`，头注释指向 C02、取值编码指向 C03/A03 §4，存疑标 `-- 待确认`，明示非权威、上线/迁移前须与真实库核对）。配套把「物理名/代码位置唯一位置」从一处（A03）扩为三处：模块 §6 结构块、`common/07-表结构DDL.sql`、`appendix/03`，并同步 SKILL（Core Position 例外声明 + Output Shape + Authority + Quality Gate）、business-voice（禁用清单边界）、conventions（权威归属表 + 溯源三处）、overview（附工程侧资料加 DDL 入口）、appendix-templates（A03 改称「断言溯源唯一处」）、common-templates（开头六份→六份产品文档 + DDL，物理结构进 DDL 不进六份）、module-template（写前段补例外说明）；插件清单 1.10.0→1.11.0
 - Updated: `2026-11-16`（第四次）— `reverse-prd` step 0 增加 **DDL 提问环节**：锁定代码基线时同步问用户「能否提供数据库 DDL（建表 SQL / schema 导出 / migration）？」，提供则以真实 DDL 为权威来源（C07 基于它、C02/C03 属性与编码对照它核对），不提供才从实体类 / Mapper / migration 脚本反推并整份标「反推、未与真实库核对」、存疑字段标 `-- 待确认` 开 Q；Completion condition 增「DDL 来源已定」；step 2 「Read schema」改为「提供 DDL 时以它为准，否则反推并标反推」；common-templates C07 增两种来源（文件头写「用户提供（权威）｜反推（非权威）」）；插件清单 1.11.0→1.12.0
@@ -23,7 +24,7 @@
 - Updated: `2026-10-14` — 08 由模板示例扩为完整订单管理应用（backend/frontend/单 jar 交付）；新增插件 hooks（commit review 门）；01–07 `DEMO.md` 精简；插件清单 1.0.1→1.0.2
 - Updated: `2026-10-14` — 新增 `skills/third-party/` 第三方桶（zentao-cli 0.3.1 / zentao-tour 0.3.0-beta.1，vendored 自 easysoft/zentao-cli@`ce36cf5`）；`/setup-skills` 新增步骤 5（检查 `zentao` CLI 安装，凭证推荐用户在 `~/.bashrc` 自行 export 环境变量），Agent Notice 模板与根 `AGENTS.md` 增加 Zentao skills 节；插件清单 1.0.2→1.1.0
 - Project: agent-start（内部 git 名 `ongoal-skills`）
-- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 29 个 skills（26 自研 + 3 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
+- Role / responsibility: AI Coding 技术分享材料仓库——一份离线 HTML 讲义 + 8 个 Demo + 32 个 skills（29 自研 + 3 第三方 vendored）；同时是多平台插件的**发布源仓库**（`skills/` 的改动会随 zy-skills 插件分发出去）
 - Main languages / frameworks: Markdown、单文件 HTML（内嵌 CSS/JS，零外部依赖）、Bash；Demo 08 另含 Java（Spring Boot 2.7 / MyBatis-Plus）与 TypeScript（React 18 + antd 5 + Vite）
 - Runtime / deployment shape: 无运行时。讲义浏览器直接打开；skills 经插件清单/链接脚本安装到各客户端
 - Primary entry types: 人类入口 `README.md` / `docs/index.html`；agent 入口 `AGENTS.md`；安装入口 `scripts/`
@@ -74,8 +75,8 @@ Node: agent-start
     - Entry: 01–07 各目录 `DEMO.md`（精简为 目标/对比/演示步骤/推荐 Prompt 四节）；08 是可运行应用，入口 `docs/demos/08-project-demo/AGENTS.md` + `.scratch/2026-10-13-order-admin/`（PRD + 7 specs）
     - Feature CodeMap: pending（08 订单管理应用值得单建，见 Backlog）
     - Status: `confirmed`
-  - skills 集合（自研 26 + 第三方 vendored 3）:
-    - Main modules: `skills/general/`(6) `skills/dev/`(12) `skills/sdd/`(3) `skills/qa/`(5) `skills/third-party-zentao/`(2) `skills/third-party-confluence/`(1)
+  - skills 集合（32 个：自研 29 + 第三方 vendored 3）:
+    - Main modules: `skills/general/`(6) `skills/dev/`(13) `skills/sdd/`(5) `skills/qa/`(5) `skills/third-party-zentao/`(2) `skills/third-party-confluence/`(1)
     - Entry: 各 `skills/<桶>/<名>/SKILL.md`
     - Feature CodeMap: pending（见 Backlog）
     - Status: `confirmed`
@@ -112,8 +113,10 @@ Node: agent-start
     - Responsibility: 外部 vendored skills 按上游分桶（zentao 桶：easysoft/zentao-cli 的 zentao-cli / zentao-tour；confluence 桶：pchuri/confluence-cli 的 confluence）；原样引入，各桶 README 记录上游 commit 基线与版本
     - Risk notes: **不参与** fork 上游同步映射；更新走上游整目录覆盖并更新基线；zentao 桶两个 skill 互为兄弟目录（内部相对链接依赖此布局）；运行依赖全局 `zentao` / `confluence` CLI（npm `zentao-cli` / `confluence-cli`）
   - `docs/agents/`:
-    - Responsibility: 本仓库契约六件（issue-tracker / triage-labels / domain / git-contract / developer / checklist），中文，`/setup-skills` 部署；`developer.md` 与 `checklist.md` 是 `/review` Standards 轴的标准来源与覆盖地图
-    - Risk notes: 文件名是硬契约——`hooks/pre-commit-review.ps1` 以 `docs/agents/issue-tracker.md` 是否存在判定门禁是否生效；`Type:` / `Status:` 行名与五个 triage 标签字符串不可翻译
+    - Responsibility: 本仓库契约七件（issue-tracker / triage-labels / domain / git-contract / developer / checklist / knowledge），中文，`/setup-skills` 部署；`developer.md` 与 `checklist.md` 是 `/review` Standards 轴的标准来源与覆盖地图
+    - Risk notes: 文件名是硬契约——`hooks/pre-commit-review.ps1` 以 `docs/agents/issue-tracker.md` 是否存在判定门禁是否生效；`Type:` / `Status:` 行名与 triage 标签字符串不可翻译
+  - `docs/knowledge/`:
+    - Responsibility: 项目知识库（`KNOWLEDGE.md` 一行索引 + 每条一文件），`/knowledge` 按 docs/agents/knowledge.md 门禁写入
   - `scripts/`:
     - Responsibility: 多平台链接与枚举（`link-skills.sh`、`link-opencode-skills.sh`、`list-skills.sh`）
 - Evidence: `ls` + 各文件头核对
@@ -187,7 +190,7 @@ Node: agent-start
 - Status: `confirmed`
 - Validation Entry:
   - Test commands: Demo 08 后端 `mvn -f docs/demos/08-project-demo/backend/pom.xml test`（MockMvc：订单 CRUD 口径 + SPA 回退）
-  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 29 个 SKILL.md；Demo 08——compose/容器起 MySQL@3307 → `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar` → `curl http://127.0.0.1:8080/`（入口 HTML）与 `/api/orders?pageNum=1&pageSize=5`（8 条种子）
+  - Smoke paths: 浏览器打开 `docs/index.html`（目录折叠/复制按钮/打印）；`bash scripts/list-skills.sh` 应列出 32 个 SKILL.md；Demo 08——compose/容器起 MySQL@3307 → `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar` → `curl http://127.0.0.1:8080/`（入口 HTML）与 `/api/orders?pageNum=1&pageSize=5`（8 条种子）
   - Local run: 链接脚本幂等可重跑（README 声明，OpenCode 版 Windows 走 junction）
   - Logs / metrics: 无
 - proves: 页面可打开、skills 清单完整
@@ -224,7 +227,7 @@ Node: agent-start
 - Status: `confirmed`
 - Backlog:
   - skills 目录地形图:
-    - Why: 29 个 skill 分六桶（含 third-party vendored 两桶），改/增 skill 是本仓库最高频操作，且牵动分发链
+    - Why: 32 个 skill 分六桶（含 third-party vendored 两桶），改/增 skill 是本仓库最高频操作，且牵动分发链
     - Likely entry: `skills/*/README.md`
     - Likely files: 各 `SKILL.md` + 插件清单
     - Priority: 高（下次动 skills 前建）

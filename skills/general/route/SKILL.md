@@ -57,6 +57,7 @@ Which test step borrows which `dev/` `sdd/` skill, and the five confusable pairs
 - **Thread is full — fresh session, keep this conversation** → `/handoff`
 - **Phase break — summarize in place** → `/compact` (built-in)
 - **Throwaway prototype to answer a runnable question** → `/prototype`
+- **Durable lesson/pitfall worth keeping — capture into the project knowledge base** → `/knowledge`
 
 ## Learn
 

@@ -1,6 +1,6 @@
 ---
 name: setup-skills
-description: Configure a repo for the SDD skills — write the AGENTS.md entry (project overview, language, build & verify, agent notice, boundaries, minimal memory) plus docs/agents/{issue-tracker,triage-labels,domain,git-contract,developer,checklist}.md, and build an initial project-level CodeMap. Run once before first use of the other skills.
+description: Configure a repo for the SDD skills — write the AGENTS.md entry (project overview, language, build & verify, agent notice, boundaries, minimal memory) plus docs/agents/{issue-tracker,triage-labels,domain,git-contract,developer,checklist,knowledge}.md, and build an initial project-level CodeMap. Run once before first use of the other skills.
 disable-model-invocation: true
 ---
 
@@ -10,13 +10,14 @@ Scaffold the per-repo configuration that the skills assume:
 
 - **AGENTS.md entry** — the project-level on-ramp for AI coding tools: overview, language, build & verify, `## Agent Notice`, default boundaries, minimal memory. Written in Chinese. Skeleton: [agents-md.md](./references/agents-md.md).
 - **Issue tracker** — where issues live. **Local markdown only** in this fork (no GitHub/GitLab).
-- **Triage labels** — the strings used for the five canonical triage roles.
+- **Triage labels** — the strings used for the canonical triage roles.
 - **Domain docs** — where `CONTEXT.md` and ADRs live, and the consumer rules for reading them.
 - **Developer rules** — coding and doc conventions for humans and agents alike.
 - **Checklist** — the review checklist used by `/review` and by self-checks before finishing.
 - **CodeMap** — an agent-facing code-terrain index under `docs/codemap/`. A project-level map is built once during setup; `/codemap` adds feature maps or refreshes it later.
+- **Knowledge base** — where durable lessons live: an index + one file per entry under `docs/knowledge/`, behind a strict capture gate. Read the index before entering unfamiliar areas; capture at wrap-up or on pitfalls.
 
-All deployed artifacts are written in **Chinese** (this fork's docs convention). Keep machine-readable tokens untranslated — `Type:` / `Status:` line names, the five triage label strings, and every path.
+All deployed artifacts are written in **Chinese** (this fork's docs convention). Keep machine-readable tokens untranslated — `Type:` / `Status:` line names, the triage label strings, and every path.
 
 This is a prompt-driven skill, not a deterministic script. Explore, present what you found, confirm with the user, then write.
 
@@ -41,15 +42,16 @@ Look at the current repo to understand its starting state. Read whatever exists;
 - `AGENTS.md` and `CLAUDE.md` at the repo root — does either exist? Which of the skeleton sections does it already carry (project overview / language / build & verify / `## Agent Notice` / default boundaries / minimal memory)?
 - `CONTEXT.md` and `CONTEXT-MAP.md` at the repo root
 - `docs/adr/` and any `src/*/docs/adr/` directories
-- `docs/agents/` — does this skill's prior output already exist? Which of the six files are present?
+- `docs/agents/` — does this skill's prior output already exist? Which of the seven files are present?
 - The build and verification commands the repo actually uses — build tool, test command, how to start it, and whether testing is manual-only. Needed for the overview and build sections; ask rather than guess.
 - `docs/codemap/` — does a project-level CodeMap already exist?
+- `docs/knowledge/` — does a knowledge base already exist (index + entries)?
 - `.scratch/` — sign that the local-markdown issue tracker convention is already in use
 - Any pre-existing spec / PRD / issue system the repo already has (its own `docs/specs/`, a tracking doc, an exported knowledge base, …) — read it for context. **Reference only**; see the rule above.
 
 ### 2. Present the plan (defaults applied)
 
-Summarise what's present and what's missing, then present the **defaults for all eight items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
+Summarise what's present and what's missing, then present the **defaults for all nine items in one list** — don't walk through them one at a time. State that you'll apply these unless the user objects, and ask only for exceptions.
 
 The defaults:
 
@@ -60,6 +62,7 @@ The defaults:
 - **Developer rules** — deploy [developer.md](./references/developer.md) to `docs/agents/developer.md`. Drop section two (skill / rule-asset conventions) when the repo carries no such assets.
 - **Checklist** — deploy [checklist.md](./references/checklist.md) to `docs/agents/checklist.md`. Drop the rule-asset line when it doesn't apply.
 - **CodeMap** — build the project-level map across the whole repo via `/codemap`.
+- **Knowledge base** — `docs/knowledge/` (`KNOWLEDGE.md` index + one file per entry), rules in [knowledge.md](./references/knowledge.md). `/knowledge` is the guided write path when installed; the contract alone also suffices.
 - **Git contract** — deploy [git-contract.md](./references/git-contract.md) to `docs/agents/git-contract.md`. The template leads with a **ZenTao-driven branch model** (`main`/`develop`/`feature`/`bugfix`/`release`/`hotfix`, each mapped to a ZenTao object); trim it to the branch types the repo actually uses, and for a repo that develops on the current branch keep only `main` and delete the rest of the table. Commit messages carry one association ID each — a ZenTao task/bug/story, or an issue slug;
 
 Raise a section as a question **only if** the repo's actual state contradicts the default — e.g. a monorepo needs multi-context (`CONTEXT-MAP.md` + per-context `CONTEXT.md` files), issues already live somewhere other than `.scratch/`, or the repo is too large/trivial for a CodeMap (or `/codemap` isn't installed). Otherwise proceed with the defaults.
@@ -69,7 +72,7 @@ Raise a section as a question **only if** the repo's actual state contradicts th
 Show the user a draft of:
 
 - The full entry-file skeleton ([agents-md.md](./references/agents-md.md)) to add to whichever of `CLAUDE.md` / `AGENTS.md` is being edited (see step 4 for selection rules) — show the sections around `## Agent Notice` too, not just the block itself
-- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`, `docs/agents/developer.md`, `docs/agents/checklist.md`
+- The contents of `docs/agents/issue-tracker.md`, `docs/agents/triage-labels.md`, `docs/agents/domain.md`, `docs/agents/git-contract.md`, `docs/agents/developer.md`, `docs/agents/checklist.md`, `docs/agents/knowledge.md`
 - **Three decisions** — (1) branch model: the ZenTao-driven table trimmed to the branch types the repo uses, or a single current branch (table reduced to `main`); (2) the association-ID source for commits — ZenTao task/bug/story, an issue slug, or "none" — plus any conventional-commits prefix; (3) whether the repo carries skill / prompt / rule assets, which decides whether `developer.md` keeps its second section and whether the checklist keeps its rule-asset line. The `git-contract.md` draft reflects the first two — trim the branch table, then rewrite the association-ID column and the commit template to the repo's real carrier.
 
 Let them edit before writing.
@@ -86,16 +89,17 @@ Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa) — alw
 
 The entry-file skeleton lives in [agents-md.md](./references/agents-md.md) — six top-level sections, all Chinese, with `<…>` placeholders. Read it, fill the placeholders from what Explore found, and merge it into the entry file. If the file already carries part of the skeleton, update `## Agent Notice` in place and add only the missing top-level sections — never overwrite user edits, never append a duplicate `## Agent Notice`.
 
-Then write the six docs files using the seed templates in this skill folder as a starting point:
+Then write the seven docs files using the seed templates in this skill folder as a starting point:
 
 - [issue-tracker-local.md](./references/issue-tracker-local.md) — 本地 markdown issue tracker
 - [triage-labels.md](./references/triage-labels.md) — 标签映射
 - [domain.md](./references/domain.md) — 领域文档消费规则与布局
+- [knowledge.md](./references/knowledge.md) — 知识库布局、读写规则与沉淀门禁
 - [developer.md](./references/developer.md) — 开发规范；仓库没有 skill / prompt / 规则资产时删掉第二节
 - [checklist.md](./references/checklist.md) — 评审清单；不适用时删掉规则资产那一条
 - [git-contract.md](./references/git-contract.md) — git 工作流契约。**部署时定稿**：按仓库实际裁剪分支类型表（在当前分支开发的仓库只留 `main`），把「主要关联对象」列与提交模板换成该仓库真实载体（禅道 ID / issue slug），并删掉两处 `_<部署时定稿…>_` 说明。`/sdd-flow` 与 `/tdd` 读部署后的 `docs/agents/git-contract.md`。
 
-All six files are written in Chinese. Keep the machine-readable tokens as-is: `Type:` / `Status:` line names, the five triage label strings, and every path.
+All seven files are written in Chinese. Keep the machine-readable tokens as-is: `Type:` / `Status:` line names, the triage label strings, and every path.
 
 Then build the project-level CodeMap: run `/codemap` in **project** mode to generate `docs/codemap/project.md`. Feature maps are added later as work needs them — not during setup. (Skip if `/codemap` isn't installed.)
 

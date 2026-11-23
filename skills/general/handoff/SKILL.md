@@ -6,6 +6,10 @@ argument-hint: "What will the next session be used for?"
 
 Write a handoff document summarising the current conversation so a fresh agent can continue the work, then emit the starter prompt that launches the next session.
 
+## 0. Capture durable lessons first
+
+Before compacting, run the knowledge gate on this session: anything durable (pitfall, correction, stabilized convention) goes into the knowledge base per `docs/agents/knowledge.md` — via `/knowledge` when installed. The handoff file carries only what's transient; a lesson recorded in both places will drift apart. If nothing passes the gate, proceed — don't force an entry.
+
 ## 1. Write the handoff file
 
 Save to the **OS temporary directory**, not the workspace — a handoff is a transient bridge between sessions, not a committed artifact.

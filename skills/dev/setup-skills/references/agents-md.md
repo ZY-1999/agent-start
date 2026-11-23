@@ -62,6 +62,10 @@
 
 [one-line summary — start here when exploring the codebase: a project-level terrain index under `docs/codemap/`; refresh or add feature maps via `/codemap`; when unsure whether a map is still trustworthy, run `/codemap` drift-check — if it reports drift, update the affected map].
 
+### Knowledge base
+
+[一行摘要 —— 持久化的经验/踩坑/约定存于 `docs/knowledge/`（索引 `KNOWLEDGE.md`）；进入陌生领域前先读索引，收尾或踩坑时经 `/knowledge` 沉淀 —— 门禁：非派生、跨会话、有据、有界。见 `docs/agents/knowledge.md`。]
+
 ### Git contract
 
 [one-line summary — active branch model (the branch types in use) + the association-ID source for commit messages; See `docs/agents/git-contract.md`.

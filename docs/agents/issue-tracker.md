@@ -10,11 +10,14 @@
   ```
   .scratch/2026-06-18-login-redirect/
   ├── 01-fix-login-redirect-loop.md   # prd 或 bug —— 父项
+  ├── contracts.md                    # 技术契约真源 —— C-NN 契约点（由 /to-spec 生成）
+  ├── trace.md                        # 追溯矩阵 —— AC→场景→契约→spec→test→commit（由 /to-spec 生成）
   └── specs/
       ├── 01-validate-token.md         # spec
       └── 02-refresh-flow.md           # spec
   ```
 
+- `contracts.md` 与 `trace.md` 是**特性级产物**，不是 issue：`/to-spec` 拆解时生成（把 PRD 的 AC 双锚翻译为契约点）、`/tdd` 收尾回填 trace 行、`/spec-sync` 在变更时联动、`/spec-check` 审计它们。特性目录里没有这两个文件，只说明尚未拆解。
 - 文件在其所在目录内从 `01` 起按 `<NN>` 编号。`specs/` 按依赖顺序编号，使 `Blocked by: #<n>` 指向同级的 spec；`Parent: #<n>` 指向特性根目录的父项。
 - 每个 issue 开头是 `Type:` 行（`spec` / `prd` / `bug`）与 `Status:` 行（取值见 `triage-labels.md`），末尾追加 `## Comments` 段。
 

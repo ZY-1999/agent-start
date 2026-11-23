@@ -1,6 +1,6 @@
 # Dev：开发相关 skill
 
-面向代码库与开发流程的 skill：设计/领域建模、代码地形、SDD 前半段入口与父项产出、逆向 PRD、双轴复核、仓库配置。共 12 个：4 个来自 [mattpocock/skills](https://github.com/mattpocock/skills)，8 个为 fork 扩展。可独立使用，也可被 `sdd/` 流水线引用（如 `/to-spec` 用 `/codebase-design` 词汇、`/sdd-flow` 调 `/review` 复核）。
+面向代码库与开发流程的 skill：设计/领域建模、代码地形、SDD 前半段入口与父项产出、逆向 PRD、双轴复核、经验沉淀、仓库配置。共 13 个：4 个来自 [mattpocock/skills](https://github.com/mattpocock/skills)，9 个为 fork 扩展。可独立使用，也可被 `sdd/` 流水线引用（如 `/to-spec` 用 `/codebase-design` 词汇、`/sdd-flow` 调 `/review` 复核，`/handoff` 交接前调 `/knowledge` 沉淀）。
 
 ## 用户调用（User-invoked）
 
@@ -33,3 +33,4 @@ fork 扩展：
 - **[to-prd](./to-prd/SKILL.md)** — 把当前对话综合成父项 issue（feature `prd` / bug `bug` / 架构深化 `prd`）并发布到 issue 追踪器。不做访谈，只做综合；发布前由 fresh-context sub-agent 对抗式审查（先真实性、后可行性）。产出供 `/to-spec` 拆解的父项。
 - **[reverse-prd](./reverse-prd/SKILL.md)** — 从已有代码反推**产品可读的 PRD 文档体系**（`docs/reverse-prd/`）：按业务能力分域、以业务场景为单元，正文只写业务/场景/对外接口/数据存储结构，零实现细节（表列名、类名方法名、端点编号、消息码、框架注解一律不进正文），代码位置下沉到 `appendix/03-溯源台账.md`。**开工先探测前后端代码基线**：只找到一侧时先问用户要另一侧仓库路径或地址，拿不到才单侧生成并标注未核实。全局层只写一次、模块层场景七子项、总览层做导航与覆盖度。用于遗留系统补文档、接手他人代码、交付产品/测试/新人。代码地形交给 `/codemap`，本 skill 不另建代码索引。
 - **[diagnose-bug](./diagnose-bug/SKILL.md)** — 顽固 bug 与性能回归的纪律化诊断循环：反馈循环 → 复现最小化 → 假设 → 插桩锁定根因。**诊断本身即交付物**（根因 + 证据 + 最小复现 + 修复方向），不修复、不自动交接；要把诊断转成被追踪的修复，经 `/route` 走 `/to-prd` → `/sdd-flow`。
+- **[knowledge](./knowledge/SKILL.md)** — 严格门禁的项目经验沉淀：把踩坑、被纠正、稳定下来的约定写入 `docs/knowledge/`（一行索引 + 每条一文件），对既有条目去重合并、修剪过期。收尾、`/handoff` 之前、被纠正或踩坑时触发。
