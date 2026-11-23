@@ -88,7 +88,7 @@ Let them edit before writing.
 
 Never create `AGENTS.md` when `CLAUDE.md` already exists (or vice versa) — always edit the one that's already there.
 
-The entry-file skeleton lives in [agents-md.md](./references/agents-md.md) — six top-level sections, all Chinese, with `<…>` placeholders. Read it, fill the placeholders from what Explore found, and merge it into the entry file. If the file already carries part of the skeleton, update `## Agent Notice` in place and add only the missing top-level sections — never overwrite user edits, never append a duplicate `## Agent Notice`.
+The entry-file skeleton lives in [agents-md.md](./references/agents-md.md) — six top-level sections, all Chinese, with `<…>` placeholders. Read it, fill the placeholders from what Explore found, and merge it into the entry file. If the file already carries part of the skeleton, update `## Agent Notice` in place and add only the missing top-level sections — never overwrite user edits, never append a duplicate `## Agent Notice`. When updating an existing `## Agent Notice`, replace each of its sections with the **current version from the skeleton template** even if that section already exists in the target file — do not preserve stale wording; sections the user added outside the template are left untouched.
 
 Then write the seven docs files using the seed templates in this skill folder as a starting point:
 

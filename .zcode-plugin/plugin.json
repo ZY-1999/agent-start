@@ -1,6 +1,6 @@
 {
   "name": "zy-skills",
-  "version": "1.17.0",
+  "version": "1.17.1",
   "description": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills, a QA pipeline (requirement clarification, smoke/full business-flow cases, regression, release verdict) and vendored third-party skills (zentao, confluence). Fork of mattpocock/skills in general/ + dev/ + sdd/ buckets, plus qa/ + third-party-zentao/ + third-party-confluence/.",
   "description_i18n": {
     "en": "Spec-Driven Development skills (grilling, PRD/spec, TDD, code maps, end-to-end SDD flow) plus general base skills, a QA pipeline and vendored third-party skills (zentao, confluence).",

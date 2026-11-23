@@ -23,13 +23,9 @@ order-admin 订单管理演示（Spring Boot 后端 + React 前端，单 jar 部
 
 ## Agent Notice
 
-### Clarify, plan, then execute
+### Route everything
 
-接到任意需求/任务先澄清、再计划、最后执行，三步不跳：
-
-1. **澄清** —— 用 `/grill-me` 拷问需求，直到目标、边界、验收标准、影响面都明确；当决策需要沉淀为 ADR / 词汇表时改用 `/grill-with-docs`。上下文不全就直接提问，不要猜。
-2. **计划** —— 给出分阶段计划：改哪些文件、按什么顺序、怎么验证。等用户确认。
-3. **执行** —— 确认后才动手；执行中计划要变，先说明再改。
+任意需求先按 `/route` 技能找到匹配的流程，再执行——不凭直觉选流程，也不跳过这一步。`/route` 按「SDD 适用性 + 需求成熟度」分档：简单/非编码任务走直接档（澄清 → 分阶段计划 → 确认 → 执行）；需求已明确但需拆解的走 to-spec 快线（澄清 → `/to-spec` → Gate A → `/tdd` → `/review` + 追溯门禁）；模糊/跨特性/需 ADR 的走完整 SDD（`/idea-to-prd` → Gate 0 → `/sdd-flow`）。工具/会话类请求直接按 `/route` 底部类别直达。各档在动手前都有对应的人类确认门（直接档是计划确认，快线是 Gate A，全流程是 Gate 0 + Gate A）；执行中计划要变，先说明再改。
 
 ### Issue tracker
 

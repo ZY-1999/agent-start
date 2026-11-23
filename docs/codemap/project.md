@@ -3,6 +3,7 @@
 ## 1. Orientation
 
 - Last updated: `2026-11-23`
+- Updated: `2026-11-23`（第五次）— 插件版本 **1.17.0 → 1.17.1**：`/route` 按「SDD 适用性 + 需求成熟度」重构为三档分流（直接档 / to-spec 快线含 Gate A / idea-to-prd + sdd-flow 全流程），Agent Notice 首节由 `Clarify, plan, then execute` 改为 `Route everything`（任意需求先经 `/route` 找匹配流程）；四份 plugin.json 与 `.codebuddy-plugin/marketplace.json` 同步 bump。源码模板、合并规则（以模板最新版本为准）、根 `AGENTS.md` 与 demo 08 部署产物均已同步
 - Updated: `2026-11-23`（第四次）— 插件版本 **1.16.0 → 1.17.0**：四份 plugin.json 与 `.codebuddy-plugin/marketplace.json` 同步 bump（新增 knowledge / spec-sync / spec-check 三个 skill 至 32、禅道 vendored skill 升至 0.5.0、全量 review 修正 18 个 skill）。`.plugins-cache.json` 为未跟踪的本地安装缓存，不手改
 - Updated: `2026-11-23`（第三次）— `skills/third-party-zentao/` 整目录同步上游 easysoft/zentao-cli `ce36cf5` → `91646a8`（2026-11-20）：zentao-cli 与 zentao-tour skill 均 0.3.x → 0.5.0，新增附件读取（`zentao file read`）、工时单位换算（`zentao setting work-hours`）、`--assistant` 标记、认证命令树重构（`auth login --web` / `auth status --verify` / `my profile`）、错误码扩充与 MCP 安装；删除上游已移除的 `agents/openai.yaml`。README 记版本与基线并加 npm 0.4.4 滞后提示。skill 数量与路径未变，四份插件清单无需改
 - Updated: `2026-11-23` — 合并 `github/master`：吸收 zy-skills 1.1.0 的 **SDD 分层重构**（PRD 纯需求 → `contracts.md` 契约真源 C-NN → specs（AC 投影）→ `trace.md` 追溯矩阵；`/to-spec` 双锚对齐 + 场景播种、`/tdd` 场景驱动、新增 `/spec-sync` 变更联动与 `/spec-check` 四维质检）、`/knowledge` 项目经验沉淀契约与 skill（第七件部署文档 `docs/agents/knowledge.md` + `docs/knowledge/` 索引与条目）、triage 标签扩为七类（增 `implemented` / `closed`，spec 专属 `needs-design`）、issue-tracker 增 `contracts.md` / `trace.md` 特性级产物约定。以本分支主线为基底保留六件套中文化、ZenTao git 契约、qa 桶与第三方桶；插件清单四份同步至 32 个 skill（原 29 + knowledge / spec-sync / spec-check），版本维持 1.16.0
@@ -57,7 +58,7 @@ Node: agent-start
 - Purpose: 分享材料 + skills 发布源，双职责
 - Read First:
   - `README.md`: 仓库大门，含目录树、章节框架、安装矩阵
-  - `AGENTS.md`: agent 进场规则（Clarify-plan-execute / issue tracker / 契约索引）
+  - `AGENTS.md`: agent 进场规则（Route everything → /route 分流 / issue tracker / 契约索引）
 - Edges / Children: 见上下各节点
 - Unknowns: 上游同步流程细节
 - Next Drill-Down: 改 skills 前读对应桶的 `skills/<桶>/README.md`
@@ -132,7 +133,7 @@ Node: agent-start
   - UI / 文档: `docs/index.html`（浏览器直接打开）
   - CLI / commands: `scripts/link-skills.sh`、`scripts/link-opencode-skills.sh`（安装）、`scripts/list-skills.sh`（枚举）
   - Agent 配置入口: `AGENTS.md`（根目录，`## Agent Notice`）
-  - 插件清单: `.claude-plugin/plugin.json` 与 `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/plugin.json` 与 `.codebuddy-plugin/marketplace.json`、`.zcode-plugin/plugin.json`（四份 plugin.json 均 v1.17.0，逐个列出 skills 路径；`.codebuddy-plugin/marketplace.json` 同为 v1.17.0，`.claude-plugin/marketplace.json` 本身无 version 字段）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
+  - 插件清单: `.claude-plugin/plugin.json` 与 `.claude-plugin/marketplace.json`（marketplace 名 `zy-skills`，Claude Code 与 ZCode 共用）、`.cursor-plugin/plugin.json`、`.codebuddy-plugin/plugin.json` 与 `.codebuddy-plugin/marketplace.json`、`.zcode-plugin/plugin.json`（四份 plugin.json 均 v1.17.1，逐个列出 skills 路径；`.codebuddy-plugin/marketplace.json` 同为 v1.17.1，`.claude-plugin/marketplace.json` 本身无 version 字段）；hooks 经约定路径 `hooks/hooks.json` 分发（ZCode 清单额外显式声明）
   - Demo 08 运行入口: `docker-compose.yml`（MySQL@3307，root/order_demo）→ `ORDER_DB_PASSWORD=order_demo java -jar backend/target/order-admin-1.0.0.jar`（8080，Flyway 自动建表 + 种子数据）
 - Evidence: 各文件已读
 - Next Drill-Down: 无
